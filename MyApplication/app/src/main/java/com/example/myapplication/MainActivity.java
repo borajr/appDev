@@ -12,12 +12,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starting);
 
-        // Set up a click listener on the whole screen
-        findViewById(android.R.id.content).setOnClickListener(new View.OnClickListener() {
+        // Find the buttons or text views
+        View btnLogin = findViewById(R.id.button2);
+        View btnSignUp = findViewById(R.id.button3);
+
+        // Set click listener for Log In
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                // Create an Intent to start LoginActivity
+            public void onClick(View v) {
+                // Start LoginActivity
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Set click listener for Sign Up
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start SignupActivity
+                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
                 startActivity(intent);
             }
         });
