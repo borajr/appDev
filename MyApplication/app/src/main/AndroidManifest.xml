@@ -23,6 +23,10 @@
             android:label="activity_signup"
             android:theme="@style/Theme.MyApplication" />
 
+        <activity
+            android:name=".ConfirmationActivity"
+            android:exported="false"/>
+        
         <!-- Main activity (Entry point of your application) -->
         <activity
             android:name=".MainActivity"
