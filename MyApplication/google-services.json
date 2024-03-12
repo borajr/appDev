@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1092808081603",
+    "firebase_url": "https://dbl-app-development-ccc78-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "dbl-app-development-ccc78",
+    "storage_bucket": "dbl-app-development-ccc78.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092808081603:android:83fb60981cb8ac6906a276",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJceBYhj1_trOIbdVANJOhnBTR6jT5nAQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
