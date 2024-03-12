@@ -39,6 +39,7 @@
         android:lines="1"
         android:ems="10"
         android:background="@drawable/signup_rectangle"
+        android:inputType="text|textNoSuggestions"
         android:hint="  Enter code"
         android:textColor="#000000"
         android:textSize="18sp"
