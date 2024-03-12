@@ -46,6 +46,23 @@
 
     <!-- Repeated pattern for TextViews and EditTexts -->
 
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:background="@drawable/signup_rectangle"
+        android:hint="  Enter email"
+        android:lines="1"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView1"
+        app:layout_constraintWidth_percent="0.8" />
+
     <Button
         android:id="@+id/button2"
         android:layout_width="0dp"
