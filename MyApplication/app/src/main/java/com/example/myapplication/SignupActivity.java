@@ -13,5 +13,6 @@ public class SignupActivity extends AppCompatActivity {
         // Initialize your UI components here
     }
 
+
     // Add any additional methods needed for handling sign-up here
 }
