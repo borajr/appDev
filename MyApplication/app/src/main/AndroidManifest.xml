@@ -29,7 +29,12 @@
         <activity
             android:name=".ProfileCreationDetailOne"
             android:exported="true" />
-        <activity android:name=".ProfileCreationDetailTwo"/>
+        <activity
+            android:name=".ProfileCreationDetailTwo"
+            android:exported="true" />
+        <activity
+            android:name=".ProfileCreationDetailThree"
+            android:exported="true" />
 
         <!-- Main activity (Entry point of your application) -->
         <activity
