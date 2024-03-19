@@ -35,11 +35,21 @@
             android:name=".ProfileCreationDetailOne"
             android:exported="true" />
         <activity
+            android:name=".NotificationSignIn"
+            android:exported="true" />
+        <activity
             android:name=".ProfileCreationDetailTwo"
             android:exported="true" />
         <activity
             android:name=".ProfileCreationDetailThree"
             android:exported="true" />
+
+        <activity
+            android:name=".TroubleSigningInActivity"
+            android:label="Trouble Signing In"
+            android:theme="@style/Theme.MyApplication">
+        </activity>
+
 
         <!-- Main activity (Entry point of your application) -->
         <activity
