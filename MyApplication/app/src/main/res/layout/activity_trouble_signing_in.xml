@@ -19,7 +19,7 @@
         android:id="@+id/textView1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Please enter the code sent to your email:"
+        android:text="Please enter your TU/e email:"
         android:textStyle="bold"
         android:textColor="#000000"
         android:textSize="18sp"
