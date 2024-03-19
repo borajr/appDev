@@ -16,10 +16,9 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         EditText editTextEmail = findViewById(R.id.editText1);
-        EditText editTextName = findViewById(R.id.editText2);
         EditText passwordEditText = findViewById(R.id.editText3); // Assuming this is the ID for the password field
         EditText repeatPasswordEditText = findViewById(R.id.editText4); // Assuming this is the ID for the repeat password field
-        Button signUpButton = findViewById(R.id.button2);
+        Button signUpButton = findViewById(R.id.signupButton);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,7 +26,6 @@ public class SignupActivity extends AppCompatActivity {
                 String emailInput = editTextEmail.getText().toString().trim();
                 String password = passwordEditText.getText().toString();
                 String repeatPassword = repeatPasswordEditText.getText().toString();
-                String name = editTextName.getText().toString();
 
                 // First, check if the email is valid
                 if (!emailInput.contains("tue.nl")) {
@@ -35,7 +33,7 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(name.isEmpty() || emailInput.isEmpty()) { // Extend this condition for all fields
+                if(emailInput.isEmpty()) { // Extend this condition for all fields
                     Toast.makeText(SignupActivity.this, "Please fill in all fields.", Toast.LENGTH_LONG).show();
                     return;
                 }
