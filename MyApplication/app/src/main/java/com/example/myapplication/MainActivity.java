@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         View btnLogin = findViewById(R.id.button2);
         View btnSignUp = findViewById(R.id.button3);
 
+
         // Set click listener for Log In
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,5 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 }
+
+
