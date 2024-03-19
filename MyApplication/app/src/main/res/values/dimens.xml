@@ -6,6 +6,7 @@
     <dimen name="between_elements_spacing">8dp</dimen>
     <dimen name="logo_to_first_element_margin">100dp</dimen>
     <dimen name="button_spacing">120dp</dimen>
+    <dimen name="button_spacing2">240dp</dimen>
 
 
 </resources>
