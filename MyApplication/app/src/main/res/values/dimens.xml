@@ -5,6 +5,7 @@
     <dimen name="element_spacing">16dp</dimen>
     <dimen name="between_elements_spacing">8dp</dimen>
     <dimen name="logo_to_first_element_margin">100dp</dimen>
+    <dimen name="button_spacing">120dp</dimen>
 
 
 </resources>
