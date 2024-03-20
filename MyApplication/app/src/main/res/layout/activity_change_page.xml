@@ -209,15 +209,6 @@
         android:orientation="horizontal">
 
         <!-- Choose Photo from Library Button -->
-        <Button
-            android:id="@+id/Basics2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_rectangle"
-            android:text="Basics"
-            android:textColor="#000000" />
 
         <!-- Take a Photo Button -->
         <Button
