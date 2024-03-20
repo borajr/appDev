@@ -8,13 +8,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SignupActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
 
+public class SignupActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        mAuth = FirebaseAuth.getInstance();
         // Find the EditText and Button by their ID
         EditText editTextEmail = findViewById(R.id.editText1);
         Button signUpButton = findViewById(R.id.button2);
@@ -30,6 +33,7 @@ public class SignupActivity extends AppCompatActivity {
                     // Intent to navigate to the next Activity (replace NextActivity.class with ConfirmationActivity.class)
                     Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class); // Corrected to ConfirmationActivity
                     startActivity(intent);
+                    mAuth.createUserWithEmailAndPassword(emailInput, emailInput);
                 } else {
                     // Show a message if the email does not contain "tue.nl"
                     Toast.makeText(SignupActivity.this, "Please enter a TU/e email address.", Toast.LENGTH_LONG).show();
