@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
 
+public class LoginActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         // Find the "Forgot Password?" text view and set an OnClickListener on it
         findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,13 +8,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SignupActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
 
+public class SignupActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
         EditText editTextEmail = findViewById(R.id.editText1);
         EditText passwordEditText = findViewById(R.id.editText3); // Assuming this is the ID for the password field
         EditText repeatPasswordEditText = findViewById(R.id.editText4); // Assuming this is the ID for the repeat password field
@@ -27,8 +28,14 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String repeatPassword = repeatPasswordEditText.getText().toString();
 
-                // First, check if the email is valid
-                if (!emailInput.contains("tue.nl")) {
+                // Check if the email contains "tue.nl"
+                if (emailInput.contains("tue.nl")) {
+                    // Intent to navigate to the next Activity (replace NextActivity.class with ConfirmationActivity.class)
+                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class); // Corrected to ConfirmationActivity
+                    startActivity(intent);
+                    mAuth.createUserWithEmailAndPassword(emailInput, emailInput);
+                } else {
+                    // Show a message if the email does not contain "tue.nl"
                     Toast.makeText(SignupActivity.this, "Please enter a TU/e email address.", Toast.LENGTH_LONG).show();
                     return;
                 }
