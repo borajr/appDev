@@ -69,6 +69,14 @@
             android:theme="@style/Theme.MyApplication">
         </activity>
 
+        <activity
+            android:name=".ChangePassword"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileSetup"
+            android:exported="true" />
+
 
         <!-- Main activity (Entry point of your application) -->
         <activity
