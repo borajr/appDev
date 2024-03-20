@@ -27,7 +27,7 @@ public class SignupActivity extends AppCompatActivity {
                 String emailInput = editTextEmail.getText().toString().trim();
                 String password = passwordEditText.getText().toString();
                 String repeatPassword = repeatPasswordEditText.getText().toString();
-
+                mAuth = FirebaseAuth.getInstance();
                 // Check if the email contains "tue.nl"
                 if (emailInput.contains("tue.nl")) {
                     // Intent to navigate to the next Activity (replace NextActivity.class with ConfirmationActivity.class)
