@@ -19,15 +19,15 @@
         android:id="@+id/textView1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Please enter the code sent to your email:"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:textSize="18sp"
+        android:layout_marginTop="@dimen/logo_to_first_element_margin"
         android:gravity="start"
-        app:layout_constraintStart_toStartOf="@id/editText1"
+        android:text="Please Enter The Code Sent To Your Email:"
+        android:textColor="#000000"
+        android:textSize="17sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/editText1"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
-        android:layout_marginTop="@dimen/logo_to_first_element_margin" />
+        app:layout_constraintStart_toStartOf="@id/editText1"
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
 
     <EditText
         android:id="@+id/editText1"
