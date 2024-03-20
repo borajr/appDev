@@ -137,19 +137,23 @@
         app:layout_constraintVertical_bias="0.019" />
 
     <!-- Academic year -->
+    <TextView
+        android:id="@+id/ageValueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="18"  
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/editText2"
+        app:layout_constraintTop_toBottomOf="@id/editText4" />
 
-    <EditText
+
+    <SeekBar
         android:id="@+id/editText4"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/between_elements_spacing"
-        android:background="@drawable/signup_rectangle"
-        android:hint="  Enter Age"
-        android:inputType="text|textNoSuggestions"
-        android:lines="1"
-        android:maxLines="1"
-        android:textColor="#000000"
-        android:textSize="12sp"
+        android:max="62"  
+        android:progress="0"  
         app:layout_constraintEnd_toEndOf="@+id/editText2"
         app:layout_constraintStart_toStartOf="@+id/editText2"
         app:layout_constraintTop_toBottomOf="@id/age" />
@@ -168,7 +172,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.048"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText4"
+        app:layout_constraintTop_toBottomOf="@id/ageValueTextView"
         app:layout_constraintVertical_bias="0.0" />
 
     <!-- Language -->
@@ -228,7 +232,7 @@
         android:id="@+id/confirm_button"
         android:layout_width="309dp"
         android:layout_height="60dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="@dimen/element_spacing"
         android:background="@drawable/pink_rounded"
         android:text="Confirm"
         android:textColor="#ffffff"
