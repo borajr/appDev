@@ -62,74 +62,44 @@
         app:layout_constraintTop_toBottomOf="@id/editText1"
         android:layout_marginTop="@dimen/element_spacing" />
 
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:hint="  Enter password"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:padding="8dp"
-        android:background="@drawable/signup_rectangle"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/textView2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.8"
-        android:layout_marginTop="@dimen/between_elements_spacing" />
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:gravity="start"
         android:text="Enter your password again:"
-        android:textStyle="bold"
         android:textColor="#000000"
         android:textSize="18sp"
-        android:gravity="start"  
-        app:layout_constraintStart_toStartOf="@id/editText3"  
-        app:layout_constraintEnd_toEndOf="@id/editText3" 
-        app:layout_constraintTop_toBottomOf="@id/editText3"
-        android:layout_marginTop="@dimen/element_spacing" />
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/editText3"
+        app:layout_constraintStart_toStartOf="@+id/editText3"
+        app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/editText3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/signup_rectangle"
         android:hint="  Repeat password"
         android:inputType="textPassword"
         android:maxLines="1"
+        android:minHeight="48dp"
         android:padding="8dp"
-        android:background="@drawable/signup_rectangle"
         android:textColor="#000000"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.8"
-        android:layout_marginTop="@dimen/between_elements_spacing" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:text="Password:"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintWidth_percent="0.8" />
 
     <EditText
         android:id="@+id/editText2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="108dp"
         android:background="@drawable/signup_rectangle"
         android:hint="Enter password"
         android:lines="1"
