@@ -45,19 +45,19 @@
             android:id="@+id/alcohol_menu"
             android:layout_width="276dp"
             android:layout_height="48dp"
-            android:layout_marginTop="16dp"
             android:entries="@array/options"
             android:background="@drawable/rounded_rectangle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.355"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Alcohol" />
+            app:layout_constraintTop_toBottomOf="@id/Alcohol"
+            android:layout_marginTop="@dimen/between_elements_spacing" />
 
         <TextView
             android:id="@+id/LastName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/element_spacing"
             android:text="Smoking"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -71,20 +71,20 @@
             android:id="@+id/smoking_menu"
             android:layout_width="276dp"
             android:layout_height="48dp"
-            android:layout_marginTop="136dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
             android:entries="@array/options"
             android:background="@drawable/rounded_rectangle"
             android:hint="Smoking"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.355"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Alcohol" />
+            app:layout_constraintTop_toBottomOf="@id/LastName" />
 
         <TextView
             android:id="@+id/Birthdate3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/element_spacing"
             android:text="Marijuana"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -98,19 +98,19 @@
             android:id="@+id/Marijuana_menu"
             android:layout_width="276dp"
             android:layout_height="48dp"
-            android:layout_marginTop="240dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
             android:entries="@array/options"
             android:background="@drawable/rounded_rectangle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.355"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Alcohol" />
+            app:layout_constraintTop_toBottomOf="@id/Birthdate3" />
 
         <TextView
             android:id="@+id/FavoriteFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/element_spacing"
             android:text="Preferred diet"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -124,7 +124,7 @@
             android:id="@+id/Food_menu"
             android:layout_width="276dp"
             android:layout_height="48dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
             android:entries="@array/food"
             android:background="@drawable/rounded_rectangle"
             app:layout_constraintEnd_toEndOf="parent"
