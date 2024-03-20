@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="title_activity_login">LoginActivity</string>
+
+    <string-array name="star_signs">
+        <item>Aries</item>
+        <item>Taurus</item>
+        <item>Gemini</item>
+        <item>Cancer</item>
+        <item>Leo</item>
+        <item>Virgo</item>
+        <item>Libra</item>
+        <item>Scorpio</item>
+        <item>Sagittarius</item>
+        <item>Capricorn</item>
+        <item>Aquarius</item>
+        <item>Pisces</item>
+    </string-array>
 </resources>

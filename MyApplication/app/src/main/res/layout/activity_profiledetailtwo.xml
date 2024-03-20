@@ -1,0 +1,259 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/profile_gradient">
+
+    <!-- TextViews -->
+
+    <!-- Preferred Gender -->
+
+    <TextView
+        android:id="@+id/Tellus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Tell us about yourself"
+        android:textColor="#000000"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.451"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Preferred Gender:"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Tellus" />
+
+    <!-- Height -->
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="279dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/signup_rectangle"
+        android:hint=" Enter Gender"
+        android:textColor="#000000"
+        android:inputType="text|textNoSuggestions"
+        android:maxLines="1"
+        android:lines="1"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Gender"
+        app:layout_constraintVertical_bias="0.129" />
+
+    <TextView
+        android:id="@+id/Height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Height"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText1"
+        app:layout_constraintVertical_bias="0.058" />
+
+    <!-- Star Sign -->
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="277dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/signup_rectangle"
+        android:hint="  Enter Height in cm"
+        android:textColor="#000000"
+        android:inputType="text|textNoSuggestions"
+        android:maxLines="1"
+        android:lines="1"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.134"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Height"
+        app:layout_constraintVertical_bias="0.087" />
+
+    <TextView
+        android:id="@+id/star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Star Sign"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText2"
+        app:layout_constraintVertical_bias="0.051" />
+
+    <!-- Age window -->
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="280dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/signup_rectangle"
+        android:hint="  Enter star sign"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.137"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/star"
+        app:layout_constraintVertical_bias="0.066" />
+
+    <TextView
+        android:id="@+id/age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Age window"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText3"
+        app:layout_constraintVertical_bias="0.019" />
+
+    <!-- Academic year -->
+
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_width="296dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/signup_rectangle"
+        android:hint="  Enter Age"
+        android:inputType="text|textNoSuggestions"
+        android:lines="1"
+        android:maxLines="1"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.147"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/age"
+        app:layout_constraintVertical_bias="0.053" />
+
+    <TextView
+        android:id="@+id/year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Academic year"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText4"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- Language -->
+
+    <EditText
+        android:id="@+id/editText5"
+        android:layout_width="314dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/signup_rectangle"
+        android:hint="  Enter study program"
+        android:textColor="#000000"
+        android:inputType="text|textNoSuggestions"
+        android:maxLines="1"
+        android:lines="1"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.185"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/year"
+        app:layout_constraintVertical_bias="0.043" />
+
+    <TextView
+        android:id="@+id/language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Language"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText5"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- Confirm Button -->
+
+    <EditText
+        android:id="@+id/edittext7"
+        android:layout_width="308dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/signup_rectangle"
+        android:hint="  Enter language"
+        android:textColor="#000000"
+        android:inputType="text|textNoSuggestions"
+        android:maxLines="1"
+        android:lines="1"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.174"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/language"
+        app:layout_constraintVertical_bias="0.036" />
+
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="309dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/pink_rounded"
+        android:text="Confirm"
+        android:textColor="#ffffff"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edittext7"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <!-- Button3 -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

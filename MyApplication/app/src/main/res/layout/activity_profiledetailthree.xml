@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/profile_gradient">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <!-- 80% of parent's width -->
+
+
+        <TextView
+            android:id="@+id/ProfileDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="Profile details"
+            android:textColor="#000000"
+            android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/Alcohol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="Alcohol"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.145"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ProfileDetails" />
+
+        <Spinner
+            android:id="@+id/alcohol_menu"
+            android:layout_width="276dp"
+            android:layout_height="48dp"
+            android:entries="@array/options"
+            android:background="@drawable/rounded_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Alcohol"
+            android:layout_marginTop="@dimen/between_elements_spacing" />
+
+        <TextView
+            android:id="@+id/LastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/element_spacing"
+            android:text="Smoking"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alcohol_menu" />
+
+        <Spinner
+            android:id="@+id/smoking_menu"
+            android:layout_width="276dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
+            android:entries="@array/options"
+            android:background="@drawable/rounded_spinner"
+            android:hint="Smoking"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/LastName" />
+
+        <TextView
+            android:id="@+id/Birthdate3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/element_spacing"
+            android:text="Marijuana"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.157"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/smoking_menu" />
+
+        <Spinner
+            android:id="@+id/Marijuana_menu"
+            android:layout_width="276dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
+            android:entries="@array/options"
+            android:background="@drawable/rounded_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Birthdate3" />
+
+        <TextView
+            android:id="@+id/FavoriteFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/element_spacing"
+            android:text="Preferred diet"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.181"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Marijuana_menu" />
+
+        <Spinner
+            android:id="@+id/Food_menu"
+            android:layout_width="276dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
+            android:entries="@array/food"
+            android:background="@drawable/rounded_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.377"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/FavoriteFood" />
+
+        <Button
+            android:id="@+id/confirm_button"
+            android:layout_width="309dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="168dp"
+            android:background="@drawable/pink_rounded"
+            android:text="Confirm"
+            android:textColor="#ffffff"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Marijuana_menu"
+            app:layout_constraintWidth_percent="0.8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
