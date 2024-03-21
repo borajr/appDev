@@ -33,8 +33,7 @@
         android:layout_gravity="center_horizontal">
 
         <!-- ImageView 1 -->
-        <ImageView
-            android:id="@+id/imageView"
+        <FrameLayout
             android:layout_width="90dp"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
@@ -43,13 +42,28 @@
             android:layout_marginEnd="8dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:padding="4dp"
-            android:background="@drawable/photo_temp" /> <!-- Placeholder drawable -->
+            android:layout_gravity="fill">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/photo_temp" /> <!-- Placeholder drawable -->
+
+            <Button
+                android:id="@+id/imageViewCloseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="X"
+                android:background="@android:color/transparent"
+                android:textColor="#FF0000" />
+        </FrameLayout>
+
 
         <!-- ImageView 2 -->
-        <ImageView
-            android:id="@+id/imageView1"
+        <FrameLayout
             android:layout_width="90dp"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
@@ -58,13 +72,27 @@
             android:layout_marginEnd="8dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:padding="4dp"
-            android:background="@drawable/photo_temp" />
+            android:layout_gravity="fill">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/photo_temp" /> <!-- Placeholder drawable -->
+
+            <Button
+                android:id="@+id/imageViewCloseBtn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="X"
+                android:background="@android:color/transparent"
+                android:textColor="#FF0000" />
+        </FrameLayout>
 
         <!-- ImageView 3 -->
-        <ImageView
-            android:id="@+id/imageView2"
+        <FrameLayout
             android:layout_width="90dp"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
@@ -73,13 +101,27 @@
             android:layout_marginEnd="8dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:padding="4dp"
-            android:background="@drawable/photo_temp" />
+            android:layout_gravity="fill">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/photo_temp" /> <!-- Placeholder drawable -->
+
+            <Button
+                android:id="@+id/imageViewCloseBtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="X"
+                android:background="@android:color/transparent"
+                android:textColor="#FF0000" />
+        </FrameLayout>
 
         <!-- ImageView 4 -->
-        <ImageView
-            android:id="@+id/imageView3"
+        <FrameLayout
             android:layout_width="90dp"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
@@ -88,13 +130,27 @@
             android:layout_marginEnd="8dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:padding="4dp"
-            android:background="@drawable/photo_temp" />
+            android:layout_gravity="fill">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/photo_temp" /> <!-- Placeholder drawable -->
+
+            <Button
+                android:id="@+id/imageViewCloseBtn3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="X"
+                android:background="@android:color/transparent"
+                android:textColor="#FF0000" />
+        </FrameLayout>
 
         <!-- ImageView 5 -->
-        <ImageView
-            android:id="@+id/imageView4"
+        <FrameLayout
             android:layout_width="90dp"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
@@ -103,13 +159,27 @@
             android:layout_marginEnd="8dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:padding="4dp"
-            android:background="@drawable/photo_temp" />
+            android:layout_gravity="fill">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/photo_temp" /> <!-- Placeholder drawable -->
+
+            <Button
+                android:id="@+id/imageViewCloseBtn4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="X"
+                android:background="@android:color/transparent"
+                android:textColor="#FF0000" />
+        </FrameLayout>
 
         <!-- ImageView 6 -->
-        <ImageView
-            android:id="@+id/imageView5"
+        <FrameLayout
             android:layout_width="90dp"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
@@ -118,9 +188,24 @@
             android:layout_marginEnd="8dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:padding="4dp"
-            android:background="@drawable/photo_temp" />
+            android:layout_gravity="fill">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/photo_temp" /> <!-- Placeholder drawable -->
+
+            <Button
+                android:id="@+id/imageViewCloseBtn5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="X"
+                android:background="@android:color/transparent"
+                android:textColor="#FF0000" />
+        </FrameLayout>
 
     </GridLayout>
 

@@ -16,5 +16,18 @@ public class PreferenceCloneOne extends AppCompatActivity {
         setContentView(layout.activity_preference_cloneone);
 
 
+        // Find the button by its ID
+        View btnConfirm = findViewById(id.confirm_button2);
+
+
+        // Set OnClickListener to the button
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to the activity_change_password.xml
+                Intent intent = new Intent(PreferenceCloneOne.this, ProfileSetup.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
     }
 }
