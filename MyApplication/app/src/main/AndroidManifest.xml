@@ -77,6 +77,31 @@
             android:name=".ProfileSetup"
             android:exported="true" />
 
+        <activity
+            android:name=".PreferenceCloneOne"
+            android:exported="true" />
+
+        <activity
+            android:name=".PreferenceCloneTwo"
+            android:exported="true" />
+
+        <activity
+            android:name=".MainPage"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileCloneOne"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileCloneTwo"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileCloneThree"
+            android:exported="true" />
+
+
 
         <!-- Main activity (Entry point of your application) -->
         <activity
