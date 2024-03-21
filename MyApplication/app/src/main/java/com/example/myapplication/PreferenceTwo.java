@@ -17,7 +17,7 @@ public class PreferenceTwo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create an Intent to start ProfileCreationDetailThree
-                Intent intent = new Intent(PreferenceTwo.this, ProfileCreationDetailThree.class);
+                Intent intent = new Intent(PreferenceTwo.this, MainPage.class);
                 startActivity(intent);
             }
         });
