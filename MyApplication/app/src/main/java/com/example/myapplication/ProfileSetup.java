@@ -91,7 +91,29 @@ public class ProfileSetup extends AppCompatActivity {
             }
         });
 
+        View btnChat = findViewById(R.id.button_chat);
+        View btnMain = findViewById(R.id.button_main);
+        View btnProfile = findViewById(R.id.button_profile);
 
+
+        // Set OnClickListener to the button
+        btnMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to the activity_change_password.xml
+                Intent intent = new Intent(ProfileSetup.this, MainPage.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to the activity_change_password.xml
+                Intent intent = new Intent(ProfileSetup.this, AllChatsActivity.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
     }
 }
 

@@ -233,14 +233,39 @@
     </LinearLayout>
 
     <!-- Continue button -->
-    <Button
-        android:id="@+id/btn_continue"
+    <LinearLayout
+        android:id="@+id/footer_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/pink_rounded"
-        android:text="Continue"
-        android:textColor="#ffffff" />
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="48dp"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/button_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/signup_rectangle"
+            android:layout_weight="1"
+            android:text="Profile" />
+
+        <Button
+            android:id="@+id/button_main"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/signup_rectangle"
+            android:layout_weight="1"
+            android:text="Main" />
+
+        <Button
+            android:id="@+id/button_chat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/signup_rectangle"
+            android:layout_weight="1"
+            android:text="Chats" />
+    </LinearLayout>
 
 </LinearLayout>

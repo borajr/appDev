@@ -14,15 +14,26 @@ public class MainPage extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Find the button by its ID
-        View btnContinue = findViewById(R.id.btnToChange);
+        View btnChat = findViewById(R.id.button_chat);
+        View btnMain = findViewById(R.id.button_main);
+        View btnProfile = findViewById(R.id.button_profile);
 
 
         // Set OnClickListener to the button
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+        btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Create an Intent to navigate to the activity_change_password.xml
                 Intent intent = new Intent(MainPage.this, ProfileSetup.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to the activity_change_password.xml
+                Intent intent = new Intent(MainPage.this, AllChatsActivity.class);
                 startActivity(intent); // Start the new activity
             }
         });

@@ -60,7 +60,6 @@ public class CameraActivity extends AppCompatActivity {
             public void onClick(View v) {
                 imageView.setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
-                v.setVisibility(View.GONE);
             }
         });
 

@@ -21,6 +21,7 @@ public class ProfileCloneThree extends AppCompatActivity {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Create an Intent to navigate to the activity_change_password.xml
                 Intent intent = new Intent(ProfileCloneThree.this, ProfileSetup.class);
                 startActivity(intent); // Start the new activity
