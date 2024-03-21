@@ -23,7 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CameraActivity extends AppCompatActivity {
+public class ChangePhotoActivity extends AppCompatActivity {
 
     // Existing constants...
     private static final int PICK_IMAGE = 3; // Choose an unused request code
@@ -37,7 +37,7 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.camera);
+        setContentView(R.layout.activity_change_photo);
 
         // Initialize image view placeholders with actual ImageView references from your layout
         imageViews[0] = findViewById(R.id.imageView);
@@ -136,9 +136,9 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Check for camera permission before opening the camera
-                if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(ChangePhotoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     // If permission is not granted, request it
-                    ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                    ActivityCompat.requestPermissions(ChangePhotoActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
                 } else {
                     // If permission is granted, open the camera
                     openCamera();
@@ -163,10 +163,10 @@ public class CameraActivity extends AppCompatActivity {
                     }
                 }
                 if (atLeastOneImageSelected) {
-                    Intent intent = new Intent(CameraActivity.this, PreferenceOne.class);
+                    Intent intent = new Intent(ChangePhotoActivity.this, ProfileSetup.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(CameraActivity.this, "Please upload at least 1 photo.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ChangePhotoActivity.this, "Please upload at least 1 photo.", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -210,7 +210,7 @@ public class CameraActivity extends AppCompatActivity {
         //if (intent.resolveActivity(getPackageManager()) != null) {
         startActivityForResult(intent, CAMERA_REQUEST);
         //} else {
-            Toast.makeText(this, "No camera found on this device", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "No camera found on this device", Toast.LENGTH_LONG).show();
         //}
     }
 

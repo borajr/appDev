@@ -37,10 +37,28 @@
             android:name=".ConfirmationActivity"
             android:exported="false"/>
         <activity
+            android:name=".chat"
+            android:exported="true"/>
+        <activity
+            android:name=".ChatAdapter"
+            android:exported="true"/>
+        <activity
+            android:name=".ChatMessage"
+            android:exported="true"/>
+        <activity
+            android:name=".SingleChatAdapter"
+            android:exported="true"/>
+        <activity
+            android:name=".AllChatsActivity"
+            android:exported="true"/>
+        <activity
             android:name=".ProfileCreationDetailOne"
             android:exported="true" />
         <activity
             android:name=".NotificationSignIn"
+            android:exported="true" />
+        <activity
+            android:name=".AdminActivity"
             android:exported="true" />
         <activity
             android:name=".PreferenceTwo"
@@ -68,6 +86,46 @@
             android:exported="true"
             android:theme="@style/Theme.MyApplication">
         </activity>
+
+        <activity
+            android:name=".ChangePhotoActivity"
+            android:label="Camera Bruh 2"
+            android:exported="true"
+            android:theme="@style/Theme.MyApplication">
+        </activity>
+
+        <activity
+            android:name=".ChangePassword"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileSetup"
+            android:exported="true" />
+
+        <activity
+            android:name=".PreferenceCloneOne"
+            android:exported="true" />
+
+        <activity
+            android:name=".PreferenceCloneTwo"
+            android:exported="true" />
+
+        <activity
+            android:name=".MainPage"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileCloneOne"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileCloneTwo"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileCloneThree"
+            android:exported="true" />
+
 
 
         <!-- Main activity (Entry point of your application) -->
