@@ -46,8 +46,8 @@
         android:background="@drawable/rounded_spinner"
         android:entries="@array/gender"
         android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="@+id/editText2"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
+        app:layout_constraintEnd_toEndOf="@+id/Gender"
+        app:layout_constraintStart_toStartOf="@+id/Gender"
         app:layout_constraintTop_toBottomOf="@id/Gender"/>
     <!-- Height -->
 
@@ -68,23 +68,36 @@
         app:layout_constraintTop_toBottomOf="@id/editText1" />
 
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="277dp"
+    <Spinner
+        android:id="@+id/minHeightSpinner"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginTop="@dimen/between_elements_spacing"
-        android:background="@drawable/signup_rectangle"
-        android:hint="  Enter Height in cm"
-        android:textColor="#000000"
-        android:inputType="number"
-        android:maxLines="1"
-        android:lines="1"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.134"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Height"
-        app:layout_constraintVertical_bias="0.087" />
+        android:entries="@array/height"
+        android:background="@drawable/rounded_spinner"
+        app:layout_constraintStart_toStartOf="@+id/minAgeSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/gap2"
+        app:layout_constraintTop_toBottomOf="@+id/Height"
+        app:layout_constraintWidth_default="wrap" />
+
+    <Space
+        android:id="@+id/gap2"
+        android:layout_width="16dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/minHeightSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/maxHeightSpinner"
+        app:layout_constraintTop_toTopOf="@+id/minHeightSpinner" />
+
+    <Spinner
+        android:id="@+id/maxHeightSpinner"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:entries="@array/height"
+        android:background="@drawable/rounded_spinner"
+        app:layout_constraintStart_toEndOf="@+id/gap2"
+        app:layout_constraintEnd_toEndOf="@+id/maxAgeSpinner"
+        app:layout_constraintTop_toTopOf="@+id/minHeightSpinner"
+        app:layout_constraintWidth_default="wrap" />
+
 
     <TextView
         android:id="@+id/star"
@@ -100,7 +113,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText2"
+        app:layout_constraintTop_toBottomOf="@id/minHeightSpinner"
         app:layout_constraintVertical_bias="0.051" />
 
     <!-- Age window -->
@@ -115,8 +128,8 @@
         android:hint="  Enter star sign"
         android:textColor="#000000"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/editText2"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
+        app:layout_constraintEnd_toEndOf="@+id/Gender"
+        app:layout_constraintStart_toStartOf="@+id/Gender"
         app:layout_constraintTop_toBottomOf="@id/star" />
 
     <TextView
@@ -137,26 +150,37 @@
         app:layout_constraintVertical_bias="0.019" />
 
     <!-- Academic year -->
-    <TextView
-        android:id="@+id/ageValueTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="18"  
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
-        app:layout_constraintTop_toBottomOf="@id/editText4" />
-
-
-    <SeekBar
-        android:id="@+id/editText4"
+    <Spinner
+        android:id="@+id/minAgeSpinner"
         android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@drawable/rounded_spinner"
+        android:entries="@array/age_range"
+        app:layout_constraintStart_toEndOf="Height"
+        app:layout_constraintEnd_toStartOf="@+id/gap"
+        app:layout_constraintTop_toBottomOf="@+id/age"
+        app:layout_constraintWidth_default="wrap" />
+
+    <Space
+        android:id="@+id/gap"
+        android:layout_width="16dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/between_elements_spacing"
-        android:max="62"  
-        android:progress="0"  
-        app:layout_constraintEnd_toEndOf="@+id/editText2"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
-        app:layout_constraintTop_toBottomOf="@id/age" />
+        app:layout_constraintStart_toEndOf="@+id/minAgeSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/maxAgeSpinner" 
+        app:layout_constraintTop_toBottomOf="@+id/age"
+        app:layout_constraintWidth_default="wrap"/>
+
+    <Spinner
+        android:id="@+id/maxAgeSpinner"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@drawable/rounded_spinner"
+        android:entries="@array/age_range"
+        app:layout_constraintStart_toEndOf="@+id/gap"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/age"
+        app:layout_constraintWidth_default="wrap" />
+
 
     <TextView
         android:id="@+id/year"
@@ -172,7 +196,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.048"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ageValueTextView"
+        app:layout_constraintTop_toBottomOf="@id/maxAgeSpinner"
         app:layout_constraintVertical_bias="0.0" />
 
     <!-- Language -->
@@ -189,8 +213,8 @@
         android:maxLines="1"
         android:lines="1"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/editText2"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
+        app:layout_constraintEnd_toEndOf="@+id/Gender"
+        app:layout_constraintStart_toStartOf="@+id/Gender"
         app:layout_constraintTop_toBottomOf="@id/year" />
 
     <TextView
@@ -224,8 +248,8 @@
         android:maxLines="1"
         android:lines="1"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/editText2"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
+        app:layout_constraintEnd_toEndOf="@+id/Gender"
+        app:layout_constraintStart_toStartOf="@+id/Gender"
         app:layout_constraintTop_toBottomOf="@id/language" />
 
     <Button
