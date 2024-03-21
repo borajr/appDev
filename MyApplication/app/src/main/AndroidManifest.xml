@@ -88,6 +88,13 @@
         </activity>
 
         <activity
+            android:name=".ChangePhotoActivity"
+            android:label="Camera Bruh 2"
+            android:exported="true"
+            android:theme="@style/Theme.MyApplication">
+        </activity>
+
+        <activity
             android:name=".ChangePassword"
             android:exported="true" />
 

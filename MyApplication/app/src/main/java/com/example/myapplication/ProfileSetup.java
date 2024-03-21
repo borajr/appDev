@@ -20,6 +20,8 @@ public class ProfileSetup extends AppCompatActivity {
         View btnYouLifestyle = findViewById(R.id.lifestyle);
         View btnThemInfo = findViewById(R.id.info2);
         View btnThemLifestyle2 = findViewById(R.id.lifestyle2);
+        View btnChangePhotos = findViewById(R.id.changephoto);
+        View btnAccountInfo = findViewById(R.id.goodbye);
 
         // Set OnClickListener to the button
         btnChangePass.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +89,15 @@ public class ProfileSetup extends AppCompatActivity {
             public void onClick(View v) {
                 // Create an Intent to navigate to the activity_change_password.xml
                 Intent intent = new Intent(ProfileSetup.this, PreferenceCloneTwo.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
+
+        btnChangePhotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to the activity_change_password.xml
+                Intent intent = new Intent(ProfileSetup.this, ChangePhotoActivity.class);
                 startActivity(intent); // Start the new activity
             }
         });
