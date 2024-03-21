@@ -17,8 +17,8 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         EditText editTextEmail = findViewById(R.id.editText1);
-        EditText passwordEditText = findViewById(R.id.editText3); // Assuming this is the ID for the password field
-        EditText repeatPasswordEditText = findViewById(R.id.editText4); // Assuming this is the ID for the repeat password field
+        EditText passwordEditText = findViewById(R.id.editText2); // Assuming this is the ID for the password field
+        EditText repeatPasswordEditText = findViewById(R.id.editText3); // Assuming this is the ID for the repeat password field
         Button signUpButton = findViewById(R.id.signupButton);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
