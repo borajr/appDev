@@ -58,6 +58,9 @@
             android:name=".NotificationSignIn"
             android:exported="true" />
         <activity
+            android:name=".AdminActivity"
+            android:exported="true" />
+        <activity
             android:name=".PreferenceTwo"
             android:exported="true" />
         <activity

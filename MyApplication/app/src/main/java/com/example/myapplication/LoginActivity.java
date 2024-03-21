@@ -52,7 +52,12 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainPage.class);
             startActivity(intent);
             finish(); // Call finish() if you want to remove this activity from the back stack
-        } else {
+        } else if ("admin".equals(email) && "YakisikliGuvenlik".equals(password)){
+            Intent intent = new Intent(this, AdminActivity.class);
+            startActivity(intent);
+            finish();
+
+        }else {
             // Credentials do not match, show error or do nothing
             // You might want to show an AlertDialog or Toast here to inform the user
             Toast.makeText(this, "Invalid email or password", Toast.LENGTH_LONG).show();
