@@ -37,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Tellus" />
-        
+
     <Spinner
         android:id="@+id/editText1"
         android:layout_width="0dp"
@@ -166,7 +166,7 @@
         android:layout_width="16dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/minAgeSpinner"
-        app:layout_constraintEnd_toStartOf="@+id/maxAgeSpinner" 
+        app:layout_constraintEnd_toStartOf="@+id/maxAgeSpinner"
         app:layout_constraintTop_toBottomOf="@+id/age"
         app:layout_constraintWidth_default="wrap"/>
 
