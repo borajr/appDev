@@ -24,41 +24,41 @@ public class SignupActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean correctInput = true;
                 String emailInput = editTextEmail.getText().toString().trim();
                 String password = passwordEditText.getText().toString();
                 String repeatPassword = repeatPasswordEditText.getText().toString();
                 mAuth = FirebaseAuth.getInstance();
+
                 // Check if the email contains "tue.nl"
-                if (emailInput.contains("tue.nl")) {
+                if (!emailInput.contains("tue.nl")) {
                     // Intent to navigate to the next Activity (replace NextActivity.class with ConfirmationActivity.class)
-                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class); // Corrected to ConfirmationActivity
-                    startActivity(intent);
-                    mAuth.createUserWithEmailAndPassword(emailInput, emailInput);
-                } else {
-                    // Show a message if the email does not contain "tue.nl"
+                    // Corrected to ConfirmationActivity
+                    correctInput = false;
                     Toast.makeText(SignupActivity.this, "Please enter a TU/e email address.", Toast.LENGTH_LONG).show();
-                    return;
                 }
 
                 if(emailInput.isEmpty()) { // Extend this condition for all fields
+                    correctInput = false;
                     Toast.makeText(SignupActivity.this, "Please fill in all fields.", Toast.LENGTH_LONG).show();
-                    return;
                 }
 
                 // Then, check if passwords match and are strong enough
                 if (!password.equals(repeatPassword)) {
+                    correctInput = false;
                     Toast.makeText(SignupActivity.this, "Passwords do not match.", Toast.LENGTH_LONG).show();
-                    return;
                 }
 
                 if (!isValidPassword(password)) {
+                    correctInput = false;
                     Toast.makeText(SignupActivity.this, "Password must contain 8+ characters, a letter, a number, and a capital letter.", Toast.LENGTH_LONG).show();
-                    return;
                 }
-
-                // If all checks pass, proceed to the ConfirmationActivity
-                Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
-                startActivity(intent);
+                if (correctInput) {
+                    mAuth.createUserWithEmailAndPassword(emailInput, emailInput);
+                    // If all checks pass, proceed to the ConfirmationActivity
+                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
