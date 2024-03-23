@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/gradient_background">
+
+    <!-- Title TextView in the middle -->
+    <TextView
+        android:id="@+id/tvSeeReportedUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="See Reported Users"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="100dp"/>
+
+    <!-- Dropdown menu for reported users -->
+    <Spinner
+        android:id="@+id/spinnerReportedUsers"
+        android:layout_width="match_parent"
+        android:minHeight="48dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvSeeReportedUsers"
+        android:layout_marginTop="24dp"/>
+
+    <!-- TextView for the reason of the report -->
+    <TextView
+        android:id="@+id/tvReportReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinnerReportedUsers"
+        android:layout_marginTop="24dp"
+        android:text="User was reported for: [Reason]"
+        android:padding="16dp"
+        android:background="#EFEFEF"/>
+
+    <!-- Button to ban the user -->
+    <Button
+        android:id="@+id/btnBanUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ban"
+        android:minHeight="48dp"
+        android:layout_below="@id/tvReportReason"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_rectangle"
+        android:textColor="#FFFFFF"/>
+
+        <!-- Button to remove user from the report list -->
+    <Button
+        android:id="@+id/btnRemoveFromList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove from list"
+        android:layout_below="@id/btnBanUser"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_rectangle"  
+        android:textColor="@android:color/white" />
+
+    <!-- Button for sign out -->
+    <Button
+        android:id="@+id/btnSignOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign Out"
+        android:layout_below="@id/btnRemoveFromList"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_rectangle" 
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>
