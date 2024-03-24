@@ -35,6 +35,7 @@ public class AllChatsActivity extends AppCompatActivity {
         View btnChat = findViewById(R.id.button_chat);
         View btnMain = findViewById(R.id.button_main);
         View btnProfile = findViewById(R.id.button_profile);
+        View btnKlavye = findViewById(R.id.klavye);
 
 
         // Set OnClickListener to the button
@@ -55,6 +56,16 @@ public class AllChatsActivity extends AppCompatActivity {
                 startActivity(intent); // Start the new activity
             }
         });
+
+        btnKlavye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to the activity_change_password.xml
+                Intent intent = new Intent(AllChatsActivity.this, SimpleChat.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
+
     }
 
 
