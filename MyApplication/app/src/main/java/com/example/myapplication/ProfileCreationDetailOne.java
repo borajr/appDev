@@ -56,6 +56,7 @@ public class ProfileCreationDetailOne extends AppCompatActivity {
                 db.updateUser(data);
                 // If all validations pass, navigate to the next page
                 Intent intent = new Intent(ProfileCreationDetailOne.this, ProfileCreationDetailTwo.class);
+                finish();
                 startActivity(intent);
             }
         });

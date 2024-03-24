@@ -43,7 +43,7 @@ public class DatabaseHandler {
         String email = mAuth.getCurrentUser().getEmail();
         db.collection("users")
                 .document(email)
-                .set(data)
+                .update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
