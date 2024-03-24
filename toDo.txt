@@ -1,32 +1,6 @@
-ui looksmaxxing:
--input text areas padding
--logo consistency - location
--remove headers
--labels: text size + orientation
--size of the input boxes and the spaces in between
--getting the name of the user (we do this twice in different ways for some reason)
-
-frontend:
-remaining pages:
--trouble signing in
--ideal date type x3
--photo upload = camera api
 -main page
--matched page
--chats page
--singular chat page
--chat problem page
--user information page
--changing of:
-	-you: basics
-	-you: additional information
-	-you: lifestyle
-	-your preferences: basics
-	-your preferences: additional information
-	-your preferences: lifestyle
--password reset page
--admin panel page
--any other admin related pages
+-admin page
+
 
 backend:
 -store user info

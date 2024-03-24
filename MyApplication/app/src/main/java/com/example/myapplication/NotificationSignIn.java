@@ -22,7 +22,7 @@ public class NotificationSignIn extends AppCompatActivity {
         setContentView(R.layout.activity_notification_signin);
 
         // Schedule the transition to the Starting Page after 45 seconds
-        handler.postDelayed(navigateToStartingPage, 45000);
+        handler.postDelayed(navigateToStartingPage, 15000);
 
         // Assuming you have a button in your layout to allow the user to skip the wait
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {

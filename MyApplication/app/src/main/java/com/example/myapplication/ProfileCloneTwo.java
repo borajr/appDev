@@ -6,18 +6,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-public class PreferenceOne extends AppCompatActivity {
+public class ProfileCloneTwo extends AppCompatActivity {
 
     private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner;
     private Button confirmButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preference_detailtwo);
+        setContentView(R.layout.activity_profiletwoclone);
+
+        // Find the button by its ID
+        View btnContinue = findViewById(R.id.confirm_button);
 
         genderSpinner = findViewById(R.id.editText1);
         minHeightSpinner = findViewById(R.id.minHeightSpinner);
@@ -26,22 +28,20 @@ public class PreferenceOne extends AppCompatActivity {
         maxAgeSpinner = findViewById(R.id.maxAgeSpinner);
         confirmButton = findViewById(R.id.confirm_button);
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        // Set OnClickListener to the button
+        btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validatePreferences()) {
-                    // Move to the next page
-                    Intent nextIntent = new Intent(PreferenceOne.this, MainPage.class);
-                    startActivity(nextIntent);
+                    // Create an Intent to navigate to the activity_change_password.xml
+                    Intent intent = new Intent(ProfileCloneTwo.this, ProfileSetup.class);
+                    startActivity(intent); // Start the new activity
                 }
             }
         });
     }
 
     private boolean validatePreferences() {
-        // Ensure a gender is selected
-
-        // Validate heights
         int minHeightIndex = minHeightSpinner.getSelectedItemPosition();
         int maxHeightIndex = maxHeightSpinner.getSelectedItemPosition();
         if (minHeightIndex > maxHeightIndex) {

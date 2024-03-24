@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- User profile picture -->
+    <ImageView
+        android:id="@+id/chat_item_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_profile_placeholder" 
+        android:scaleType="centerCrop"
+        android:contentDescription="profile picture"
+        android:shape="oval"
+        android:elevation="2dp"/>
+
+    <!-- Text layout for name and message preview -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <!-- User name -->
+        <TextView
+            android:id="@+id/chat_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Username" />
+
+        <!-- Message preview -->
+        <TextView
+            android:id="@+id/chat_item_message_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="Message preview" />
+    </LinearLayout>
+
+    <!-- Message time stamp -->
+    <TextView
+        android:id="@+id/chat_item_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="4:30 PM"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"/>
+
+</LinearLayout>
