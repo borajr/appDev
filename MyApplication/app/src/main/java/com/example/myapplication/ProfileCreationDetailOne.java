@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProfileCreationDetailOne extends AppCompatActivity {
 
     @Override
@@ -46,9 +49,14 @@ public class ProfileCreationDetailOne extends AppCompatActivity {
                     Toast.makeText(ProfileCreationDetailOne.this, "You must be at least 18 years old.", Toast.LENGTH_LONG).show();
                     return;
                 }
-
+                DatabaseHandler db = new DatabaseHandler();
+                int year = datePicker.getYear();
+                Calendar today = Calendar.getInstance(); //CREATE HASHMAP HERE, DB.UPDATEUSER SHOULD JUST UPLOAD THE HASHMAP!!
+                Map<String, Object> data = createMap(firstName, lastName, 2024-year);
+                db.updateUser(data);
                 // If all validations pass, navigate to the next page
                 Intent intent = new Intent(ProfileCreationDetailOne.this, ProfileCreationDetailTwo.class);
+                finish();
                 startActivity(intent);
             }
         });
@@ -70,6 +78,14 @@ public class ProfileCreationDetailOne extends AppCompatActivity {
         today.add(Calendar.YEAR, -18);
 
         return !selectedDate.after(today); // True if 18 or older
+    }
+
+    private Map<String, Object> createMap(String name, String lastName, Integer age) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("lastName", lastName);
+        map.put("age", age);
+        return map;
     }
 
 }

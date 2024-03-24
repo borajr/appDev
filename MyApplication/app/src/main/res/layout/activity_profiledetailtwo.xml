@@ -77,15 +77,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:gravity="left"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/Height"
-        tools:layout_editor_absoluteX="0dp">
+        tools:layout_editor_absoluteX="30dp">
 
         <Spinner
             android:id="@+id/minHeightSpinner"
-            android:layout_width="140dp"
+            android:layout_width="303dp"
             android:layout_height="48dp"
             android:layout_marginLeft="30dp"
             android:background="#ffffff"
@@ -94,16 +94,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
 
-        <Spinner
-            android:id="@+id/maxHeightSpinner"
-            android:layout_width="140dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="40dp"
-            android:background="#ffffff"
-            android:entries="@array/height"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/gap"
-            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
     <TextView
@@ -124,7 +114,7 @@
         app:layout_constraintVertical_bias="0.01" />
 
     <Spinner
-        android:id="@+id/editText3"
+        android:id="@+id/starSignSpinner"
         android:layout_width="300dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
@@ -146,7 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="@dimen/element_spacing"
-        android:text="Age window"
+        android:text="Random data"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -154,7 +144,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText3"
+        app:layout_constraintTop_toBottomOf="@id/starSignSpinner"
         app:layout_constraintVertical_bias="0.019" />
 
     <LinearLayout
@@ -170,26 +160,15 @@
 
         <Spinner
             android:id="@+id/minAgeSpinner"
-            android:layout_width="140dp"
+            android:layout_width="297dp"
             android:layout_height="48dp"
             android:layout_marginStart="30dp"
             android:background="#ffffff"
             android:entries="@array/age_range"
-            app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/gap"
+            app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
 
-        <Spinner
-            android:id="@+id/maxAgeSpinner"
-            android:layout_width="140dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="40dp"
-            android:background="#ffffff"
-            android:entries="@array/age_range"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/gap"
-            app:layout_constraintTop_toTopOf="parent"
-            />
     </LinearLayout>
 
     <!-- Language -->
