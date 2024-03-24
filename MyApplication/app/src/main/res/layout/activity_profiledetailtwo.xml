@@ -27,191 +27,196 @@
         android:id="@+id/Gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
         android:text="Preferred Gender:"
-        android:textStyle="bold"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.06"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Tellus" />
 
     <!-- Height -->
 
-    <EditText
+
+    <Spinner
         android:id="@+id/editText1"
-        android:layout_width="279dp"
+        android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/signup_rectangle"
-        android:hint=" Enter Gender"
-        android:textColor="#000000"
-        android:inputType="text|textNoSuggestions"
-        android:maxLines="1"
-        android:lines="1"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_spinner"
+        android:entries="@array/gender"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintHorizontal_bias="0.27"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Gender"
-        app:layout_constraintVertical_bias="0.129" />
+        app:layout_constraintTop_toBottomOf="@id/Gender" />
 
     <TextView
         android:id="@+id/Height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Height"
+        android:textColor="#000000"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#000000"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintHorizontal_bias="0.041"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText1"
-        app:layout_constraintVertical_bias="0.058" />
+        app:layout_constraintTop_toBottomOf="@id/editText1" />
 
-    <!-- Star Sign -->
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="277dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/signup_rectangle"
-        android:hint="  Enter Height in cm"
-        android:textColor="#000000"
-        android:inputType="text|textNoSuggestions"
-        android:maxLines="1"
-        android:lines="1"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.134"
-        app:layout_constraintStart_toStartOf="parent"
+    <!-- Age window -->
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:gravity="left"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/Height"
-        app:layout_constraintVertical_bias="0.087" />
+        tools:layout_editor_absoluteX="30dp">
+
+        <Spinner
+            android:id="@+id/minHeightSpinner"
+            android:layout_width="303dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="30dp"
+            android:background="#ffffff"
+            android:entries="@array/height"
+            app:layout_constraintEnd_toStartOf="@id/gap"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Star Sign"
-        android:textStyle="bold"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText2"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintTop_toBottomOf="@id/linear"
+        app:layout_constraintVertical_bias="0.01" />
 
-    <!-- Age window -->
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="280dp"
+    <Spinner
+        android:id="@+id/starSignSpinner"
+        android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/signup_rectangle"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_spinner"
+        android:entries="@array/star_signs"
         android:hint="  Enter star sign"
         android:textColor="#000000"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.137"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/star"
-        app:layout_constraintVertical_bias="0.066" />
+        app:layout_constraintEnd_toEndOf="@+id/Gender"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Gender"
+        app:layout_constraintTop_toBottomOf="@id/star" />
+
+    <!-- Academic year -->
 
     <TextView
         android:id="@+id/age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Age window"
-        android:textStyle="bold"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/element_spacing"
+        android:text="Random data"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText3"
+        app:layout_constraintTop_toBottomOf="@id/starSignSpinner"
         app:layout_constraintVertical_bias="0.019" />
 
-    <!-- Academic year -->
-
-    <EditText
-        android:id="@+id/editText4"
-        android:layout_width="296dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/signup_rectangle"
-        android:hint="  Enter Age"
-        android:inputType="text|textNoSuggestions"
-        android:lines="1"
-        android:maxLines="1"
-        android:textColor="#000000"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.147"
-        app:layout_constraintStart_toStartOf="parent"
+    <LinearLayout
+        android:id="@+id/linear2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:gravity="left"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/age"
-        app:layout_constraintVertical_bias="0.053" />
+        tools:layout_editor_absoluteX="0dp">
+
+        <Spinner
+            android:id="@+id/minAgeSpinner"
+            android:layout_width="297dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="30dp"
+            android:background="#ffffff"
+            android:entries="@array/age_range"
+            app:layout_constraintEnd_toStartOf="@+id/gap"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+    </LinearLayout>
+
+    <!-- Language -->
 
     <TextView
         android:id="@+id/year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Academic year"
-        android:textStyle="bold"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/element_spacing"
+        android:text="Academic Program"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintHorizontal_bias="0.063"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText4"
+        app:layout_constraintTop_toBottomOf="@id/linear2"
         app:layout_constraintVertical_bias="0.0" />
-
-    <!-- Language -->
 
     <EditText
         android:id="@+id/editText5"
-        android:layout_width="314dp"
+        android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/between_elements_spacing"
         android:background="@drawable/signup_rectangle"
         android:hint="  Enter study program"
-        android:textColor="#000000"
         android:inputType="text|textNoSuggestions"
-        android:maxLines="1"
         android:lines="1"
+        android:maxLines="1"
+        android:textColor="#000000"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.185"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/year"
-        app:layout_constraintVertical_bias="0.043" />
+        app:layout_constraintEnd_toEndOf="@+id/Gender"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Gender"
+        app:layout_constraintTop_toBottomOf="@id/year" />
 
     <TextView
         android:id="@+id/language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/element_spacing"
         android:text="Language"
-        android:textStyle="bold"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
@@ -223,28 +228,26 @@
 
     <EditText
         android:id="@+id/edittext7"
-        android:layout_width="308dp"
+        android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/signup_rectangle"
         android:hint="  Enter language"
-        android:textColor="#000000"
         android:inputType="text|textNoSuggestions"
-        android:maxLines="1"
         android:lines="1"
+        android:maxLines="1"
+        android:textColor="#000000"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.174"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/language"
-        app:layout_constraintVertical_bias="0.036" />
+        app:layout_constraintEnd_toEndOf="@+id/Gender"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Gender"
+        app:layout_constraintTop_toBottomOf="@id/language" />
 
     <Button
         android:id="@+id/confirm_button"
         android:layout_width="309dp"
         android:layout_height="60dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/pink_rounded"
         android:text="Confirm"
         android:textColor="#ffffff"

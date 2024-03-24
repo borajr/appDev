@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/gradient_background" 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Experiencing a Problem?"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/button_unmatch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Unmatch"
+        android:background="@drawable/rounded_spinner"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/button_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Report"
+        android:background="@drawable/rounded_spinner"
+        android:layout_marginTop="8dp" />
+</LinearLayout>
