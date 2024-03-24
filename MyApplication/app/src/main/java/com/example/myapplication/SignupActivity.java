@@ -2,15 +2,24 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private static final String TAG = "SignupActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +62,11 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, "Password must contain 8+ characters, a letter, a number, and a capital letter.", Toast.LENGTH_LONG).show();
                 }
                 if (correctInput) {
-                    mAuth.createUserWithEmailAndPassword(emailInput, emailInput);
+                    createUser(emailInput, password);
+                    DatabaseHandler db = new DatabaseHandler();
+                    db.addUser(emailInput);
                     // If all checks pass, proceed to the ConfirmationActivity
-                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
+                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
                     startActivity(intent);
                 }
             }
@@ -85,5 +96,23 @@ public class SignupActivity extends AppCompatActivity {
             }
         }
         return false; // Password missing required character types
+    }
+    private void createUser(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

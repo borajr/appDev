@@ -8,6 +8,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProfileCreationDetailTwo extends AppCompatActivity {
 
     private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner;
@@ -31,6 +34,8 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
             public void onClick(View v) {
                 if (validatePreferences()) {
                     // Move to the next appropriate page
+                    DatabaseHandler db = new DatabaseHandler();
+                    //db.updateUser();
                     Intent nextIntent = new Intent(ProfileCreationDetailTwo.this, ProfileCreationDetailThree.class); // Adjust as needed
                     startActivity(nextIntent);
                 }
@@ -55,5 +60,17 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
         }
 
         return true; // All validations passed
+    }
+
+    private Map<String, Object> createMap(
+            String gender, Integer height, String starSign,
+            String academicProgram, String language ) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("gender", gender);
+        map.put("height", height);
+        map.put("starSign", starSign);
+        map.put("academicProgram", academicProgram);
+        map.put("language", language);
+        return map;
     }
 }

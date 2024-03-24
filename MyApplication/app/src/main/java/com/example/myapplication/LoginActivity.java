@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         emailEditText = findViewById(R.id.editText1);
         passwordEditText = findViewById(R.id.editText2);
-        Button loginButton = findViewById(R.id.button2); // Update this ID to match your button's ID in your layout
+        Button loginButton = findViewById(R.id.loginbutton); // Update this ID to match your button's ID in your layout
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,12 +68,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.loginbutton).setOnClickListener(new View.OnClickListener() {
+            final EditText emailEditText = findViewById(R.id.editText1);
+            final EditText passwordEditText = findViewById(R.id.editText2);
             @Override
             public void onClick(View v) {
                 mAuth = FirebaseAuth.getInstance();
-                String email = editTextEmail.getText().toString().trim();
-                String password = passwordEditText.getText().toString();
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
                 signIn(email, password);
+                Intent intent = new Intent(LoginActivity.this, MainPage.class);
+                startActivity(intent);
             }
         });
     }
@@ -91,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, "Authentication failed with password"+password+" "+email,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
