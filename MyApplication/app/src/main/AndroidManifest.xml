@@ -126,6 +126,10 @@
             android:name=".ProfileCloneThree"
             android:exported="true" />
 
+        <activity
+            android:name=".SimpleChat"
+            android:exported="true" />
+
 
 
         <!-- Main activity (Entry point of your application) -->
