@@ -33,7 +33,7 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create an Intent to navigate to the activity_change_password.xml
-                Intent intent = new Intent(MainPage.this, AllChatsActivity.class);
+                Intent intent = new Intent(MainPage.this, ChatActivity.class);
                 startActivity(intent); // Start the new activity
             }
         });

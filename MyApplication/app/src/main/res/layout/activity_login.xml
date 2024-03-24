@@ -82,7 +82,7 @@
         android:layout_marginTop="@dimen/between_elements_spacing" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/loginbutton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
@@ -109,7 +109,7 @@
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" 
-        app:layout_constraintTop_toBottomOf="@id/button2"
+        app:layout_constraintTop_toBottomOf="@id/loginbutton"
         app:layout_constraintWidth_percent="0.4"
         app:layout_constraintVertical_bias="0.1"
         android:layout_marginTop="@dimen/between_elements_spacing" />
