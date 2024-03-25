@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/profile_gradient">
+    android:background="@drawable/profile_gradient"
+    tools:context=".ProfileCreationDetailTwo">
 
     <!-- TextViews -->
 
@@ -247,18 +248,15 @@
 
     <!-- Confirm Button -->
 
-    <EditText
-        android:id="@+id/edittext7"
+    <TextView
+        android:id="@+id/textview"
         android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="4dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="8dp"
         android:background="@drawable/signup_rectangle"
-        android:hint="  Enter language"
-        android:inputType="text|textNoSuggestions"
-        android:lines="1"
-        android:maxLines="1"
-        android:textColor="#000000"
-        android:textSize="12sp"
+        android:hint="Select Language"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="@+id/Gender"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Gender"
@@ -275,7 +273,7 @@
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edittext7"
+        app:layout_constraintTop_toBottomOf="@id/textview"
         app:layout_constraintWidth_percent="0.8" />
 
     <!-- Button3 -->
