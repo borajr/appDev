@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/spinnerReportedUsers"
         android:layout_marginTop="24dp"
-        android:text="User was reported for: [Reason]"
+        android:text="User Was Reported For: [Reason]"
         android:padding="16dp"
         android:background="#EFEFEF"/>
 

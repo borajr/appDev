@@ -16,14 +16,15 @@
 
 
         <TextView
-            android:id="@+id/ProfileDetails"
+            android:id="@+id/Tellus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:text="Profile details"
+            android:layout_marginTop="15dp"
+            android:text="Tell us about yourself"
             android:textColor="#000000"
-            android:textSize="48sp"
+            android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.451"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +32,7 @@
             android:id="@+id/Alcohol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="60dp"
             android:text="Alcohol"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -39,7 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.145"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ProfileDetails" />
+            app:layout_constraintTop_toBottomOf="@id/Tellus" />
 
         <Spinner
             android:id="@+id/alcohol_menu"

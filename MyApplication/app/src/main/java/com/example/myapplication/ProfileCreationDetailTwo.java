@@ -89,9 +89,7 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
         // Initialize your views
         genderSpinner = findViewById(R.id.editText1);
         minHeightSpinner = findViewById(R.id.minHeightSpinner);
-        maxHeightSpinner = findViewById(R.id.maxHeightSpinner);
         minAgeSpinner = findViewById(R.id.minAgeSpinner);
-        maxAgeSpinner = findViewById(R.id.maxAgeSpinner);
         confirmButton = findViewById(R.id.confirm_button);
         textView = findViewById(R.id.textview);
         selectedLanguage = new boolean[langArray.length];

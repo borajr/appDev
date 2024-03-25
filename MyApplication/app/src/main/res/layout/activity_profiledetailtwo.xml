@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/profile_gradient"
-    tools:context=".ProfileCreationDetailTwo">
+    android:background="@drawable/profile_gradient">
 
     <!-- TextViews -->
 
@@ -15,7 +14,7 @@
         android:id="@+id/Tellus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="15dp"
         android:text="Tell us about yourself"
         android:textColor="#000000"
         android:textSize="28sp"
@@ -89,7 +88,7 @@
             android:layout_width="303dp"
             android:layout_height="48dp"
             android:layout_marginLeft="30dp"
-            android:background="@drawable/rounded_spinner"
+            android:background="#ffffff"
             android:entries="@array/height"
             app:layout_constraintEnd_toStartOf="@id/gap"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +163,7 @@
             android:layout_width="297dp"
             android:layout_height="48dp"
             android:layout_marginStart="30dp"
-            android:background="#ffffff"
+            android:background="@drawable/rounded_spinner"
             android:entries="@array/age_range"
             app:layout_constraintEnd_toStartOf="@+id/gap"
             app:layout_constraintStart_toEndOf="parent"
@@ -225,8 +224,6 @@
         app:layout_constraintTop_toBottomOf="@id/editText5"
         app:layout_constraintVertical_bias="0.0" />
 
-    <!-- Confirm Button -->
-
     <TextView
         android:id="@+id/textview"
         android:layout_width="300dp"
@@ -240,6 +237,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/Gender"
         app:layout_constraintTop_toBottomOf="@id/language" />
+
 
     <Button
         android:id="@+id/confirm_button"
