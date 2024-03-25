@@ -15,6 +15,17 @@
         <item>Non-binary</item>
         <item>Other</item>
     </string-array>
+    <string-array name="academic">
+        <item>Chemical Engineering and Chemistry</item>
+        <item>Built Environment</item>
+        <item>Electrical Engineering</item>
+        <item>Biomedical Engineering</item>
+        <item>Mechanical Engineering</item>
+        <item>Industrial Design</item>
+        <item>Applied Physics abd Science Education</item>
+        <item>Mathematics and Computer Science</item>
+        <item>Industrial Engineering and Innovation Sciences</item>
+    </string-array>
 </resources>
 
 
