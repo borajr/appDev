@@ -48,6 +48,8 @@ dependencies {
 
 
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.firebase:firebase-database:20.3.1")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")

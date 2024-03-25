@@ -30,14 +30,17 @@ public class SimpleChat extends AppCompatActivity {
         setContentView(R.layout.activity_simplechat);
         Button sendButton = findViewById(R.id.chat_send_button);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        messagesRef = firebaseDatabase.getReference("messages");
+        //firebaseAuth = FirebaseAuth.getInstance();
+        //FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        //messagesRef = firebaseDatabase.getReference("messages");
 
-    sendButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            boolean correctInput = true;
-        }
+        //sendButton.setOnClickListener(new View.OnClickListener() {
+           // @Override
+           // public void onClick(View v) {
+              //  boolean correctInput = true;
+           // }
+
+      //  }
+
     }
-    }
+}
