@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:background="@drawable/gradient_background" 
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/textViewMatchMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"
+            android:text="You have matched! If both parties want you can meet with them on:"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/textViewMatchLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:text="Location: [Location]"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/textViewMatchTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Time: [Time]"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+</RelativeLayout>
