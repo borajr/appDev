@@ -5,18 +5,18 @@
     android:layout_height="match_parent"
     android:background="@drawable/profile_gradient">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/logo"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintHeight_percent="0.25"
-        app:layout_constraintBottom_toTopOf="@id/FirstName"
+<TextView
+        android:id="@+id/Tellus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Tell us about yourself"
+        android:textColor="#000000"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.451"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 80% of parent's width -->
 
@@ -24,7 +24,7 @@
         android:id="@+id/FirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="120dp"
         android:text="First Name"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="@id/editText1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/editText1"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/Tellus" />
 
     <EditText
         android:id="@+id/editText1"
@@ -41,7 +41,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/signup_rectangle"
         android:ems="10"
-        android:hint="  Enter first name"
+        android:hint="Enter First Name"
         android:padding="8dp"
         android:inputType="text|textNoSuggestions"
         android:lines="1"
@@ -75,7 +75,7 @@
         android:layout_marginTop="4dp"
         android:background="@drawable/signup_rectangle"
         android:ems="10"
-        android:hint="  Enter last name"
+        android:hint="Enter Last Name"
         android:padding="8dp"
         android:inputType="textPersonName"
         android:lines="1"

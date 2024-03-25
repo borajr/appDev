@@ -1,16 +1,29 @@
--main page
--admin page
+ui:
+	-create page for close account / signout
+	-create popup for more info on user
+	-go through the entire app and make the letters capital
+	-go through the entire app and make the texts correct
+	-match pop up
 
-
+frontend: 
+	-display name and age of the user
+	-add the pop up that shows additional information
+	-swipe left and swipe right
+	-match pop up with location & time
+	
 backend:
--store user info
--show the user info/profiles on the main page
--be able to change the user information
--password reset
--implement bora's algorithm
+	-display user info on the main page
+	-chat feautre
+	-report/ban feature
+	-close account feature
+	-password reset
+	-implementing matching algorithm
+	-differentiate users and students
 
-other stuff:
--documentation
--chat feature
--requriements doc overview
--final presentation graphs
+documentation:
+	-prepare the slides for the final presentation
+
+hardware:
+	-vertical rotation
+	-actual phone?
+-sonar qube?
