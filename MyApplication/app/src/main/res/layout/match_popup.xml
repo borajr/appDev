@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textSize="18sp"
-            android:text="You have matched! If both parties want you can meet with them on:"
+            android:text="You have matched! If both parties want, you can meet with them on:"
             android:layout_gravity="center"/>
 
         <TextView
