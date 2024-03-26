@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     android:padding="20dp">
 
     <LinearLayout
@@ -9,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:background="@drawable/gradient_background" 
+        android:background="@android:color/transparent"
         android:elevation="4dp">
 
         <TextView
@@ -18,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textSize="18sp"
-            android:text="You have matched! If both parties want you can meet with them on:"
+            android:text="You have matched! If both parties want, you can meet with them on:"
             android:layout_gravity="center"/>
 
         <TextView

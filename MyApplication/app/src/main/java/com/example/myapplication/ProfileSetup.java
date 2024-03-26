@@ -124,7 +124,7 @@ public class ProfileSetup extends AppCompatActivity {
                     startActivity(new Intent(ProfileSetup.this, MainPage.class));
                     return true;
                 } else if (id == R.id.navigation_chats) {
-                    startActivity(new Intent(ProfileSetup.this, ChatActivity.class));
+                    startActivity(new Intent(ProfileSetup.this, AllChatsActivity.class));
                     return true;
                 }
                 return false;
