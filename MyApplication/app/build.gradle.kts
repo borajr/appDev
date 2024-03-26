@@ -68,6 +68,10 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
-
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("com.lorentzos.swipecards:library:1.0.9")
+    implementation ("com.google.firebase:firebase-database:9.8.0")
+    implementation("com.lorentzos.swipecards:library:X.X.X@aar")
+    implementation ("androidx.cardview:cardview:1.0.0")
 }
 
