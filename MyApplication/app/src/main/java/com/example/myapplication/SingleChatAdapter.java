@@ -66,7 +66,7 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     // ViewHolder for sent messages
     public static class SentMessageViewHolder extends RecyclerView.ViewHolder {
-        TextView messageText, timestampText;
+        TextView messageText;
 
         SentMessageViewHolder(View itemView) {
             super(itemView);
@@ -75,7 +75,6 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         void bind(ChatMessage message) {
             messageText.setText(message.getMessage());
-            timestampText.setText(message.getTimestamp());
         }
     }
 
@@ -87,13 +86,11 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ReceivedMessageViewHolder(View itemView) {
             super(itemView);
             messageText = itemView.findViewById(R.id.text_message_body_received);
-            //timestampText = itemView.findViewById(R.id.received_message_time);
             profileImage = itemView.findViewById(R.id.image_message_profile);
         }
 
         void bind(ChatMessage message) {
             messageText.setText(message.getMessage());
-            timestampText.setText(message.getTimestamp());
             profileImage.setImageResource(message.getUserProfileImageId());
         }
     }

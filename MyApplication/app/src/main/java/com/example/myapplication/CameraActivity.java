@@ -58,6 +58,72 @@ public class CameraActivity extends AppCompatActivity {
         Button btnTakePhoto = findViewById(R.id.btn_take_photo);
         Button btnContinue = findViewById(R.id.btn_continue);
 
+        final ImageView imageView = findViewById(R.id.imageView);
+        Button imageViewCloseBtn = findViewById(R.id.imageViewCloseBtn);
+
+        imageViewCloseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.setImageDrawable(null); // Clears the ImageView
+                // Optionally, hide the button itself if desired
+            }
+        });
+
+        final ImageView imageView1 = findViewById(R.id.imageView1);
+        Button imageViewCloseBtn1 = findViewById(R.id.imageViewCloseBtn1);
+
+        imageViewCloseBtn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView1.setImageDrawable(null); // Clears the ImageView
+                // Optionally, hide the button itself if desired
+            }
+        });
+
+        final ImageView imageView2 = findViewById(R.id.imageView2);
+        Button imageViewCloseBtn2 = findViewById(R.id.imageViewCloseBtn2);
+
+        imageViewCloseBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView2.setImageDrawable(null); // Clears the ImageView
+                // Optionally, hide the button itself if desired
+            }
+        });
+
+        final ImageView imageView3 = findViewById(R.id.imageView3);
+        Button imageViewCloseBtn3 = findViewById(R.id.imageViewCloseBtn3);
+
+        imageViewCloseBtn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView3.setImageDrawable(null); // Clears the ImageView
+                // Optionally, hide the button itself if desired
+            }
+        });
+
+        final ImageView imageView4 = findViewById(R.id.imageView4);
+        Button imageViewCloseBtn4 = findViewById(R.id.imageViewCloseBtn4);
+
+        imageViewCloseBtn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView4.setImageDrawable(null); // Clears the ImageView
+                // Optionally, hide the button itself if desired
+            }
+        });
+
+        final ImageView imageView5 = findViewById(R.id.imageView5);
+        Button imageViewCloseBtn5 = findViewById(R.id.imageViewCloseBtn5);
+
+        imageViewCloseBtn5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView5.setImageDrawable(null); // Clears the ImageView
+                // Optionally, hide the button itself if desired
+            }
+        });
+
         // Set click listener for Choose Photo button
         btnChoosePhoto.setOnClickListener(new View.OnClickListener() {
             @Override

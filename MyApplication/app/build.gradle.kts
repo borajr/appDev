@@ -45,8 +45,7 @@ android {
 }
 
 dependencies {
-
-
+    
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -56,6 +55,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("com.google.firebase:firebase-database:20.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -68,6 +68,10 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
-
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("com.lorentzos.swipecards:library:1.0.9")
+    implementation ("com.google.firebase:firebase-database:9.8.0")
+    implementation("com.lorentzos.swipecards:library:X.X.X@aar")
+    implementation ("androidx.cardview:cardview:1.0.0")
 }
 

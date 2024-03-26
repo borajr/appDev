@@ -38,7 +38,7 @@
         android:padding="8dp"
         android:background="@drawable/signup_rectangle"
         android:inputType="text|textNoSuggestions"
-        android:hint="  Enter code"
+        android:hint="Enter Code"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"

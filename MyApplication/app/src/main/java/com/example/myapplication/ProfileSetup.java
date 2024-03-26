@@ -2,9 +2,13 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProfileSetup extends AppCompatActivity {
 
@@ -102,27 +106,28 @@ public class ProfileSetup extends AppCompatActivity {
             }
         });
 
-        View btnChat = findViewById(R.id.button_chat);
-        View btnMain = findViewById(R.id.button_main);
-        View btnProfile = findViewById(R.id.button_profile);
 
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
         // Set OnClickListener to the button
-        btnMain.setOnClickListener(new View.OnClickListener() {
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                // Create an Intent to navigate to the activity_change_password.xml
-                Intent intent = new Intent(ProfileSetup.this, MainPage.class);
-                startActivity(intent); // Start the new activity
-            }
-        });
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Get the item ID
+                int id = item.getItemId();
 
-        btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create an Intent to navigate to the activity_change_password.xml
-                Intent intent = new Intent(ProfileSetup.this, AllChatsActivity.class);
-                startActivity(intent); // Start the new activity
+                // Use if-else blocks to determine which item was selected
+                if (id == R.id.navigation_profile) {
+                    startActivity(new Intent(ProfileSetup.this, ProfileSetup.class));
+                    return true;
+                } else if (id == R.id.navigation_main) {
+                    startActivity(new Intent(ProfileSetup.this, MainPage.class));
+                    return true;
+                } else if (id == R.id.navigation_chats) {
+                    startActivity(new Intent(ProfileSetup.this, AllChatsActivity.class));
+                    return true;
+                }
+                return false;
             }
         });
     }

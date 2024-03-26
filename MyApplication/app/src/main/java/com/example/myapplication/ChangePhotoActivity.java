@@ -71,7 +71,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 imageView1.setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
-                v.setVisibility(View.GONE);
             }
         });
 
@@ -83,7 +82,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 imageView2.setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
-                v.setVisibility(View.GONE);
             }
         });
 
@@ -95,7 +93,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 imageView3.setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
-                v.setVisibility(View.GONE);
             }
         });
 
@@ -107,7 +104,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 imageView4.setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
-                v.setVisibility(View.GONE);
             }
         });
 
@@ -119,7 +115,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 imageView5.setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
-                v.setVisibility(View.GONE);
             }
         });
         // Set click listener for Choose Photo button
