@@ -37,6 +37,9 @@
             android:name=".ConfirmationActivity"
             android:exported="false"/>
         <activity
+            android:name=".ChatActivity"
+            android:exported="false"/>
+        <activity
             android:name=".chat"
             android:exported="true"/>
         <activity

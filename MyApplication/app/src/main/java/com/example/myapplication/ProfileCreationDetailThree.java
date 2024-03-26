@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,12 +20,20 @@ public class ProfileCreationDetailThree extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profiledetailthree);
+
         alcoholMenu = findViewById(R.id.alcohol_menu);
         smokingMenu = findViewById(R.id.smoking_menu);
         foodMenu = findViewById(R.id.Food_menu);
         marijuanaMenu = findViewById(R.id.Marijuana_menu);
         DatabaseHandler db = new DatabaseHandler();
+        TextView Alcohol = findViewById(R.id.Alcohol);
 
+        int unicodeAlcohol = 0x1F37A;
+
+        String emojiAlcohol = getEmoji(unicodeAlcohol);
+
+        String textAlcohol = "Alcohol" + emojiAlcohol;
+        Alcohol.setText(textAlcohol);
 
         // Find the button by its ID
         findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
@@ -63,6 +72,9 @@ public class ProfileCreationDetailThree extends AppCompatActivity {
         return input.equals("Yes");
     }
 
+    public String getEmoji(int uni){
 
+        return new String(Character.toChars(uni));
+    }
 
 }
