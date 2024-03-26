@@ -55,7 +55,7 @@ public class AllChatsActivity extends AppCompatActivity {
                     startActivity(new Intent(AllChatsActivity.this, MainPage.class));
                     return true;
                 } else if (id == R.id.navigation_chats) {
-                    startActivity(new Intent(AllChatsActivity.this, ChatActivity.class));
+                    startActivity(new Intent(AllChatsActivity.this, AllChatsActivity.class));
                     return true;
                 }
 
