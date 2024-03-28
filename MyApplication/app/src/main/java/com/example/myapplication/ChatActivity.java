@@ -29,8 +29,6 @@ public class ChatActivity extends AppCompatActivity {
         // Initialize the message list and adapter
         messageList = new ArrayList<>();
         // Example message
-        messageList.add(new ChatMessage("Hi!", true, null, 0));
-        messageList.add(new ChatMessage("Hello!", false, null, 0));
 
         chatAdapter = new SingleChatAdapter(messageList);
 

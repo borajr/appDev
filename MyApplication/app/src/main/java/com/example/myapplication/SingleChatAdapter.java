@@ -74,8 +74,8 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         void bind(ChatMessage message) {
-            messageText.setText(message.getMessage());
-            timestampText.setText(message.getTimestamp());
+            messageText.setText(message.getMessageText());
+            timestampText.setText((int) message.getMessageTime());
         }
     }
 
@@ -92,9 +92,9 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         void bind(ChatMessage message) {
-            messageText.setText(message.getMessage());
-            timestampText.setText(message.getTimestamp());
-            profileImage.setImageResource(message.getUserProfileImageId());
+            messageText.setText(message.getMessageText());
+            timestampText.setText((int) message.getMessageTime());
+
         }
     }
 }

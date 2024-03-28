@@ -3,44 +3,38 @@ package com.example.myapplication;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
+import com.google.firebase.firestore.FirebaseFirestore; // Import for Firestore
 
 public class SimpleChat extends AppCompatActivity {
+
+    private FirebaseFirestore db; // Firestore instance
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simplechat);
+        setContentView(R.layout.activity_simplechat); // Assuming your layout file is named activity_simple_chat
+
+        db = FirebaseFirestore.getInstance(); // Initialize Firestore
+
         Button sendButton = findViewById(R.id.chat_send_button);
-
-        //firebaseAuth = FirebaseAuth.getInstance();
-        //FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        //messagesRef = firebaseDatabase.getReference("messages");
-
-        //sendButton.setOnClickListener(new View.OnClickListener() {
-           // @Override
-           // public void onClick(View v) {
-              //  boolean correctInput = true;
-           // }
-
-      //  }
-
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText input = findViewById(R.id.chat_message_input);
+                // Read the input field and push a new instance
+                // of ChatMessage to the Firestore database
+                db.collection("messages") // Assuming "messages" is your collection name
+                        .add(new ChatMessage(input.getText().toString(),
+                                FirebaseAuth.getInstance()
+                                        .getCurrentUser()
+                                        .getDisplayName())
+                        );
+                // Clear the input
+                input.setText("");
+            }
+        });
     }
 }

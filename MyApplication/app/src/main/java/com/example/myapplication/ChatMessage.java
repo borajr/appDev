@@ -1,49 +1,45 @@
 package com.example.myapplication;
 
+import java.util.Date;
+
 public class ChatMessage {
-    private String message;
-    private boolean isSent; // 'true' if this message was sent by the user, 'false' if received
-    private String timestamp; // Optional: For message time
-    private int userProfileImageId; // Optional: For the image resource ID (if message is received)
+    private String messageText;
 
-    public ChatMessage(String message, boolean isSent, String timestamp, int userProfileImageId) {
-        this.message = message;
-        this.isSent = isSent;
-        this.timestamp = timestamp;
-        this.userProfileImageId = userProfileImageId;
+    public boolean isSent;
+    private String messageUser;
+    private long messageTime;
+    public ChatMessage(String messageText, String messageUser) {
+        this.messageText = messageText;
+        this.messageUser = messageUser;
+
+        // Initialize to current time
+        messageTime = new Date().getTime();
+    }
+    public ChatMessage(){
+    }
+    public String getMessageText() {
+        return messageText;
+    }
+    public void setMessageText(String messageText) {
+        this.messageText = messageText;
+    }
+    public String getMessageUser() {
+        return messageUser;
+    }
+    public void setMessageUser(String messageUser) {
+        this.messageUser = messageUser;
+    }
+    public long getMessageTime() {
+        return messageTime;
+    }
+    public void setMessageTime(long messageTime) {
+        this.messageTime = messageTime;
     }
 
-    // Getters
-    public String getMessage() {
-        return message;
-    }
 
     public boolean isSent() {
-        return isSent;
+        return true;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
 
-    public int getUserProfileImageId() {
-        return userProfileImageId;
-    }
-
-    // Setters
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setSent(boolean sent) {
-        isSent = sent;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public void setUserProfileImageId(int userProfileImageId) {
-        this.userProfileImageId = userProfileImageId;
-    }
 }
