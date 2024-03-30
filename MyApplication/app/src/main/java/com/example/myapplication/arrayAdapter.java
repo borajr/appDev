@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,8 +40,29 @@ public class arrayAdapter extends ArrayAdapter<cards>{
                 break;
         }
 
+        ImageButton infoButton = convertView.findViewById(R.id.infoButton);
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inform activity about info button click
+                if (mCallback != null) {
+                    mCallback.onInfoButtonClick(position);
+                }
+            }
+        });
+
 
         return convertView;
 
+    }
+    // Interface to communicate info button click to the activity
+    public interface OnInfoButtonClickListener {
+        void onInfoButtonClick(int position);
+    }
+
+    private OnInfoButtonClickListener mCallback;
+
+    public void setOnInfoButtonClickListener(OnInfoButtonClickListener listener) {
+        mCallback = listener;
     }
 }

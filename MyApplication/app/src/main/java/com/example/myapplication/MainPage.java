@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +18,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,24 +30,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class MainPage extends AppCompatActivity {
-    private FirebaseFirestore db;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private cards cards_data[];
     private arrayAdapter arrayAdapter;
-    private int i;
+    int i = 0;
     private FirebaseAuth mAuth;
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    private String currentUId;
-    private DatabaseReference usersDb;
+    CollectionReference usersReference = db.collection("users");
     ListView listView;
     List<cards> rowItems;
 
@@ -54,9 +62,9 @@ public class MainPage extends AppCompatActivity {
 
         // Initialize the BottomNavigationView
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        checkUserPreferences();
+
         // Set the OnNavigationItemSelectedListener
-        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNav.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // Get the item ID
@@ -79,13 +87,21 @@ public class MainPage extends AppCompatActivity {
             }
         });
 
+        Button infoButton = findViewById(R.id.infoButton);
+
+        compareGendersWithAllUsers();
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moreInfo();
+            }
+        });
+
+
         if (matched) {
+            //moreInfo();
             showMatchPopup();
         }
-
-        usersDb = FirebaseDatabase.getInstance().getReference().child("users");
-        currentUId = mAuth.getCurrentUser().getUid();
-
 
         rowItems = new ArrayList<cards>();
 
@@ -93,6 +109,8 @@ public class MainPage extends AppCompatActivity {
 
 
         SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        flingContainer.setAdapter(arrayAdapter);
+
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
@@ -104,9 +122,9 @@ public class MainPage extends AppCompatActivity {
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                //Do something on the left!
-                //You also have access to the original object.
-                //If you want to use it just cast it (String) dataObject
+                // Do something on the left!
+                // You also have access to the original object.
+                // If you want to use it just cast it (String) dataObject
                 Toast.makeText(MainPage.this, "left", Toast.LENGTH_SHORT).show();
             }
 
@@ -138,77 +156,119 @@ public class MainPage extends AppCompatActivity {
 
     }
 
-    private String userGender;
-    private String nextUserGender;
+    public void compareGendersWithAllUsers() {
+        if (currentUser != null) {
+            // Retrieve the email of the logged-in user
+            String userEmail = currentUser.getEmail();
 
-    public void checkGender() {
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            // Fetch the data of the logged-in user
+            db.collection("users").document(userEmail).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot loggedInUserDoc = task.getResult();
+                            if (loggedInUserDoc.exists()) {
+                                String loggedInUserGender = loggedInUserDoc.getString("gender");
+                                String loggedInUserPreference = loggedInUserDoc.getString("preference");
+                                //Log.d(TAG, "ALOALO loggedin user name: " + loggedInUserDoc.get("name")+ "gender: " +  loggedInUserGender + " logged in user preference: " + loggedInUserPreference);
+
+                                // Query all users
+                                db.collection("users").get()
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+
+                                                for (QueryDocumentSnapshot userDoc : task1.getResult()) {
+                                                    String userGender = userDoc.getString("gender");
+                                                    String userPreference = userDoc.getString("preference");
+                                                    String displayedUserEmail = userDoc.getString("email");
+                                                    Log.d(TAG, "ALOALO db user name: " + userDoc.get("name") + " gender: " +  userGender + " db user preference: "+ userPreference);
+                                                    if (loggedInUserGender != null && userPreference != null &&
+                                                            loggedInUserGender.equals(userPreference) &&
+                                                            userGender != null && loggedInUserPreference != null &&
+                                                            userGender.equals(loggedInUserPreference)) {
+
+                                                       /*cards item = new cards(userDoc.getString("email"),
+                                                                userDoc.getString("name"),
+                                                                userDoc.getString("images"));
+                                                        rowItems.add(item);
+                                                        arrayAdapter.notifyDataSetChanged();*/
 
 
-    }
+                                                        //Log.d(TAG, "Displays" + loggedInUserDoc.get("name") + " matches the logged-in user: " + userDoc.get("name"));
 
+                                                        // Gender and preference match
+                                                        Log.d(TAG, "User with email " + userDoc.get("name") + " matches the logged-in user's gender and preference.");
+                                                    } else {
 
-    private String userSex;
-    private String userPreferredGender;
-
-    public void checkUserPreferences() {
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference userDb = usersDb.child(user.getUid());
-        userDb.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    if (dataSnapshot.child("gender").getValue() != null && dataSnapshot.child("preferences").child("gender").getValue() != null) {
-                        userSex = dataSnapshot.child("gender").getValue().toString();
-                        userPreferredGender = dataSnapshot.child("preferences").child("gender").getValue().toString();
-                        getOppositeSexUsers();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void getOppositeSexUsers() {
-        usersDb.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (!dataSnapshot.getKey().equals(currentUId) && dataSnapshot.child("gender").getValue() != null && dataSnapshot.child("preferences").child("gender").getValue() != null) {
-                    String user2Gender = dataSnapshot.child("gender").getValue().toString();
-                    String user2PreferredGender = dataSnapshot.child("preferences").child("gender").getValue().toString();
-
-                    if (userSex.equals(user2PreferredGender) && user2Gender.equals(userPreferredGender)) {
-                        //display users
-                        String profileImageUrl = "default";
-                        if (!dataSnapshot.child("images").getValue().equals("default")) {
-                            profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
+                                                        Log.d(TAG, "User with email " + userDoc.get("name") + " does not match the logged-in user's gender and preference.");
+                                                    }
+                                                }
+                                            } else {
+                                                // Failed to fetch users
+                                                Log.d(TAG, "Error getting users: ", task1.getException());
+                                            }
+                                        });
+                            } else {
+                                // Logged-in user document does not exist
+                                Log.d(TAG, "Logged-in user document does not exist.");
+                            }
+                        } else {
+                            // Failed to fetch logged-in user data
+                            Log.d(TAG, "Error getting logged-in user data: ", task.getException());
                         }
-                        cards item = new cards(dataSnapshot.getKey(), dataSnapshot.child("name").getValue().toString(), profileImageUrl);
-                        rowItems.add(item);
-                        arrayAdapter.notifyDataSetChanged();
+                    });
+        } else {
+            // No user is logged in
+            Log.d(TAG, "No user logged in.");
+        }
+
+    }
+
+
+
+    private void moreInfo() {
+
+        View popupView = LayoutInflater.from(this).inflate(R.layout.more_info, null);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(popupView);
+
+        Dialog dialog = dialogBuilder.create();
+        dialog.show();
+
+
+        DocumentReference docRef = db.collection("users").document("b.bilgin@student.tue.nl"); // change
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        TextView nameTextView = popupView.findViewById(R.id.textViewName);
+                        nameTextView.setText("Name: " + document.get("name"));
+                        TextView ageTextView = popupView.findViewById(R.id.textViewAge);
+                        ageTextView.setText("Age: " + document.get("age"));
+                        TextView genderTextView = popupView.findViewById(R.id.textViewGender);
+                        genderTextView.setText("Name: " + document.get("gender"));
+                        TextView heightTextView = popupView.findViewById(R.id.textViewHeight);
+                        heightTextView.setText("Name: " + document.get("height"));
+                        TextView starSignTextView = popupView.findViewById(R.id.textViewStarSign);
+                        starSignTextView.setText("Name: " + document.get("starSign"));
+                        TextView smokingTextView = popupView.findViewById(R.id.textViewSmoking);
+                        smokingTextView.setText("Name: " + document.get("smoking"));
+                        TextView marijuanaTextView = popupView.findViewById(R.id.textViewMarijuana);
+                        marijuanaTextView.setText("Name: " + document.get("marijuana"));
+
+                    } else {
+                        Log.d(TAG, "No such document");
                     }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
                 }
             }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
         });
+
+
     }
 
 
@@ -256,5 +316,9 @@ public class MainPage extends AppCompatActivity {
         timeTextView.setText("Time: " + randomTime);
 
     }
+
+
+
+
 
 }

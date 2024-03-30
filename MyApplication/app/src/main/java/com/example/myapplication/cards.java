@@ -1,20 +1,20 @@
 package com.example.myapplication;
 
 public class cards {
-    private String userId;
+    private String userEmail;
     private String name;
     private String profileImageUrl;
     public cards (String userId, String name, String profileImageUrl){
-        this.userId = userId;
+        this.userEmail = userId;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
     }
 
     public String getUserId(){
-        return userId;
+        return userEmail;
     }
     public void setUserID(String userID){
-        this.userId = userId;
+        this.userEmail = userEmail;
     }
 
     public String getName(){
