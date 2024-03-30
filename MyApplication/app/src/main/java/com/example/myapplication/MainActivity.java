@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start LoginActivity
-                Intent intent = new Intent(MainActivity.this, PreferenceOne.class);
+                Intent intent = new Intent(MainActivity.this, SimpleChat.class);
                 startActivity(intent);
             }
         });
