@@ -43,7 +43,7 @@ import java.util.Random;
 
 public class MainPage extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private cards cards_data[];
+    //private cards cards_data[];
     private arrayAdapter arrayAdapter;
     int i = 0;
     private FirebaseAuth mAuth;
@@ -249,15 +249,15 @@ public class MainPage extends AppCompatActivity {
                         TextView ageTextView = popupView.findViewById(R.id.textViewAge);
                         ageTextView.setText("Age: " + document.get("age"));
                         TextView genderTextView = popupView.findViewById(R.id.textViewGender);
-                        genderTextView.setText("Name: " + document.get("gender"));
+                        genderTextView.setText("Gender: " + document.get("gender"));
                         TextView heightTextView = popupView.findViewById(R.id.textViewHeight);
-                        heightTextView.setText("Name: " + document.get("height"));
+                        heightTextView.setText("Height: " + document.get("height"));
                         TextView starSignTextView = popupView.findViewById(R.id.textViewStarSign);
-                        starSignTextView.setText("Name: " + document.get("starSign"));
+                        starSignTextView.setText("StarSign: " + document.get("starSign"));
                         TextView smokingTextView = popupView.findViewById(R.id.textViewSmoking);
-                        smokingTextView.setText("Name: " + document.get("smoking"));
+                        smokingTextView.setText("Smoknig: " + document.get("smoking"));
                         TextView marijuanaTextView = popupView.findViewById(R.id.textViewMarijuana);
-                        marijuanaTextView.setText("Name: " + document.get("marijuana"));
+                        marijuanaTextView.setText("Marijuana: " + document.get("marijuana"));
 
                     } else {
                         Log.d(TAG, "No such document");
