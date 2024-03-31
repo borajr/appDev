@@ -47,7 +47,7 @@ public class arrayAdapter extends ArrayAdapter<User>{
             Glide.with(convertView.getContext()).load(R.mipmap.ic_launcher).into(image);
         }
 
-
+        //More info button
         Button moreInfoButton = convertView.findViewById(R.id.infoButton);
         moreInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
