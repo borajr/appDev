@@ -136,9 +136,7 @@
         <activity
             android:name=".SimpleChat"
             android:exported="true" />
-
-
-
+        
         <!-- Main activity (Entry point of your application) -->
         <activity
             android:name=".MainActivity"
