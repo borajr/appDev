@@ -106,6 +106,16 @@ public class ProfileSetup extends AppCompatActivity {
             }
         });
 
+        // Set OnClickListener to the button
+        btnAccountInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to the activity_change_password.xml
+                Intent intent = new Intent(ProfileSetup.this, AccountInfo.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
+
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.navigation_profile);
