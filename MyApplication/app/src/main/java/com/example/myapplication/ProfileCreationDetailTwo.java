@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class ProfileCreationDetailTwo extends AppCompatActivity {
 
-    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner;
+    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner;
     private Button confirmButton;
 
     // initialize variables
@@ -90,23 +90,23 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
         setContentView(R.layout.activity_profiledetailtwo); // Ensure this matches your layout file
 
         // Initialize your views
-        genderSpinner = findViewById(R.id.editText1);
+        genderSpinner = findViewById(R.id.editText1); // TODO: this is called edittext1 but is a spinner?
         minHeightSpinner = findViewById(R.id.minHeightSpinner);
-        minAgeSpinner = findViewById(R.id.minAgeSpinner);
         confirmButton = findViewById(R.id.confirm_button);
         textView = findViewById(R.id.textview);
         selectedLanguage = new boolean[langArray.length];
+        departmentSpinner = findViewById(R.id.editText5);
 
-        String gender = genderSpinner.getSelectedItem().toString();
-        String height = minHeightSpinner.getSelectedItem().toString();
-        Integer age = Integer.parseInt(minAgeSpinner.getSelectedItem().toString());
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     // Move to the next appropriate page
+                    String gender = genderSpinner.getSelectedItem().toString();
+                    String height = minHeightSpinner.getSelectedItem().toString();
+                    String department = departmentSpinner.getSelectedItem().toString();
                     DatabaseHandler db = new DatabaseHandler();
-                    Map<String, Object> data = createMap(gender, height, age); //TODO: ADD LANGLIST
+                    Map<String, Object> data = createMap(gender, height, department); //TODO: ADD LANGLIST
                     db.updateUser(data);
                     Intent nextIntent = new Intent(ProfileCreationDetailTwo.this, ProfileCreationDetailThree.class); // Adjust as needed
                     startActivity(nextIntent);
@@ -193,11 +193,21 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
             }
         });
     }
-    private Map<String, Object> createMap(String gender, String height, Integer age) {
+    private Map<String, Object> createMap(String gender, String height, String department) {
         Map<String, Object> map = new HashMap<>();
         map.put("gender", gender);
-        map.put("height", height);
-        map.put("age", age);
+        int heightInt = 0;
+
+        if (height.equals("<150")) {
+            heightInt = 149;
+        } else if (height.equals(">210")) {
+            heightInt = 211;
+        } else {
+            heightInt = Integer.parseInt(height);
+        }
+        map.put("height", heightInt);
+
+        map.put("department", department);
         return map;
     }
 
