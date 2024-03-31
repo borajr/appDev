@@ -17,7 +17,7 @@ public class PreferenceCloneOne extends AppCompatActivity {
 
 
         // Find the button by its ID
-        View btnConfirm = findViewById(R.id.confirm_button);
+        View btnConfirm = findViewById(id.confirm_button);
 
 
         // Set OnClickListener to the button

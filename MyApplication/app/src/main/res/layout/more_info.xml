@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:background="@android:color/transparent"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/textViewMoreInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"
+            android:text="More Info"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:text="Name: [Name]"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/textViewAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Age: [age]"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/textViewGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Gender: [gender]"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/textViewHeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Height: [height]"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/textViewStarSign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:text="StarSign: [starsign]"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/textViewSmoking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Smoking: [smoking]"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/textViewMarijuana"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Marijuana: [marijuana]"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+</RelativeLayout>
