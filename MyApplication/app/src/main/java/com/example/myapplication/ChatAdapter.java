@@ -30,6 +30,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.lastMessageView.setText(chat.getLastMessage());
         holder.timestampView.setText(chat.getTimestamp());
         holder.userImageView.setImageResource(chat.getUserProfileImageId());
+
     }
 
     @Override
@@ -49,4 +50,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             timestampView = itemView.findViewById(R.id.chat_item_timestamp);
         }
     }
+
+
 }

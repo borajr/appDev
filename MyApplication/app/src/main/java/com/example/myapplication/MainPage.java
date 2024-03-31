@@ -27,6 +27,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,7 @@ public class MainPage extends AppCompatActivity {
 
         arrayAdapter = new arrayAdapter(this, users);
 
+        fetchUsersFromBackend();
 
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -200,6 +202,43 @@ public class MainPage extends AppCompatActivity {
             Log.d(TAG, "No user logged in.");
         }
 
+    }
+
+
+
+    private void fetchUsersFromBackend() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String userEmail = document.getString("email");
+                        String name = document.getString("name");
+                        String profileImageUrl = document.getString("image"); // Update this to fetch from Firebase Storage if needed
+                        String department = document.getString("department");
+                        String food = document.getString("food");
+
+                        // Use a default value if the field is null
+                        boolean alcohol = document.getBoolean("alcohol") != null ? document.getBoolean("alcohol") : false;
+                        boolean smoking = document.getBoolean("smoking") != null ? document.getBoolean("smoking") : false;
+                        boolean weed = document.getBoolean("weed") != null ? document.getBoolean("weed") : false;
+
+                        // Assuming age and height are stored as numbers (long in Firestore)
+                        int age = document.getLong("age").intValue(); // Add null check if necessary
+                        int height = document.getLong("height").intValue(); // Add null check if necessary
+
+                        User user = new User(userEmail, name, profileImageUrl, department, food,
+                                alcohol, smoking, weed, age, height);
+
+                        users.add(user);
+                    }
+                    arrayAdapter.notifyDataSetChanged();
+                } else {
+                    Log.w(TAG, "Error getting documents.", task.getException());
+                }
+            }
+        });
     }
 
 
