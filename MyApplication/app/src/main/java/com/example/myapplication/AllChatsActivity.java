@@ -39,6 +39,7 @@ public class AllChatsActivity extends AppCompatActivity {
 
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.navigation_chats);
 
         // Set OnClickListener to the button
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
