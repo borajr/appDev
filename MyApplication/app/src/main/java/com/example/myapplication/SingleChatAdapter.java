@@ -3,56 +3,49 @@ package com.example.myapplication;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
     private List<ChatMessage> messages;
+    private String currentUserId;
 
-    // View Types
-    private static final int SENT_MESSAGE = 0;
-    private static final int RECEIVED_MESSAGE = 1;
+    private static final int VIEW_TYPE_SENT = 1;
+    private static final int VIEW_TYPE_RECEIVED = 2;
 
-    public SingleChatAdapter(List<ChatMessage> messages) {
+    public SingleChatAdapter(List<ChatMessage> messages, String currentUserId) {
         this.messages = messages;
+        this.currentUserId = currentUserId;
     }
 
     @Override
     public int getItemViewType(int position) {
-        // Determine which layout to use for the row based on the MessageType
         ChatMessage message = messages.get(position);
-        if (message.isSent()) {
-            return SENT_MESSAGE;
+        if (message.getSenderId().equals(currentUserId)) {
+            return VIEW_TYPE_SENT;
         } else {
-            return RECEIVED_MESSAGE;
+            return VIEW_TYPE_RECEIVED;
         }
     }
 
-    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if (viewType == SENT_MESSAGE) {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.sent_message_item, parent, false);
+        if (viewType == VIEW_TYPE_SENT) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sent_message_item, parent, false);
             return new SentMessageViewHolder(view);
         } else {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.received_message_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.received_message_item, parent, false);
             return new ReceivedMessageViewHolder(view);
         }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ChatMessage message = messages.get(position);
-
-        if (holder.getItemViewType() == SENT_MESSAGE) {
+        if (getItemViewType(position) == VIEW_TYPE_SENT) {
             ((SentMessageViewHolder) holder).bind(message);
         } else {
             ((ReceivedMessageViewHolder) holder).bind(message);
@@ -64,8 +57,7 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return messages.size();
     }
 
-    // ViewHolder for sent messages
-    public static class SentMessageViewHolder extends RecyclerView.ViewHolder {
+    private static class SentMessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageText;
 
         SentMessageViewHolder(View itemView) {
@@ -78,20 +70,16 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    // ViewHolder for received messages
-    public static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
-        TextView messageText, timestampText;
-        ImageView profileImage;
+    private static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
+        TextView messageText;
 
         ReceivedMessageViewHolder(View itemView) {
             super(itemView);
             messageText = itemView.findViewById(R.id.text_message_body_received);
-            profileImage = itemView.findViewById(R.id.image_message_profile);
         }
 
         void bind(ChatMessage message) {
             messageText.setText(message.getMessage());
-            profileImage.setImageResource(message.getUserProfileImageId());
         }
     }
 }

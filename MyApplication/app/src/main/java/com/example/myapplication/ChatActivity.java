@@ -2,47 +2,106 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
+    private static final String TAG = "ChatActivity";
     private RecyclerView recyclerViewChat;
     private SingleChatAdapter chatAdapter;
     private List<ChatMessage> messageList;
+    private FirebaseFirestore db;
+    private String currentUserId; // The current user's ID
+    private String otherUserId; // The ID of the other user in the chat
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simplechat);
 
+        db = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        // Set the user IDs. In a real app, these would be determined based on the chat selected.
+        if (currentUser != null) {
+            currentUserId = currentUser.getUid();
+            // For demonstration purposes, we're using a fixed otherUserId.
+            otherUserId = "OTHER_USER_ID"; // TODO: Set this based on the chat selected.
+        } else {
+            // Handle the case where the user is not logged in (this shouldn't happen in this activity)
+            Log.e(TAG, "No user logged in!");
+            finish(); // Exit the ChatActivity
+            return;
+        }
+
         // Initialize the message list and adapter
         messageList = new ArrayList<>();
-        // Example message
-        messageList.add(new ChatMessage("Hi!", true, null, 0));
-        messageList.add(new ChatMessage("Hello!", false, null, 0));
-
-        chatAdapter = new SingleChatAdapter(messageList);
+        chatAdapter = new SingleChatAdapter(messageList, currentUserId);
 
         // Setup RecyclerView
         recyclerViewChat = findViewById(R.id.chat_messages_recycler_view);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewChat.setAdapter(chatAdapter);
 
+        // Fetch and display messages
+        fetchMessages();
+
         // Setup the menu button
         ImageView menuButton = findViewById(R.id.chat_menu_button);
         menuButton.setOnClickListener(view -> showMenuPopup());
+
+        // TODO: Setup the send button and message input
+        // You will need to add code here that sends a message when the send button is clicked
     }
+
+    private void fetchMessages() {
+        // Assuming you have a conversationId that you have received from the previous screen (chat list)
+        String conversationId = "CONVERSATION_ID"; // TODO: Get this from the intent or chat selection
+
+        db.collection("messages")
+                .whereEqualTo("conversationId", conversationId)
+                .orderBy("timestamp")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        List<ChatMessage> fetchedMessages = new ArrayList<>();
+                        for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                            ChatMessage message = doc.toObject(ChatMessage.class);
+                            fetchedMessages.add(message);
+                        }
+
+                        messageList.clear();
+                        messageList.addAll(fetchedMessages);
+                        chatAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    // ... Existing methods for showing pop-ups and transitioning to main activity ...
 
     private void showMenuPopup() {
         View popupView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.chat_pop_up_menu, null);

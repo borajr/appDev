@@ -5,19 +5,25 @@ public class ChatMessage {
     private boolean isSent;
     private String timestamp;
     private int userProfileImageId;
+    private String senderId; // Add senderId
+    private String receiverId; // Add receiverId
 
-    // No-argument constructor
-    public ChatMessage() {
-        // Default constructor required for Firestore data model deserialization
-    }
+    // No-argument constructor for Firestore deserialization
+    public ChatMessage() {}
 
-    // All-argument constructor
-    public ChatMessage(String message, boolean isSent, String timestamp, int userProfileImageId) {
+    // Constructor with all arguments
+    public ChatMessage(String message, boolean isSent, String timestamp, int userProfileImageId, String senderId, String receiverId) {
         this.message = message;
         this.isSent = isSent;
         this.timestamp = timestamp;
         this.userProfileImageId = userProfileImageId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
+
+
+// Getters and setters
+    // ... Include all getters and setters, including those for senderId and receiverId
 
     // Getters and setters
     public String getMessage() {
@@ -50,5 +56,12 @@ public class ChatMessage {
 
     public void setUserProfileImageId(int userProfileImageId) {
         this.userProfileImageId = userProfileImageId;
+    }
+
+    public Object getSenderId() {
+        return senderId;
+    }
+    public String getReceiverId() {
+        return receiverId;
     }
 }
