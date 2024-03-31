@@ -55,15 +55,18 @@ public class SimpleChat extends AppCompatActivity {
     private void sendMessage() {
         String messageText = messageInput.getText().toString();
         if (!messageText.isEmpty()) {
-            String receiverUserId = "RECEIVER_USER_ID"; // This should dynamically determine based on your app's chat system
+            // The receiver's ID needs to be retrieved from where you store this information (e.g., intent extras)
+            String receiverUserId = "RECEIVER_USER_ID";
             ChatMessage newMessage = new ChatMessage(
                     messageText,
+                    true,
+                    null, // Set the timestamp to the current time before sending
+                    0, // Set a proper image ID if needed
                     currentUserId,
-                    System.currentTimeMillis(), // Use System.currentTimeMillis() for timestamp
                     receiverUserId
             );
             // Assuming you have a 'chats' collection and a document for each chat session
-            String chatId = getIntent().getStringExtra("CHAT_ID");
+            String chatId = "YOUR_CHAT_DOCUMENT_ID"; // The ID of the chat document
             db.collection("chats").document(chatId)
                     .collection("messages")
                     .add(newMessage)
@@ -103,8 +106,10 @@ public class SimpleChat extends AppCompatActivity {
                         messageList.clear();
                         messageList.addAll(fetchedMessages);
                         chatAdapter.notifyDataSetChanged();
-                        recyclerViewChat.scrollToPosition(messageList.size() - 1); // Auto-scroll to the latest message
+                        recyclerViewChat.scrollToPosition(messageList.size() - 1);
                     }
                 });
     }
+
+    // Rest of your SimpleChat code...
 }
