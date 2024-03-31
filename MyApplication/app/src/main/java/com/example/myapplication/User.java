@@ -1,10 +1,10 @@
 package com.example.myapplication;
 
-public class cards {
+public class User {
     private String userEmail;
     private String name;
     private String profileImageUrl;
-    public cards (String userId, String name, String profileImageUrl){
+    public User(String userId, String name, String profileImageUrl){
         this.userEmail = userId;
         this.name = name;
         this.profileImageUrl = profileImageUrl;

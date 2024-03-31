@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,14 +13,17 @@ import com.bumptech.glide.Glide;
 
 
 import java.util.List;
-public class arrayAdapter extends ArrayAdapter<cards>{
+public class arrayAdapter extends ArrayAdapter<User>{
     Context context;
+    private MainPage mainPage;
 
-    public arrayAdapter(Context context, int resourceId, List<cards> items){
-        super(context, resourceId, items);
+    public arrayAdapter(MainPage mainPage, List<User> users) {
+        super(mainPage, R.layout.item, users);
+        this.mainPage = mainPage;
     }
+
     public View getView(int position, View convertView, ViewGroup parent){
-        cards card_item = getItem(position);
+        User card_item = getItem(position);
 
         if (convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item, parent, false);
@@ -40,14 +43,12 @@ public class arrayAdapter extends ArrayAdapter<cards>{
                 break;
         }
 
-        ImageButton infoButton = convertView.findViewById(R.id.infoButton);
-        infoButton.setOnClickListener(new View.OnClickListener() {
+        Button moreInfoButton = convertView.findViewById(R.id.infoButton);
+        moreInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Inform activity about info button click
-                if (mCallback != null) {
-                    mCallback.onInfoButtonClick(position);
-                }
+                User user = getItem(position);
+                mainPage.moreInfo(user);
             }
         });
 
@@ -55,6 +56,7 @@ public class arrayAdapter extends ArrayAdapter<cards>{
         return convertView;
 
     }
+
     // Interface to communicate info button click to the activity
     public interface OnInfoButtonClickListener {
         void onInfoButtonClick(int position);

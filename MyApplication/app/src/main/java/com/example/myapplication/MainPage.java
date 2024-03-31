@@ -10,10 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -24,18 +22,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,15 +34,18 @@ import java.util.Random;
 
 public class MainPage extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    //private cards cards_data[];
-    private arrayAdapter arrayAdapter;
     int i = 0;
     private FirebaseAuth mAuth;
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+    private SwipeFlingAdapterView flingContainer;
+    private ArrayList<User> users; // Assuming you have a User class with info to display
+    private ArrayAdapter<User> arrayAdapter;
+    private boolean temp = false; // This boolean is set based on swipe direction
+
     CollectionReference usersReference = db.collection("users");
     ListView listView;
-    List<cards> rowItems;
+    List<User> rowItems;
 
 
     @Override
@@ -59,6 +53,49 @@ public class MainPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         boolean matched = true;
+
+
+        flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+
+        // Initialize your users array here
+        users = new ArrayList<>();
+
+        arrayAdapter = new arrayAdapter(this, users);
+
+
+        flingContainer.setAdapter(arrayAdapter);
+        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+            @Override
+            public void removeFirstObjectInAdapter() {
+                // this is the simplest way to delete an object from the Adapter (/AdapterView)
+                users.remove(0);
+                arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onLeftCardExit(Object dataObject) {
+                // Set temp to false when swiped left
+                temp = false;
+                // Do something with the dataObject if needed
+            }
+
+            @Override
+            public void onRightCardExit(Object dataObject) {
+                // Set temp to true when swiped right
+                temp = true;
+                // Do something with the dataObject if needed
+            }
+
+            @Override
+            public void onAdapterAboutToEmpty(int itemsInAdapter) {
+                // Ask for more data here
+            }
+
+            @Override
+            public void onScroll(float scrollProgressPercent) {
+                // You can implement some sort of feedback or animation while swiping if desired
+            }
+        });
 
         // Initialize the BottomNavigationView
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -87,72 +124,13 @@ public class MainPage extends AppCompatActivity {
             }
         });
 
-        Button infoButton = findViewById(R.id.infoButton);
-
         compareGendersWithAllUsers();
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moreInfo();
-            }
-        });
-
 
         if (matched) {
             //moreInfo();
             showMatchPopup();
         }
 
-        rowItems = new ArrayList<cards>();
-
-        arrayAdapter = new arrayAdapter(this, R.layout.item, rowItems);
-
-
-        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
-        flingContainer.setAdapter(arrayAdapter);
-
-        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-            @Override
-            public void removeFirstObjectInAdapter() {
-                // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                Log.d("LIST", "removed object!");
-                rowItems.remove(0);
-                arrayAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onLeftCardExit(Object dataObject) {
-                // Do something on the left!
-                // You also have access to the original object.
-                // If you want to use it just cast it (String) dataObject
-                Toast.makeText(MainPage.this, "left", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onRightCardExit(Object dataObject) {
-                Toast.makeText(MainPage.this, "right", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                // Ask for more data here
-
-            }
-
-            @Override
-            public void onScroll(float scrollProgressPercent) {
-
-            }
-        });
-
-
-        // Optionally add an OnItemClickListener
-        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(MainPage.this, "click", Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 
@@ -225,7 +203,7 @@ public class MainPage extends AppCompatActivity {
 
 
 
-    private void moreInfo() {
+    public void moreInfo(User user) {
 
         View popupView = LayoutInflater.from(this).inflate(R.layout.more_info, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -317,8 +295,5 @@ public class MainPage extends AppCompatActivity {
 
     }
 
-
-
-
-
 }
+
