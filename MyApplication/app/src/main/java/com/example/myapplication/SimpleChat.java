@@ -53,30 +53,43 @@ public class SimpleChat extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        String messageText = messageInput.getText().toString();
+        String messageText = messageInput.getText().toString().trim();
         if (!messageText.isEmpty()) {
-            // The receiver's ID needs to be retrieved from where you store this information (e.g., intent extras)
-            String receiverUserId = "RECEIVER_USER_ID";
+            // Assuming the currentUserId is the sender's ID
+            // The receiverUserId needs to be determined by your chat logic
+            String receiverUserId = "RECEIVER_USER_ID"; // Replace with dynamic receiver ID based on your app logic
+
+            // Constructing the new message
             ChatMessage newMessage = new ChatMessage(
-                    messageText,
-                    true,
-                    null, // Set the timestamp to the current time before sending
-                    0, // Set a proper image ID if needed
-                    currentUserId,
-                    receiverUserId
+                    messageText, // message text
+                    true, // isSent - assuming true when sending
+                    "timestamp_placeholder", // timestamp, consider formatting or using ServerValue.TIMESTAMP from Firebase
+                    0, // userProfileImageId, adjust as necessary
+                    currentUserId, // sender ID
+                    receiverUserId // receiver ID
             );
-            // Assuming you have a 'chats' collection and a document for each chat session
-            String chatId = "YOUR_CHAT_DOCUMENT_ID"; // The ID of the chat document
-            db.collection("chats").document(chatId)
-                    .collection("messages")
-                    .add(newMessage)
-                    .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "Message sent successfully");
-                        messageInput.setText(""); // Clear input after sending
-                    })
-                    .addOnFailureListener(e -> Log.e(TAG, "Error sending message", e));
+
+            // Fetch the chatId, similar to how we retrieve it for fetching messages
+            String chatId = getIntent().getStringExtra("CHAT_ID");
+            if(chatId != null && !chatId.isEmpty()) {
+                db.collection("chats").document(chatId)
+                        .collection("messages")
+                        .add(newMessage)
+                        .addOnSuccessListener(documentReference -> {
+                            Log.d(TAG, "Message sent successfully");
+                            messageInput.setText(""); // Clear the input field
+                        })
+                        .addOnFailureListener(e -> Log.e(TAG, "Error sending message", e));
+            } else {
+                Log.e(TAG, "No chat ID specified.");
+                // Optionally, show an error message to the user
+            }
+        } else {
+            Log.e(TAG, "Attempted to send an empty message.");
+            // Optionally, notify the user that they can't send an empty message
         }
     }
+
 
     private void fetchMessages() {
         String chatId = getIntent().getStringExtra("CHAT_ID");
