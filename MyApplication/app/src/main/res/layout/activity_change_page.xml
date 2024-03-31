@@ -43,7 +43,7 @@
 
             <!-- ImageView 1 -->
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/image1"
                 android:layout_width="45dp"
                 android:layout_height="100dp"
                 android:layout_rowWeight="1"
@@ -58,7 +58,7 @@
 
             <!-- ImageView 2 -->
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/image2"
                 android:layout_width="45dp"
                 android:layout_height="100dp"
                 android:layout_rowWeight="1"
@@ -73,7 +73,7 @@
 
             <!-- ImageView 3 -->
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/image3"
                 android:layout_width="45dp"
                 android:layout_height="100dp"
                 android:layout_rowWeight="1"
@@ -88,7 +88,7 @@
 
             <!-- ImageView 4 -->
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/image4"
                 android:layout_width="45dp"
                 android:layout_height="100dp"
                 android:layout_rowWeight="1"
@@ -103,7 +103,7 @@
 
             <!-- ImageView 5 -->
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/image5"
                 android:layout_width="45dp"
                 android:layout_height="100dp"
                 android:layout_rowWeight="1"
@@ -118,7 +118,7 @@
 
             <!-- ImageView 6 -->
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/image6"
                 android:layout_width="45dp"
                 android:layout_height="100dp"
                 android:layout_rowWeight="1"
