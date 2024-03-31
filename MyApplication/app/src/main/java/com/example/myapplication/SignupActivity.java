@@ -12,10 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -63,11 +69,31 @@ public class SignupActivity extends AppCompatActivity {
                 }
                 if (correctInput) {
                     createUser(emailInput, password);
-                    DatabaseHandler db = new DatabaseHandler();
-                    db.addUser(emailInput);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String,Object> user = new HashMap<>();
+                    user.put("banned", false);
+                    db.collection("users")
+                            .document(emailInput)
+                            .set(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
+                                    startActivity(intent);
+                                }
+
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+
+
                     // If all checks pass, proceed to the ConfirmationActivity
-                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
-                    startActivity(intent);
+
                 }
             }
         });

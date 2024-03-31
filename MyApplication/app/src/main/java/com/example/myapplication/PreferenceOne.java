@@ -2,20 +2,31 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PreferenceOne extends AppCompatActivity {
 
-    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner;
+    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner;
     private Button confirmButton;
 
     TextView textView;
@@ -103,23 +114,33 @@ public class PreferenceOne extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preference_detailtwo);
+        setContentView(R.layout.activity_preference_detail);
 
         minHeightSpinner = findViewById(R.id.minHeightSpinner);
         maxHeightSpinner = findViewById(R.id.maxHeightSpinner);
         minAgeSpinner = findViewById(R.id.minAgeSpinner);
         maxAgeSpinner = findViewById(R.id.maxAgeSpinner);
         confirmButton = findViewById(R.id.confirm_button);
+        departmentSpinner = findViewById(R.id.editText5);
         textView = findViewById(R.id.textview);
         selectedLanguage = new boolean[langArray.length];
         TextView textstar = findViewById(R.id.textstar);
         TextView textgender = findViewById(R.id.textgender);
+        
+
+        String gender = textgender.getText().toString();
+        String starSign = textstar.getText().toString();
+        String department = departmentSpinner.getSelectedItem().toString();
+        String minHeight = minHeightSpinner.getSelectedItem().toString();
+        String maxHeight = maxHeightSpinner.getSelectedItem().toString();
+        Integer minAge =  Integer.parseInt(minAgeSpinner.getSelectedItem().toString());
+        Integer maxAge = Integer.parseInt(maxAgeSpinner.getSelectedItem().toString());
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validatePreferences()) {
-                    // Move to the next page
+                if (validatePreferences()) { //createUserPref only used here, after this use Update
+                    createUserPref(getData(gender, minHeight, maxHeight,starSign, department, minAge, maxAge));
                     Intent nextIntent = new Intent(PreferenceOne.this, PreferenceTwo.class);
                     startActivity(nextIntent);
                 }
@@ -384,5 +405,56 @@ public class PreferenceOne extends AppCompatActivity {
         }
 
         return true; // All validations passed
+    }
+
+
+    private Map<String, Object> getData(String gender, String minHeight, String maxHeight, String starSign,
+                                          String department, Integer minAge, Integer maxAge) {
+        Map<String, Object> map = new HashMap<>();
+        int minHeightInt = 0;
+        int maxHeightInt = 0;
+        if (minHeight.equals("<150")) {
+            minHeightInt = 149;
+        } else if (minHeight.equals(">210")) {
+            minHeightInt = 211;
+        } else {
+            minHeightInt = Integer.parseInt(minHeight);
+        }
+        if (maxHeight.equals("<150")) {
+            maxHeightInt = 149;
+        } else if (minHeight.equals(">210")) {
+            maxHeightInt = 211;
+        } else {
+            maxHeightInt = Integer.parseInt(minHeight);
+        }
+        map.put("gender", gender);
+        map.put("minHeight", minHeightInt);
+        map.put("maxHeight", maxHeightInt);
+        map.put("starSign", starSign);
+        map.put("department", department);
+        map.put("minAge", minAge);
+        map.put("maxAge", maxAge);
+        return map;
+    }
+    FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public void createUserPref(Map<String, Object> data) {
+        mAuth = FirebaseAuth.getInstance();
+        String email = mAuth.getCurrentUser().getEmail();
+        db.collection("preferences")
+                .document(email)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("prefoOne", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("PrefOne", "Error writing document", e);
+                    }
+                });
     }
 }
