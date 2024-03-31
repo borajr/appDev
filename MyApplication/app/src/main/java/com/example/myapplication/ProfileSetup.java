@@ -179,7 +179,7 @@ public class ProfileSetup extends AppCompatActivity {
 
             // Create a reference to the image in Firebase Storage
             Log.d("ProfileSetup", currentUser.getEmail() + "/image" + x);
-            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x + ".jpeg"); //ALL FILES WILL BE UPLOADED IN JPEG CHECK CAMERACTIVITY.JAVA
+            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x + ".jpeg");
             x++;
             // Create a temporary file to store the downloaded image
             imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {

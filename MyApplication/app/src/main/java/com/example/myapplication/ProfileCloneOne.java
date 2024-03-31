@@ -10,47 +10,63 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProfileCloneOne extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Ensure this matches your XML file name for ProfileCloneOne
-        setContentView(R.layout.activity_profileoneclone);
+        // Set the content view to your layout
+        setContentView(R.layout.activity_profiledetailone); // Ensure this matches your XML file name
 
-        // Initialize your UI components here, assuming you use similar IDs
+        // Initialize your UI components here
         EditText firstNameEditText = findViewById(R.id.editText1);
         EditText lastNameEditText = findViewById(R.id.editText2);
-        DatePicker datePicker = findViewById(R.id.datePicker);
+        DatePicker datePicker = findViewById(R.id.datePicker); // If you plan to use the DatePicker value
         Button confirmButton = findViewById(R.id.confirm_button);
-
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Assuming you have EditText fields for first name, last name, etc.
+                EditText firstNameEditText = findViewById(R.id.editText1);
+                EditText lastNameEditText = findViewById(R.id.editText2);
+                // Continue for other EditTexts as necessary
+
                 String firstName = firstNameEditText.getText().toString().trim();
                 String lastName = lastNameEditText.getText().toString().trim();
+                // Continue for other fields as necessary
 
                 // Check if any field is empty
-                if(firstName.isEmpty() || lastName.isEmpty()) {
+                if(firstName.isEmpty() || lastName.isEmpty()) { // Extend this condition for all fields
                     Toast.makeText(ProfileCloneOne.this, "Please fill in all fields.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                // Age check
+                // Age check - Reuse isOldEnough() method from previous example
                 if (!isOldEnough()) {
                     Toast.makeText(ProfileCloneOne.this, "You must be at least 18 years old.", Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                // Navigate to the next page
-                Intent intent = new Intent(ProfileCloneOne.this, ProfileSetup.class); // Adjust as necessary
+                DatabaseHandler db = new DatabaseHandler();
+                int year = datePicker.getYear();
+                Calendar today = Calendar.getInstance(); //CREATE HASHMAP HERE, DB.UPDATEUSER SHOULD JUST UPLOAD THE HASHMAP!!
+                Map<String, Object> data = createMap(firstName, lastName, 2024-year);
+                db.updateUser(data);
+                // If all validations pass, navigate to the next page
+                Intent intent = new Intent(ProfileCloneOne.this, ProfileSetup.class);
+                finish();
                 startActivity(intent);
             }
         });
+
+
+        // Further initialization can be done as needed
     }
 
     private boolean isOldEnough() {
-        DatePicker datePicker = findViewById(R.id.datePicker);
+        DatePicker datePicker = findViewById(R.id.datePicker); // Make sure the ID matches
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
         int year = datePicker.getYear();
@@ -63,4 +79,13 @@ public class ProfileCloneOne extends AppCompatActivity {
 
         return !selectedDate.after(today); // True if 18 or older
     }
+
+    private Map<String, Object> createMap(String name, String lastName, Integer age) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("lastName", lastName);
+        map.put("age", age);
+        return map;
+    }
+
 }

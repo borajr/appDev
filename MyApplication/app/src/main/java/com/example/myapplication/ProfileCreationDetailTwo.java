@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileCreationDetailTwo extends AppCompatActivity {
 
@@ -94,10 +97,17 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
         textView = findViewById(R.id.textview);
         selectedLanguage = new boolean[langArray.length];
 
+        String gender = genderSpinner.getSelectedItem().toString();
+        String height = minHeightSpinner.getSelectedItem().toString();
+        Integer age = Integer.parseInt(minAgeSpinner.getSelectedItem().toString());
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     // Move to the next appropriate page
+                    DatabaseHandler db = new DatabaseHandler();
+                    Map<String, Object> data = createMap(gender, height, age); //TODO: ADD LANGLIST
+                    db.updateUser(data);
                     Intent nextIntent = new Intent(ProfileCreationDetailTwo.this, ProfileCreationDetailThree.class); // Adjust as needed
                     startActivity(nextIntent);
 
@@ -182,6 +192,13 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
                 builder.show();
             }
         });
+    }
+    private Map<String, Object> createMap(String gender, String height, Integer age) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("gender", gender);
+        map.put("height", height);
+        map.put("age", age);
+        return map;
     }
 
 }
