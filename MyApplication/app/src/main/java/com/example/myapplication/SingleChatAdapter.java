@@ -75,7 +75,7 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         void bind(ChatMessage message) {
             messageText.setText(message.getMessageText());
-
+            timestampText.setText((int) message.getMessageTime());
         }
     }
 
@@ -93,7 +93,7 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         void bind(ChatMessage message) {
             messageText.setText(message.getMessageText());
-
+            timestampText.setText((int) message.getMessageTime());
 
         }
     }
