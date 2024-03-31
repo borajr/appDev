@@ -108,6 +108,7 @@ public class ProfileSetup extends AppCompatActivity {
 
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.navigation_profile);
 
         // Set OnClickListener to the button
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

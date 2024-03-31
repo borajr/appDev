@@ -99,6 +99,7 @@ public class MainPage extends AppCompatActivity {
 
         // Initialize the BottomNavigationView
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.navigation_main);
 
         // Set the OnNavigationItemSelectedListener
         bottomNav.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
