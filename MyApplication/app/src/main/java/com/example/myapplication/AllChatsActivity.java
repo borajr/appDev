@@ -47,10 +47,10 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
     @Override
     public void onChatClicked(chat chat) {
         Intent intent = new Intent(AllChatsActivity.this, SimpleChat.class);
-        // Assuming 'chat' has a method or field to get the chatId or the receiver's userId
-        // For demonstration, using userName as a placeholder
-        intent.putExtra("CHAT_ID", "5jfLL3fEG3Y35MXc5K6x"); // Adjust this based on your actual data model
+        // Pass the chat's unique identifier; here we use userName as a placeholder
+        intent.putExtra("CHAT_ID", chat.getUserName());
         startActivity(intent);
     }
+
 
 }

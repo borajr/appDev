@@ -30,6 +30,7 @@ public class SimpleChat extends AppCompatActivity {
     private String currentUserId;
     private EditText messageInput;
     private Button sendButton;
+    private String chatId; // The unique ID for the chat
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,56 +50,42 @@ public class SimpleChat extends AppCompatActivity {
         sendButton = findViewById(R.id.chat_send_button);
         sendButton.setOnClickListener(view -> sendMessage());
 
-        fetchMessages();
+        // Retrieve the chat ID passed from AllChatsActivity
+        chatId = getIntent().getStringExtra("CHAT_ID");
+        if (chatId != null && !chatId.isEmpty()) {
+            fetchMessages();
+        } else {
+            Log.e(TAG, "No chat ID provided.");
+            finish(); // Optionally, exit if there's no chat ID
+        }
     }
 
     private void sendMessage() {
         String messageText = messageInput.getText().toString().trim();
-        if (!messageText.isEmpty()) {
-            // Assuming the currentUserId is the sender's ID
-            // The receiverUserId needs to be determined by your chat logic
-            String receiverUserId = "RECEIVER_USER_ID"; // Replace with dynamic receiver ID based on your app logic
-
-            // Constructing the new message
+        if (!messageText.isEmpty() && chatId != null) {
             ChatMessage newMessage = new ChatMessage(
-                    messageText, // message text
-                    true, // isSent - assuming true when sending
-                    "timestamp_placeholder", // timestamp, consider formatting or using ServerValue.TIMESTAMP from Firebase
-                    0, // userProfileImageId, adjust as necessary
-                    currentUserId, // sender ID
-                    receiverUserId // receiver ID
+                    messageText, // Message text
+                    true, // isSent
+                    String.valueOf(System.currentTimeMillis()), // Current time as a string for the timestamp
+                    0, // userProfileImageId, adjust this as necessary
+                    currentUserId, // Sender ID
+                    "RECEIVER_USER_ID" // Placeholder for receiver ID, replace as needed
             );
 
-            // Fetch the chatId, similar to how we retrieve it for fetching messages
-            String chatId = getIntent().getStringExtra("CHAT_ID");
-            if(chatId != null && !chatId.isEmpty()) {
-                db.collection("chats").document(chatId)
-                        .collection("messages")
-                        .add(newMessage)
-                        .addOnSuccessListener(documentReference -> {
-                            Log.d(TAG, "Message sent successfully");
-                            messageInput.setText(""); // Clear the input field
-                        })
-                        .addOnFailureListener(e -> Log.e(TAG, "Error sending message", e));
-            } else {
-                Log.e(TAG, "No chat ID specified.");
-                // Optionally, show an error message to the user
-            }
+            db.collection("chats").document(chatId)
+                    .collection("messages")
+                    .add(newMessage)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "Message sent successfully");
+                        messageInput.setText(""); // Clear the input field
+                    })
+                    .addOnFailureListener(e -> Log.e(TAG, "Error sending message", e));
         } else {
-            Log.e(TAG, "Attempted to send an empty message.");
-            // Optionally, notify the user that they can't send an empty message
+            Log.e(TAG, "Message text is empty or chat ID is missing.");
         }
     }
 
-
     private void fetchMessages() {
-        String chatId = getIntent().getStringExtra("CHAT_ID");
-        if (chatId == null || chatId.isEmpty()) {
-            Log.e(TAG, "No chat ID provided.");
-            finish(); // Close the activity if there's no chat ID
-            return;
-        }
-
         db.collection("chats").document(chatId)
                 .collection("messages")
                 .orderBy("timestamp")
@@ -119,10 +106,8 @@ public class SimpleChat extends AppCompatActivity {
                         messageList.clear();
                         messageList.addAll(fetchedMessages);
                         chatAdapter.notifyDataSetChanged();
-                        recyclerViewChat.scrollToPosition(messageList.size() - 1);
+                        recyclerViewChat.scrollToPosition(messageList.size() - 1); // Auto-scroll to the latest message
                     }
                 });
     }
-
-    // Rest of your SimpleChat code...
 }
