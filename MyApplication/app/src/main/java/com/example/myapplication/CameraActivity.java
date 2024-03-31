@@ -219,7 +219,7 @@ public class CameraActivity extends AppCompatActivity {
                 images[i].compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] imageData = baos.toByteArray();
 
-                String imageFileName = UUID.randomUUID().toString(); // Generate a random file name
+                String imageFileName = "image"+i; // Generate a random file name
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 // Upload byte array to Firebase Storage
