@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.view.View;
+
 public class chat {
     private String userName;
     private String lastMessage;
@@ -29,4 +31,8 @@ public class chat {
     public int getUserProfileImageId() {
         return userProfileImageId;
     }
+
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+    }
+
 }

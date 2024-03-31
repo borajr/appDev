@@ -15,7 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllChatsActivity extends AppCompatActivity {
+public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.ChatClickListener {
     private RecyclerView recyclerView;
     private ChatAdapter adapter;
     private List<chat> chatList;
@@ -34,7 +34,7 @@ public class AllChatsActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView_chats);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ChatAdapter(chatList);
+        adapter = new ChatAdapter(chatList, this);
         recyclerView.setAdapter(adapter);
 
 
@@ -64,8 +64,12 @@ public class AllChatsActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
-
+    @Override
+    public void onChatClick(chat chatData) {
+        // Handle the click event, e.g., start a new activity with details of the clicked chat
+        Intent intent = new Intent(AllChatsActivity.this, SimpleChat.class);
+        startActivity(intent);
+    }
 }

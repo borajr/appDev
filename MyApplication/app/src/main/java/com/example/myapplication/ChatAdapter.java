@@ -11,6 +11,14 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
+    public ChatAdapter(List<chat> chatList, ChatClickListener clickListener) {
+        this.chatList = chatList;
+        this.clickListener = clickListener;
+    }
+
+    private chat chatData;
+
+    private ChatClickListener clickListener;
     private List<chat> chatList;
 
     public ChatAdapter(List<chat> chatList) {
@@ -30,6 +38,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.lastMessageView.setText(chat.getLastMessage());
         holder.timestampView.setText(chat.getTimestamp());
         holder.userImageView.setImageResource(chat.getUserProfileImageId());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.onChatClick(chatData);
+            }
+});
     }
 
     @Override
@@ -48,5 +62,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             lastMessageView = itemView.findViewById(R.id.chat_item_message_preview);
             timestampView = itemView.findViewById(R.id.chat_item_timestamp);
         }
+
     }
+
+    public interface ChatClickListener {
+        void onChatClick(chat chatData);
+    }
+
+
 }
