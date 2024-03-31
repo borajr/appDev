@@ -2,10 +2,16 @@ package com.example.myapplication;
 
 public class ChatMessage {
     private String message;
-    private boolean isSent; // 'true' if this message was sent by the user, 'false' if received
-    private String timestamp; // Optional: For message time
-    private int userProfileImageId; // Optional: For the image resource ID (if message is received)
+    private boolean isSent;
+    private String timestamp;
+    private int userProfileImageId;
 
+    // No-argument constructor
+    public ChatMessage() {
+        // Default constructor required for Firestore data model deserialization
+    }
+
+    // All-argument constructor
     public ChatMessage(String message, boolean isSent, String timestamp, int userProfileImageId) {
         this.message = message;
         this.isSent = isSent;
@@ -13,34 +19,33 @@ public class ChatMessage {
         this.userProfileImageId = userProfileImageId;
     }
 
-    // Getters
+    // Getters and setters
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public boolean isSent() {
         return isSent;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public int getUserProfileImageId() {
-        return userProfileImageId;
-    }
-
-    // Setters
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public void setSent(boolean sent) {
         isSent = sent;
     }
 
+    public String getTimestamp() {
+        return timestamp;
+    }
+
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getUserProfileImageId() {
+        return userProfileImageId;
     }
 
     public void setUserProfileImageId(int userProfileImageId) {
