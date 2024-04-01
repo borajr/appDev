@@ -23,10 +23,10 @@ import java.util.Map;
 
 public class MainMatch extends AppCompatActivity {
 
-    private void recordSwipe(String swiperId, String swipedId, String direction) {
+    public void recordSwipe(String swiperEmail, String swipedEmail, String direction) {
         Map<String, Object> swipeData = new HashMap<>();
-        swipeData.put("swiperId", swiperId);
-        swipeData.put("swipedId", swipedId);
+        swipeData.put("swiperEmail", swiperEmail);
+        swipeData.put("swipedEmail", swipedEmail);
         swipeData.put("direction", direction);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -34,7 +34,7 @@ public class MainMatch extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 if ("right".equals(direction)) {
-                    checkForMatch(swiperId, swipedId);
+                    checkForMatch(swiperEmail, swiperEmail);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -45,11 +45,11 @@ public class MainMatch extends AppCompatActivity {
         });
     }
 
-    private void checkForMatch(final String swiperId, final String swipedId) { //efranin gotu kocaman izmitin yollari tastan
+    private void checkForMatch(final String swiperEmail, final String swipedEmail) { //efranin gotu kocaman izmitin yollari tastan
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Swipes")
-                .whereEqualTo("swiperId", swipedId)
-                .whereEqualTo("swipedId", swiperId)
+                .whereEqualTo("swiperEmail", swiperEmail)
+                .whereEqualTo("swipedEmail", swipedEmail)
                 .whereEqualTo("direction", "right")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -58,7 +58,7 @@ public class MainMatch extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.exists()) {
-                                    createMatch(swiperId, swipedId);
+                                    createMatch(swiperEmail, swiperEmail);
                                     break;
                                 }
                             }

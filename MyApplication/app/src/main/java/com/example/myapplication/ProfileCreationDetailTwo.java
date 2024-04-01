@@ -1,12 +1,11 @@
 package com.example.myapplication;
 
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.widget.TextView;
@@ -18,7 +17,7 @@ import java.util.Map;
 
 public class ProfileCreationDetailTwo extends AppCompatActivity {
 
-    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner;
+    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner, starSignSpinner;
     private Button confirmButton;
 
     // initialize variables
@@ -96,6 +95,7 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
         textView = findViewById(R.id.textview);
         selectedLanguage = new boolean[langArray.length];
         departmentSpinner = findViewById(R.id.editText5);
+        starSignSpinner = findViewById(R.id.starSignSpinner);
 
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +105,9 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
                     String gender = genderSpinner.getSelectedItem().toString();
                     String height = minHeightSpinner.getSelectedItem().toString();
                     String department = departmentSpinner.getSelectedItem().toString();
+                    String starSign = starSignSpinner.getSelectedItem().toString();
                     DatabaseHandler db = new DatabaseHandler();
-                    Map<String, Object> data = createMap(gender, height, department); //TODO: ADD LANGLIST
+                    Map<String, Object> data = createMap(gender, height, department, starSign); //TODO: ADD LANGLIST
                     db.updateUser(data);
                     Intent nextIntent = new Intent(ProfileCreationDetailTwo.this, ProfileCreationDetailThree.class); // Adjust as needed
                     startActivity(nextIntent);
@@ -193,7 +194,7 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
             }
         });
     }
-    private Map<String, Object> createMap(String gender, String height, String department) {
+    private Map<String, Object> createMap(String gender, String height, String department, String starSign) {
         Map<String, Object> map = new HashMap<>();
         map.put("gender", gender);
         int heightInt = 0;
