@@ -28,6 +28,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,10 @@ public class MainPage extends AppCompatActivity {
     private SwipeFlingAdapterView flingContainer;
     private ArrayList<User> users; // Assuming you have a User class with info to display
     private ArrayAdapter<User> arrayAdapter;
-    private boolean temp = false; // This boolean is set based on swipe direction
+    private boolean temp = false; // This boolean is set based on swipe
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+
+
 
     CollectionReference usersReference = db.collection("users");
     ListView listView;
@@ -225,8 +230,11 @@ public class MainPage extends AppCompatActivity {
                         boolean weed = document.getBoolean("weed") != null ? document.getBoolean("weed") : false;
 
                         // Assuming age and height are stored as numbers (long in Firestore)
-                        int age = document.getLong("age").intValue(); // Add null check if necessary
-                        int height = document.getLong("height").intValue(); // Add null check if necessary
+                        Long ageLong = document.getLong("age"); // This could be null if "age" field is missing
+                        int DEFAULT_AGE = 20;
+                        int age = (ageLong != null) ? ageLong.intValue() : DEFAULT_AGE;
+                        int DEFAULT_HEIGHT = 160;
+                        int height = (ageLong != null) ? ageLong.intValue() : DEFAULT_HEIGHT; // Add null check if necessary
 
                         User user = new User(userEmail, name, profileImageUrl, department, food,
                                 alcohol, smoking, weed, age, height);
@@ -253,40 +261,22 @@ public class MainPage extends AppCompatActivity {
         dialog.show();
 
 
-        DocumentReference docRef = db.collection("users").document("b.bilgin@student.tue.nl"); // change
-
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        TextView nameTextView = popupView.findViewById(R.id.textViewName);
-                        nameTextView.setText("Name: " + document.get("name"));
-                        TextView ageTextView = popupView.findViewById(R.id.textViewAge);
-                        ageTextView.setText("Age: " + document.get("age"));
-                        TextView genderTextView = popupView.findViewById(R.id.textViewGender);
-                        genderTextView.setText("Gender: " + document.get("gender"));
-                        TextView heightTextView = popupView.findViewById(R.id.textViewHeight);
-                        heightTextView.setText("Height: " + document.get("height"));
-                        TextView starSignTextView = popupView.findViewById(R.id.textViewStarSign);
-                        starSignTextView.setText("StarSign: " + document.get("starSign"));
-                        TextView smokingTextView = popupView.findViewById(R.id.textViewSmoking);
-                        smokingTextView.setText("Smoknig: " + document.get("smoking"));
-                        TextView marijuanaTextView = popupView.findViewById(R.id.textViewMarijuana);
-                        marijuanaTextView.setText("Marijuana: " + document.get("marijuana"));
-
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-
-
+        TextView nameTextView = popupView.findViewById(R.id.textViewName);
+        nameTextView.setText("Name: " + user.getName());
+        TextView ageTextView = popupView.findViewById(R.id.textViewAge);
+        ageTextView.setText("Age: " + user.getAge());
+        TextView genderTextView = popupView.findViewById(R.id.textViewGender);
+        genderTextView.setText("Gender: female");
+        TextView heightTextView = popupView.findViewById(R.id.textViewHeight);
+        heightTextView.setText("Height: " + user.getHeight());
+        TextView starSignTextView = popupView.findViewById(R.id.textViewStarSign);
+        starSignTextView.setText("StarSign: Aries");
+        TextView smokingTextView = popupView.findViewById(R.id.textViewSmoking);
+        smokingTextView.setText("Smoknig: " + user.getSmoking());
+        TextView marijuanaTextView = popupView.findViewById(R.id.textViewMarijuana);
+        marijuanaTextView.setText("Marijuana: " + user.getWeed());
+        TextView alcoholTextView = popupView.findViewById(R.id.textViewAlcohol);
+        marijuanaTextView.setText("Marijuana: " + user.getAlcohol());
     }
 
 

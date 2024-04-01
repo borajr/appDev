@@ -34,11 +34,27 @@ public class User {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getProfileImageUrl() { return profileImageUrl; }
     public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
 
     public int getHeight() { return height; }
     public void setHeight(int height) { this.height = height; }
+
+    public int getAge() {return age;}
+
+    public String getImageStoragePath() {
+        // Assuming the image is named image0 and the email is used as the directory name
+        return getEmail().replace('.', '_') + "/image0"; // Replacing '.' with '_' to avoid Firebase Storage issues with email
+    }
+
+    public String getEmail(){return userEmail;}
+
+    public void setAge(int age) {this.age = age;}
+
+    public String getProfileImageUrl() {
+        // Assuming the profile image name is fixed, e.g., "image0"
+        // Adjust the path if necessary
+        return "gs://dbl-app-development-ccc78.appspot.com/" + userEmail + "/image0";
+    }
 
     //public String getStarSign() { return starSign; }
     //public void setStarSign(String starSign) { this.starSign = starSign; }

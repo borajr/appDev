@@ -9,84 +9,99 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
         android:background="@android:color/transparent"
-        android:elevation="4dp">
+        android:elevation="4dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textViewMoreInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:textSize="18sp"
             android:text="More Info"
-            android:layout_gravity="center"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/textViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
             android:text="Name: [Name]"
-            android:layout_gravity="center"/>
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
             android:text="Age: [age]"
-            android:layout_gravity="center"/>
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/textViewGender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
             android:text="Gender: [gender]"
-            android:layout_gravity="center"/>
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/textViewHeight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
             android:text="Height: [height]"
-            android:layout_gravity="center"/>
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/textViewStarSign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
             android:text="StarSign: [starsign]"
-            android:layout_gravity="center"/>
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/textViewSmoking"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
             android:text="Smoking: [smoking]"
-            android:layout_gravity="center"/>
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/textViewMarijuana"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
             android:text="Marijuana: [marijuana]"
-            android:layout_gravity="center"/>
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textViewAlcohol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Alcohol: [alcohol]"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </RelativeLayout>
