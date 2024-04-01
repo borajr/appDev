@@ -24,6 +24,7 @@ public class DatabaseHandler {
     public void addUser(String email) {
         Map<String,Object> user = new HashMap<>();
         user.put("banned", false);
+        user.put("email", email);
         boolean success = false;
         db.collection("users")
                 .document(email)
