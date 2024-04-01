@@ -38,12 +38,10 @@ public class MainPage extends AppCompatActivity {
     int i = 0;
     private FirebaseAuth mAuth;
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
     private SwipeFlingAdapterView flingContainer;
     private ArrayList<User> users; // Assuming you have a User class with info to display
     private ArrayAdapter<User> arrayAdapter;
     private boolean temp = false; // This boolean is set based on swipe direction
-
     CollectionReference usersReference = db.collection("users");
     ListView listView;
     List<User> rowItems;
@@ -225,11 +223,11 @@ public class MainPage extends AppCompatActivity {
                         boolean weed = document.getBoolean("weed") != null ? document.getBoolean("weed") : false;
 
                         // Assuming age and height are stored as numbers (long in Firestore)
-                        int age = document.getLong("age").intValue(); // Add null check if necessary
-                        int height = document.getLong("height").intValue(); // Add null check if necessary
+                        //int age = document.getLong("age").intValue(); // Add null check if necessary
+                       //int height = document.getLong("height").intValue(); // Add null check if necessary
 
                         User user = new User(userEmail, name, profileImageUrl, department, food,
-                                alcohol, smoking, weed, age, height);
+                                alcohol, smoking, weed, 2, 160);
 
                         users.add(user);
                     }
