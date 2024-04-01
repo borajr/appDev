@@ -24,7 +24,8 @@ public class arrayAdapter extends ArrayAdapter<User> {
     Context context;
     private MainPage mainPage;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
+    // Firebase Storage initialization
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public arrayAdapter(MainPage mainPage, List<User> users) {
         super(mainPage, R.layout.item, users);
@@ -41,14 +42,11 @@ public class arrayAdapter extends ArrayAdapter<User> {
 
         TextView name = convertView.findViewById(R.id.name);
         ImageView imageView = convertView.findViewById(R.id.image);
-
         name.setText(card_item.getName() != null ? card_item.getName() : "");
 
-        // Construct the image path using the user's email
-        // Note: Assuming the getProfileImageUrl() returns the email address of the user
-        String userEmail = card_item.getProfileImageUrl(); // You might need to adjust this if getProfileImageUrl() does not return the email
-        String imagePath = userEmail.replace("@", "%40") + "/image0"; // URL encode the "@" symbol
-        StorageReference imageRef = storage.getReference().child(imagePath);
+        // Assuming getImageStoragePath() method returns a valid path for Firebase Storage
+        String imagePath = card_item.getProfileImageUrl();
+        StorageReference imageRef = storage.getReferenceFromUrl(imagePath);
 
         // Use Glide to load the image from the storage reference
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -60,7 +58,7 @@ public class arrayAdapter extends ArrayAdapter<User> {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle errors, e.g., by loading a default image.
-                Glide.with(getContext()).load(R.drawable.logo).into(imageView); // Use your default placeholder image
+                Glide.with(getContext()).load(R.drawable.logo).into(imageView); // Adjust this to your default placeholder image resource
             }
         });
 
