@@ -2,97 +2,112 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import java.util.List;
 
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore; // Import for Firestore
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SimpleChat extends AppCompatActivity {
 
-    private FirebaseFirestore db; // Firestore instance
-    private FirebaseAuth mAuth;
-    private final String TAG = "SimpleChat";
-
-    // Assuming you have a RecyclerView named recyclerView
-    RecyclerView recyclerView = findViewById(R.id.chat_messages_recycler_view);
-    List<String> messages = new ArrayList<>(); // This should be populated with messages from Firestore
-
-    // Inside onSuccess method of Firestore write operation, update the RecyclerView
-
-
+    private static final String TAG = "SimpleChat";
+    private FirebaseFirestore db;
+    private RecyclerView recyclerViewChat;
+    private SingleChatAdapter chatAdapter;
+    private List<ChatMessage> messageList;
+    private String currentUserId;
+    private EditText messageInput;
+    private Button sendButton;
+    private String chatId; // The unique ID for the chat
+    private String receiverId; // The ID for the receiver of the messages
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simplechat); // Assuming your layout file is named activity_simple_chat
+        setContentView(R.layout.activity_simplechat);
 
-        db = FirebaseFirestore.getInstance(); // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        messageList = new ArrayList<>();
+        chatAdapter = new SingleChatAdapter(messageList, currentUserId);
 
+        recyclerViewChat = findViewById(R.id.chat_messages_recycler_view);
+        recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewChat.setAdapter(chatAdapter);
 
-        Button sendButton = findViewById(R.id.chat_send_button);
-        EditText input = findViewById(R.id.chat_message_input);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText input = findViewById(R.id.chat_message_input);
+        messageInput = findViewById(R.id.chat_message_input);
+        sendButton = findViewById(R.id.chat_send_button);
 
-                // Create a timestamp of the current date and time
-                Timestamp timestamp = Timestamp.now();
+        // Retrieve the chat ID and receiver ID passed from AllChatsActivity
+        chatId = getIntent().getStringExtra("CHAT_ID");
+        receiverId = getIntent().getStringExtra("RECEIVER_ID");
 
-                Map<String, Object> message = new HashMap<>();
-                message.put("content", input.getText().toString()); // Assuming you want to put the text content of the input field
-                message.put("timestamp", timestamp);
+        if (chatId == null || receiverId == null) {
+            Log.e(TAG, "Chat ID or Receiver ID not provided.");
+            finish(); // Exit if essential data is missing
+            return;
+        }
 
-                // Read the input field and push a new instance
-                // of ChatMessage to the Firestore database
-                db.collection("messages") // Assuming "messages" is your collection name
-                        .document()
-                        .set(message)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // Document successfully written
-                                Log.d(TAG, "DocumentSnapshot successfully written!");
-                                messages.add(input.getText().toString());
+        sendButton.setOnClickListener(view -> sendMessage());
 
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Error handling
-                                Log.w(TAG, "Error writing document", e);
-                            }
-                        });
+        fetchMessages();
+    }
 
-                // Clear the input
-                input.setText("");
-            }
-        }); // <-- Add closing parenthesis for setOnClickListener method
+    private void sendMessage() {
+        String messageText = messageInput.getText().toString().trim();
+        if (!messageText.isEmpty()) {
+            ChatMessage newMessage = new ChatMessage(
+                    messageText,
+                    true,
+                    "0",
+                    0,
+                    currentUserId, // Sender ID
+                    receiverId// Use the dynamically obtained receiver ID
+                     // Timestamp
+                     // userProfileImageId (if used)
+            );
+
+            db.collection("chats").document(chatId)
+                    .collection("messages")
+                    .add(newMessage)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "Message sent successfully");
+                        messageInput.setText(""); // Clear the input field after sending
+                    })
+                    .addOnFailureListener(e -> Log.e(TAG, "Error sending message", e));
+        }
+    }
+
+    private void fetchMessages() {
+        db.collection("chats").document(chatId)
+                .collection("messages")
+                .orderBy("timestamp")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Error loading messages: ", e);
+                            return;
+                        }
+
+                        messageList.clear();
+                        for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                            ChatMessage message = snapshot.toObject(ChatMessage.class);
+                            messageList.add(message);
+                        }
+                        chatAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 }
-
-
