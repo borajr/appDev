@@ -41,6 +41,7 @@
         private FirebaseAuth mAuth;
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+
         private SwipeFlingAdapterView flingContainer;
         private ArrayList<User> users; // Assuming you have a User class with info to display
         private ArrayAdapter<User> arrayAdapter;
@@ -237,17 +238,17 @@
                             String department = document.getString("department");
                             String food = document.getString("food");
 
-                            // Use a default value if the field is null
                             boolean alcohol = document.getBoolean("alcohol") != null ? document.getBoolean("alcohol") : false;
                             boolean smoking = document.getBoolean("smoking") != null ? document.getBoolean("smoking") : false;
-                            boolean weed = document.getBoolean("weed") != null ? document.getBoolean("weed") : false;
+                            boolean weed = document.getBoolean("marijuana") != null ? document.getBoolean("marijuana") : false;
 
                             // Assuming age and height are stored as numbers (long in Firestore)
                             Long ageLong = document.getLong("age"); // This could be null if "age" field is missing
                             int DEFAULT_AGE = 20;
                             int age = (ageLong != null) ? ageLong.intValue() : DEFAULT_AGE;
+                            Long heightLong = document.getLong("height");
                             int DEFAULT_HEIGHT = 160;
-                            int height = (ageLong != null) ? ageLong.intValue() : DEFAULT_HEIGHT; // Add null check if necessary
+                            int height = (heightLong != null) ? heightLong.intValue() :DEFAULT_HEIGHT;// Add null check if necessary
 
                             User user = new User(userEmail, name, profileImageUrl, department, food,
                                     alcohol, smoking, weed, age, height, gender);
@@ -289,10 +290,11 @@
             TextView marijuanaTextView = popupView.findViewById(R.id.textViewMarijuana);
             marijuanaTextView.setText("Marijuana: " + user.getWeed());
             TextView alcoholTextView = popupView.findViewById(R.id.textViewAlcohol);
-            marijuanaTextView.setText("Marijuana: " + user.getAlcohol());
+            alcoholTextView.setText("Alcohol: " + user.getAlcohol());
+            TextView foodTextView = popupView.findViewById(R.id.textViewFood);
+            foodTextView.setText("Diet: " + user.getPreferredDiet());
         }
-
-
+        
         private void showMatchPopup() {
             // Inflate the match_popup.xml layout
             View popupView = LayoutInflater.from(this).inflate(R.layout.match_popup, null);
