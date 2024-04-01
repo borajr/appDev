@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background">
+    android:background="@drawable/gradient_background"
+    android:screenOrientation="portrait">
+
 
     <ImageView
         android:id="@+id/imageView"
@@ -94,9 +96,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editText2"
         app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintVertical_bias="0.9" 
+        app:layout_constraintVertical_bias="0.9"
         android:layout_marginTop="@dimen/button_spacing" />
-        
+
     <Button
         android:id="@+id/button3"
         android:layout_width="0dp"
@@ -108,7 +110,7 @@
         android:textColor="#ffffff"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" 
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginbutton"
         app:layout_constraintWidth_percent="0.4"
         app:layout_constraintVertical_bias="0.1"
