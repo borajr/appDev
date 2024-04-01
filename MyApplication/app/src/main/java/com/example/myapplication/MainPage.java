@@ -293,9 +293,6 @@
             alcoholTextView.setText("Alcohol: " + user.getAlcohol());
             TextView foodTextView = popupView.findViewById(R.id.textViewFood);
             foodTextView.setText("Diet: " + user.getPreferredDiet());
-
-
-            
         }
 
         private void showMatchPopup() {
