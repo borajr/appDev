@@ -12,10 +12,12 @@ public class User {
     private int age;
     private int height; // Assuming height is stored as an integer
 
+    private String gender;
+
     // Constructor
     public User(String userEmail, String name, String profileImageUrl,
                 String department, String food, boolean alcohol, boolean smoking,
-                boolean weed, int age, int height) {
+                boolean weed, int age, int height, String gender) {
         this.userEmail = userEmail;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
@@ -26,6 +28,7 @@ public class User {
         this.weed = weed;
         this.age = age;
         this.height = height;
+        this.gender = gender;
     }
     // Getters and setters for all properties
     public String getUserEmail() { return userEmail; }
@@ -34,11 +37,27 @@ public class User {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getProfileImageUrl() { return profileImageUrl; }
     public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
 
     public int getHeight() { return height; }
     public void setHeight(int height) { this.height = height; }
+
+    public int getAge() {return age;}
+
+    public String getImageStoragePath() {
+        // Assuming the image is named image0 and the email is used as the directory name
+        return getEmail().replace('.', '_') + "/image0"; // Replacing '.' with '_' to avoid Firebase Storage issues with email
+    }
+
+    public String getEmail(){return userEmail;}
+
+    public void setAge(int age) {this.age = age;}
+
+    public String getProfileImageUrl() {
+        // Assuming the profile image name is fixed, e.g., "image0"
+        // Adjust the path if necessary
+        return "gs://dbl-app-development-ccc78.appspot.com/" + userEmail + "/image0";
+    }
 
     //public String getStarSign() { return starSign; }
     //public void setStarSign(String starSign) { this.starSign = starSign; }
@@ -60,4 +79,7 @@ public class User {
 
     public String getPreferredDiet() { return food; }
     public void setPreferredDiet(String preferredDiet) { this.food = preferredDiet; }
+
+    public String getGender(){return gender;}
+    public void setGender(String gender) { this.gender = gender; }
 }
