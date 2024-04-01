@@ -1,7 +1,11 @@
 package com.example.myapplication;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class User {
     private String userEmail;
+    FirebaseStorage storage;
     private String name;
     private String profileImageUrl;
     private String department;
@@ -54,9 +58,15 @@ public class User {
     public void setAge(int age) {this.age = age;}
 
     public String getProfileImageUrl() {
-        // Assuming the profile image name is fixed, e.g., "image0"
-        // Adjust the path if necessary
-        return "gs://dbl-app-development-ccc78.appspot.com/" + userEmail + "/image0";
+        if (this.userEmail != null) {
+            // Assuming the profile image name is fixed, e.g., "image0"
+            // Adjust the path if necessary
+            return ("gs://dbl-app-development-ccc78.appspot.com/b" + this.userEmail.replace("@", "%40") + "/image0");
+        } else {
+            // Handle the case where userEmail is null
+            // For example, return a default path or log an error
+            return "gs://dbl-app-development-ccc78.appspot.com/boran@student.tue.nl/image0"; // Just an example, adjust based on your needs
+        }
     }
 
     //public String getStarSign() { return starSign; }

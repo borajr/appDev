@@ -10,19 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
+    private List<chat> chatList;
+    private OnChatClickListener listener;
 
-    public ChatAdapter(List<chat> chatList, ChatClickListener clickListener) {
+    public ChatAdapter(List<chat> chatList, OnChatClickListener listener) {
         this.chatList = chatList;
-        this.clickListener = clickListener;
+        this.listener = listener;
     }
 
-    private chat chatData;
-
-    private ChatClickListener clickListener;
-    private List<chat> chatList;
-
-    public ChatAdapter(List<chat> chatList) {
-        this.chatList = chatList;
+    public interface OnChatClickListener {
+        void onChatClicked(chat chat);
     }
 
     @Override
@@ -38,12 +35,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.lastMessageView.setText(chat.getLastMessage());
         holder.timestampView.setText(chat.getTimestamp());
         holder.userImageView.setImageResource(chat.getUserProfileImageId());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickListener.onChatClick(chatData);
-            }
-});
+
+        holder.itemView.setOnClickListener(v -> listener.onChatClicked(chat));
     }
 
     @Override
@@ -52,8 +45,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView userImageView;
-        public TextView userNameView, lastMessageView, timestampView;
+        ImageView userImageView;
+        TextView userNameView, lastMessageView, timestampView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,12 +55,5 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             lastMessageView = itemView.findViewById(R.id.chat_item_message_preview);
             timestampView = itemView.findViewById(R.id.chat_item_timestamp);
         }
-
     }
-
-    public interface ChatClickListener {
-        void onChatClick(chat chatData);
-    }
-
-
 }
