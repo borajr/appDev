@@ -58,7 +58,7 @@ public class ChatMessage {
         this.userProfileImageId = userProfileImageId;
     }
 
-    public Object getSenderId() {
+    public String getSenderId() {
         return senderId;
     }
     public String getReceiverId() {
