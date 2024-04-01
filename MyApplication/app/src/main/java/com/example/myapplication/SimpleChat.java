@@ -2,8 +2,10 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,13 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.EventListener; // Correct import
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 public class SimpleChat extends AppCompatActivity {
 
@@ -26,11 +33,10 @@ public class SimpleChat extends AppCompatActivity {
     private RecyclerView recyclerViewChat;
     private SingleChatAdapter chatAdapter;
     private List<ChatMessage> messageList;
-    private String currentUserId;
     private EditText messageInput;
     private Button sendButton;
     private String chatId; // The unique ID for the chat
-    private String receiverId; // The ID for the receiver of the messages
+    private String receiverEmail; // The email of the receiver
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +44,7 @@ public class SimpleChat extends AppCompatActivity {
         setContentView(R.layout.activity_simplechat);
 
         db = FirebaseFirestore.getInstance();
-        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         messageList = new ArrayList<>();
         chatAdapter = new SingleChatAdapter(messageList, currentUserId);
 
@@ -49,41 +55,33 @@ public class SimpleChat extends AppCompatActivity {
         messageInput = findViewById(R.id.chat_message_input);
         sendButton = findViewById(R.id.chat_send_button);
 
-        // Retrieve the chat ID and receiver ID passed from AllChatsActivity
-        chatId = getIntent().getStringExtra("CHAT_ID");
-        receiverId = getIntent().getStringExtra("RECEIVER_ID");
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
+            }
+        });
 
-        if (chatId == null || receiverId == null) {
-            Log.e(TAG, "Chat ID or Receiver ID not provided.");
-            finish(); // Exit if essential data is missing
-            return;
-        }
-
-        sendButton.setOnClickListener(view -> sendMessage());
 
         fetchMessages();
     }
 
     private void sendMessage() {
-        String messageText = messageInput.getText().toString().trim();
+        String senderEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail(); // Get sender's email
+        String messageText = messageInput.getText().toString();
         if (!messageText.isEmpty()) {
-            ChatMessage newMessage = new ChatMessage(
-                    messageText,
-                    true,
-                    "0",
-                    0,
-                    currentUserId, // Sender ID
-                    receiverId// Use the dynamically obtained receiver ID
-                     // Timestamp
-                     // userProfileImageId (if used)
-            );
+            Map<String, Object> newMessage = new HashMap<>();
+            newMessage.put("message", messageText);
+            newMessage.put("senderEmail", senderEmail); // Use the sender's email
+            newMessage.put("receiverEmail", receiverEmail); // Use the receiver's email
+            newMessage.put("timestamp", System.currentTimeMillis()); // Use current timestamp
 
             db.collection("chats").document(chatId)
                     .collection("messages")
                     .add(newMessage)
                     .addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "Message sent successfully");
-                        messageInput.setText(""); // Clear the input field after sending
+                        messageInput.setText(""); // Clear the input after sending
                     })
                     .addOnFailureListener(e -> Log.e(TAG, "Error sending message", e));
         }
@@ -95,18 +93,27 @@ public class SimpleChat extends AppCompatActivity {
                 .orderBy("timestamp")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            Log.e(TAG, "Error loading messages: ", e);
+                            Log.w(TAG, "Listen failed.", e);
                             return;
                         }
 
-                        messageList.clear();
-                        for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                            ChatMessage message = snapshot.toObject(ChatMessage.class);
-                            messageList.add(message);
+                        List<ChatMessage> fetchedMessages = new ArrayList<>();
+                        if (snapshots != null) {
+                            for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                                ChatMessage message = doc.toObject(ChatMessage.class);
+                                fetchedMessages.add(message);
+                            }
                         }
+
+                        messageList.clear();
+                        messageList.addAll(fetchedMessages);
                         chatAdapter.notifyDataSetChanged();
+                        // Scroll to the last message
+                        if (fetchedMessages.size() > 0) {
+                            recyclerViewChat.scrollToPosition(fetchedMessages.size() - 1);
+                        }
                     }
                 });
     }
