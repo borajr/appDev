@@ -41,30 +41,22 @@
         private FirebaseAuth mAuth;
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-
         private SwipeFlingAdapterView flingContainer;
         private ArrayList<User> users; // Assuming you have a User class with info to display
         private ArrayAdapter<User> arrayAdapter;
         private boolean temp = false; // This boolean is set based on swipe
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
-        private MainMatch mainMatch;
-
-
+        private MainMatch mainMatch = new MainMatch(this);
 
         CollectionReference usersReference = db.collection("users");
         ListView listView;
         List<User> rowItems;
 
-
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-            boolean matched = true;
-
-
-            MainMatch mainMatch = new MainMatch();
 
             flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
@@ -92,7 +84,6 @@
                     String swipedUserEmail = swipedUser.getEmail();
                     // Do something with the dataObject if needed
                     mainMatch.recordSwipe(currentUser.getEmail(), swipedUser.getUserEmail(), "left");
-                    Log.d(TAG, "right");
                 }
 
                 @Override
@@ -103,7 +94,7 @@
                     String swipedUserEmail = swipedUser.getEmail();
                     // Do something with the dataObject if needed
                     mainMatch.recordSwipe(currentUser.getEmail(), swipedUser.getUserEmail(), "right");
-                    Log.d(TAG, "right:");
+                    mainMatch.checkForMatch(currentUser.getEmail(), swipedUser.getUserEmail());
                 }
 
                 @Override
@@ -146,11 +137,6 @@
             });
 
             compareGendersWithAllUsers();
-
-            if (matched) {
-                //moreInfo();
-                showMatchPopup();
-            }
 
 
         }
@@ -295,10 +281,9 @@
             foodTextView.setText("Diet: " + user.getPreferredDiet());
 
 
-            
         }
 
-        private void showMatchPopup() {
+        public void showMatchPopup() {
             // Inflate the match_popup.xml layout
             View popupView = LayoutInflater.from(this).inflate(R.layout.match_popup, null);
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -342,6 +327,7 @@
             timeTextView.setText("Time: " + randomTime);
 
         }
+
 
     }
 
