@@ -40,7 +40,7 @@ public class ProfileSetup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storage = FirebaseStorage.getInstance();
         setContentView(R.layout.activity_change_page);
 
         // Find the button by its ID
@@ -185,12 +185,12 @@ public class ProfileSetup extends AppCompatActivity {
         imageViews.add(image6);
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
-        int x = 1;
+        int x = 0;
         for (ImageView i : imageViews) { // Assuming you have 6 images to download
 
             // Create a reference to the image in Firebase Storage
             Log.d("ProfileSetup", currentUser.getEmail() + "/image" + x);
-            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x + ".jpeg");
+            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x );
             x++;
             // Create a temporary file to store the downloaded image
             imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
