@@ -70,6 +70,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (correctInput) {
                     createUser(emailInput, password);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    
                     Map<String,Object> user = new HashMap<>();
                     user.put("banned", false);
                     db.collection("users")
@@ -79,7 +80,7 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
-                                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
+                                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
                                     startActivity(intent);
                                 }
 
