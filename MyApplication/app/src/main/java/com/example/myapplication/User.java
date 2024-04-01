@@ -12,10 +12,12 @@ public class User {
     private int age;
     private int height; // Assuming height is stored as an integer
 
+    private String gender;
+
     // Constructor
     public User(String userEmail, String name, String profileImageUrl,
                 String department, String food, boolean alcohol, boolean smoking,
-                boolean weed, int age, int height) {
+                boolean weed, int age, int height, String gender) {
         this.userEmail = userEmail;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
@@ -26,6 +28,7 @@ public class User {
         this.weed = weed;
         this.age = age;
         this.height = height;
+        this.gender = gender;
     }
     // Getters and setters for all properties
     public String getUserEmail() { return userEmail; }
@@ -76,4 +79,7 @@ public class User {
 
     public String getPreferredDiet() { return food; }
     public void setPreferredDiet(String preferredDiet) { this.food = preferredDiet; }
+
+    public String getGender(){return gender;}
+    public void setGender(String gender) { this.gender = gender; }
 }

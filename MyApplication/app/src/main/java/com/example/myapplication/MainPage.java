@@ -220,6 +220,7 @@ public class MainPage extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String userEmail = document.getString("email");
                         String name = document.getString("name");
+                        String gender = document.getString("gender");
                         String profileImageUrl = document.getString("image"); // Update this to fetch from Firebase Storage if needed
                         String department = document.getString("department");
                         String food = document.getString("food");
@@ -237,7 +238,7 @@ public class MainPage extends AppCompatActivity {
                         int height = (ageLong != null) ? ageLong.intValue() : DEFAULT_HEIGHT; // Add null check if necessary
 
                         User user = new User(userEmail, name, profileImageUrl, department, food,
-                                alcohol, smoking, weed, age, height);
+                                alcohol, smoking, weed, age, height, gender);
 
                         users.add(user);
                     }
@@ -266,7 +267,7 @@ public class MainPage extends AppCompatActivity {
         TextView ageTextView = popupView.findViewById(R.id.textViewAge);
         ageTextView.setText("Age: " + user.getAge());
         TextView genderTextView = popupView.findViewById(R.id.textViewGender);
-        genderTextView.setText("Gender: female");
+        genderTextView.setText("Gender: " + user.getGender());
         TextView heightTextView = popupView.findViewById(R.id.textViewHeight);
         heightTextView.setText("Height: " + user.getHeight());
         TextView starSignTextView = popupView.findViewById(R.id.textViewStarSign);
