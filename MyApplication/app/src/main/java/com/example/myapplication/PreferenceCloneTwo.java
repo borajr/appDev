@@ -1,359 +1,82 @@
 package com.example.myapplication;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PreferenceCloneTwo extends AppCompatActivity {
+
+    private Spinner alcoholMenu, smokingMenu, foodMenu, marijuanaMenu;
+    String alcohol, smoking, food, marijuana;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preference_clonetwo);
+        setContentView(R.layout.activity_preference_clonetwo); // Ensure this matches your layout file
 
-        TextView textView;
-        boolean[] selectedLanguage;
-        ArrayList<Integer> langList = new ArrayList<>();
-        String[] langArray = {
-                "Amharic",
-                "Arabic",
-                "Armenian",
-                "Azerbaijani",
-                "Bengali",
-                "Bhojpuri",
-                "Bulgarian",
-                "Burmese",
-                "Chinese (Mandarin)",
-                "Dutch",
-                "English",
-                "Farsi (Persian)",
-                "Finnish",
-                "French",
-                "German",
-                "Gujarati",
-                "Hausa",
-                "Hebrew",
-                "Hindi",
-                "Indonesian",
-                "Italian",
-                "Japanese",
-                "Javanese",
-                "Kannada",
-                "Kazakh",
-                "Khmer",
-                "Korean",
-                "Lao",
-                "Malagasy",
-                "Malay",
-                "Marathi",
-                "Maithili",
-                "Nepali",
-                "Norwegian",
-                "Odia (Oriya)",
-                "Pashto",
-                "Polish",
-                "Portuguese",
-                "Punjabi",
-                "Russian",
-                "Serbian",
-                "Sindhi",
-                "Sinhalese",
-                "Somali",
-                "Spanish",
-                "Sudanese",
-                "Swahili",
-                "Swedish",
-                "Tamil",
-                "Telugu",
-                "Thai",
-                "Tigrinya",
-                "Turkish",
-                "Ukrainian",
-                "Urdu",
-                "Uzbek",
-                "Vietnamese"};
+        View btnProfile = findViewById(R.id.confirm_button);
+        DatabaseHandler db = new DatabaseHandler();
+        // Set OnClickListener to the button
 
-        String[] langArray1 = {
-                "Aries",
-                "Taurus",
-                "Gemini",
-                "Cancer",
-                "Leo",
-                "Virgo",
-                "Libra",
-                "Scorpio",
-                "Sagittarius",
-                "Capricorn",
-                "Aquarius",
-                "Pisces"};
+        alcoholMenu = findViewById(R.id.alcohol_menu);
+        smokingMenu = findViewById(R.id.smoking_menu);
+        foodMenu = findViewById(R.id.Food_menu);
+        marijuanaMenu = findViewById(R.id.Marijuana_menu);
+        TextView Alcohol = findViewById(R.id.Alcohol);
 
-        String[] langArray2 = {
-                "Male",
-                "Female",
-                "Non-binary",
-                "Other" };
+        int unicodeAlcohol = 0x1F37A;
+
+        String emojiAlcohol = getEmoji(unicodeAlcohol);
+
+        String textAlcohol = "Alcohol" + emojiAlcohol;
+        Alcohol.setText(textAlcohol);
 
         // Find the button by its ID
-        View btnConfirm = findViewById(R.id.confirm_button);
-        textView = findViewById(R.id.textview);
-        selectedLanguage = new boolean[langArray.length];
-        TextView textstar = findViewById(R.id.textstar);
-        TextView textgender = findViewById(R.id.textgender);
-
-
-        // Set OnClickListener to the button
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to navigate to the activity_change_password.xml
+                // Create an Intent to start ProfileCreationDetailThree
+                db.updateUserPref(getData());
                 Intent intent = new Intent(PreferenceCloneTwo.this, ProfileSetup.class);
-                startActivity(intent); // Start the new activity
+                startActivity(intent);
             }
         });
+    }
 
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                // Initialize alert dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(PreferenceCloneTwo.this);
+    private Map<String, Object> getData() {
+        String alcohol = alcoholMenu.getSelectedItem().toString();
+        String smoking = smokingMenu.getSelectedItem().toString();
+        String food = foodMenu.getSelectedItem().toString();
+        String marijuana = marijuanaMenu.getSelectedItem().toString();
+        Boolean alcoholBoolean = convertToBoolean(alcohol);
+        Boolean smokingBoolean = convertToBoolean(smoking);
+        Boolean marijuanaBoolean = convertToBoolean(marijuana);
 
-                // set title
-                builder.setTitle("Select Language");
 
-                // set dialog non cancelable
-                builder.setCancelable(false);
+        // Call createMap() with the collected data
+        Map<String, Object> map = new HashMap<>();
+        map.put("alcohol", alcoholBoolean);
+        map.put("smoking", smokingBoolean);
+        map.put("food", food);
+        map.put("marijuana", marijuanaBoolean);
+        return map;
+    }
+    public String getEmoji(int uni){
 
-                builder.setMultiChoiceItems(langArray, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        // check condition
-                        if (b) {
-                            // when checkbox selected
-                            // Add position  in lang list
-                            langList.add(i);
-                            // Sort array list
-                            Collections.sort(langList);
-                        } else {
-                            // when checkbox unselected
-                            // Remove position from langList
-                            langList.remove(Integer.valueOf(i));
-                        }
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
-                        StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
-                        for (int j = 0; j < langList.size(); j++) {
-                            // concat array value
-                            stringBuilder.append(langArray[langList.get(j)]);
-                            // check condition
-                            if (j != langList.size() - 1) {
-                                // When j value  not equal
-                                // to lang list size - 1
-                                // add comma
-                                stringBuilder.append(", ");
-                            }
-                        }
-                        // set text on textView
-                        textView.setText(stringBuilder.toString());
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // dismiss dialog
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // use for loop
-                        for (int j = 0; j < selectedLanguage.length; j++) {
-                            // remove all selection
-                            selectedLanguage[j] = false;
-                            // clear language list
-                            langList.clear();
-                            // clear text view value
-                            textView.setText("");
-                        }
-                    }
-                });
-                // show dialog
-                builder.show();
-            }
-        });
-
-        textstar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // Initialize alert dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(PreferenceCloneTwo.this);
-
-                // set title
-                builder.setTitle("Select Star-Sign");
-
-                // set dialog non cancelable
-                builder.setCancelable(false);
-
-                builder.setMultiChoiceItems(langArray1, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        // check condition
-                        if (b) {
-                            // when checkbox selected
-                            // Add position  in lang list
-                            langList.add(i);
-                            // Sort array list
-                            Collections.sort(langList);
-                        } else {
-                            // when checkbox unselected
-                            // Remove position from langList
-                            langList.remove(Integer.valueOf(i));
-                        }
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
-                        StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
-                        for (int j = 0; j < langList.size(); j++) {
-                            // concat array value
-                            stringBuilder.append(langArray1[langList.get(j)]);
-                            // check condition
-                            if (j != langList.size() - 1) {
-                                // When j value  not equal
-                                // to lang list size - 1
-                                // add comma
-                                stringBuilder.append(", ");
-                            }
-                        }
-                        // set text on textView
-                        textstar.setText(stringBuilder.toString());
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // dismiss dialog
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // use for loop
-                        for (int j = 0; j < selectedLanguage.length; j++) {
-                            // remove all selection
-                            selectedLanguage[j] = false;
-                            // clear language list
-                            langList.clear();
-                            // clear text view value
-                            textstar.setText("");
-                        }
-                    }
-                });
-                // show dialog
-                builder.show();
-            }
-        });
-
-        textgender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // Initialize alert dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(PreferenceCloneTwo.this);
-
-                // set title
-                builder.setTitle("Select Gender");
-
-                // set dialog non cancelable
-                builder.setCancelable(false);
-
-                builder.setMultiChoiceItems(langArray2, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        // check condition
-                        if (b) {
-                            // when checkbox selected
-                            // Add position  in lang list
-                            langList.add(i);
-                            // Sort array list
-                            Collections.sort(langList);
-                        } else {
-                            // when checkbox unselected
-                            // Remove position from langList
-                            langList.remove(Integer.valueOf(i));
-                        }
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
-                        StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
-                        for (int j = 0; j < langList.size(); j++) {
-                            // concat array value
-                            stringBuilder.append(langArray2[langList.get(j)]);
-                            // check condition
-                            if (j != langList.size() - 1) {
-                                // When j value  not equal
-                                // to lang list size - 1
-                                // add comma
-                                stringBuilder.append(", ");
-                            }
-                        }
-                        // set text on textView
-                        textgender.setText(stringBuilder.toString());
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // dismiss dialog
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // use for loop
-                        for (int j = 0; j < selectedLanguage.length; j++) {
-                            // remove all selection
-                            selectedLanguage[j] = false;
-                            // clear language list
-                            langList.clear();
-                            // clear text view value
-                            textgender.setText("");
-                        }
-                    }
-                });
-                // show dialog
-                builder.show();
-            }
-        });
+        return new String(Character.toChars(uni));
+    }
+    private Boolean convertToBoolean(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.equals("Yes");
     }
 }

@@ -1,279 +1,150 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/profile_gradient">
 
-    <!-- TextViews -->
-
-    <!-- Preferred Gender -->
-
-    <TextView
-        android:id="@+id/Tellus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Tell us about your ideal type"
-        android:textColor="#000000"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/Gender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:text="Preferred Gender:"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.06"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Tellus" />
-
-    <!-- Height -->
-
-
-    <TextView
-        android:id="@+id/textgender"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/signup_rectangle"
-        android:hint="Select gender"
-        android:textColorHint="@color/black"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="@id/Gender"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/Gender"
-        app:layout_constraintTop_toBottomOf="@id/Gender" />
-
-    <TextView
-        android:id="@+id/Height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Height"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.041"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textgender" />
-
-
-    <!-- Age window -->
-
-    <LinearLayout
-        android:id="@+id/linear"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:gravity="left"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/Height"
-        tools:layout_editor_absoluteX="0dp">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp">
 
-        <Spinner
-            android:id="@+id/minHeightSpinner"
-            android:layout_width="140dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="30dp"
-            android:background="#ffffff"
-            android:entries="@array/height"
-            app:layout_constraintEnd_toStartOf="@id/gap"
+        <!-- 80% of parent's width -->
+
+
+        <TextView
+            android:id="@+id/ProfileDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="Your Ideal Type"
+            android:textColor="#000000"
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-        <Spinner
-            android:id="@+id/maxHeightSpinner"
-            android:layout_width="140dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="40dp"
-            android:background="#ffffff"
-            android:entries="@array/height"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/gap"
             app:layout_constraintTop_toTopOf="parent" />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/star"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Star Sign"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear"
-        app:layout_constraintVertical_bias="0.01" />
-
-    <TextView
-        android:id="@+id/textstar"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/signup_rectangle"
-        android:hint="Select Star Sign"
-        android:textColorHint="@color/black"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="@+id/star"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/star"
-        app:layout_constraintTop_toBottomOf="@id/star" />
-
-    <!-- Academic year -->
-
-    <TextView
-        android:id="@+id/age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/element_spacing"
-        android:text="Age window"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textstar"
-        app:layout_constraintVertical_bias="0.019" />
-
-    <LinearLayout
-        android:id="@+id/linear2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:gravity="left"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/age"
-        tools:layout_editor_absoluteX="0dp">
-
-        <Spinner
-            android:id="@+id/minAgeSpinner"
-            android:layout_width="140dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="30dp"
-            android:background="#ffffff"
-            android:entries="@array/age_range"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/gap"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-        <Spinner
-            android:id="@+id/maxAgeSpinner"
-            android:layout_width="140dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="40dp"
-            android:background="#ffffff"
-            android:entries="@array/age_range"
+        <TextView
+            android:id="@+id/Alcohol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="Alcohol 🍺"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/gap"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-    </LinearLayout>
+            app:layout_constraintHorizontal_bias="0.163"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ProfileDetails" />
 
-    <!-- Language -->
+        <Spinner
+            android:id="@+id/alcohol_menu"
+            android:layout_width="276dp"
+            android:layout_height="48dp"
+            android:entries="@array/options"
+            android:background="@drawable/rounded_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Alcohol"
+            android:layout_marginTop="@dimen/between_elements_spacing" />
 
-    <TextView
-        android:id="@+id/year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/element_spacing"
-        android:text="Department"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.063"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear2"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/LastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/element_spacing"
+            android:text="Smoking 🚬"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.172"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alcohol_menu" />
 
-    <Spinner
-        android:id="@+id/editText5"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_spinner"
-        android:entries="@array/academic"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.27"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/year" />
+        <Spinner
+            android:id="@+id/smoking_menu"
+            android:layout_width="276dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
+            android:entries="@array/options"
+            android:background="@drawable/rounded_spinner"
+            android:hint="Smoking"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/LastName" />
 
-    <TextView
-        android:id="@+id/language"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/element_spacing"
-        android:text="Language"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText5"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/Birthdate3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/element_spacing"
+            android:text="Weed 🍃"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.152"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/smoking_menu" />
 
-    <!-- Confirm Button -->
+        <Spinner
+            android:id="@+id/Marijuana_menu"
+            android:layout_width="276dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
+            android:entries="@array/options"
+            android:background="@drawable/rounded_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Birthdate3" />
 
-    <TextView
-        android:id="@+id/textview"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/signup_rectangle"
-        android:textColorHint="@color/black"
-        android:hint="Select Language"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="@+id/Gender"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/Gender"
-        app:layout_constraintTop_toBottomOf="@id/language" />
+        <TextView
+            android:id="@+id/FavoriteFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/element_spacing"
+            android:text="Preferred diet 🍜"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.212"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Marijuana_menu" />
 
-    <Button
-        android:id="@+id/confirm_button"
-        android:layout_width="309dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/pink_rounded"
-        android:text="Confirm"
-        android:textColor="#ffffff"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview"
-        app:layout_constraintWidth_percent="0.8" />
+        <Spinner
+            android:id="@+id/Food_menu"
+            android:layout_width="276dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/between_elements_spacing"
+            android:background="@drawable/rounded_spinner"
+            android:entries="@array/food"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/FavoriteFood" />
 
-    <!-- Button3 -->
+        <Button
+            android:id="@+id/confirm_button"
+            android:layout_width="309dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="100sp"
+            android:background="@drawable/pink_rounded"
+            android:text="Confirm"
+            android:textColor="#ffffff"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Food_menu"
+            app:layout_constraintWidth_percent="0.8" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

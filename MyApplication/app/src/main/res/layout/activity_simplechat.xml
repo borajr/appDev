@@ -28,8 +28,8 @@
             android:layout_width="45dp"
             android:layout_height="31dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="-1dp"
-            android:contentDescription="menu"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="chat_menu"
             android:src="@drawable/chat_menu_button" />
 
     </RelativeLayout>
@@ -38,9 +38,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_messages_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_below="@id/chat_header"
-        android:layout_above="@id/chat_input_layout" />
+        android:layout_above="@id/chat_input_layout"
+        android:padding="8dp"
+        android:clipToPadding="false" />
 
     <!-- Chat Input Layout -->
     <LinearLayout
@@ -52,25 +54,25 @@
         android:padding="16dp">
 
         <!-- Message Input Field -->
-
-        <!-- Send Button -->
         <EditText
             android:id="@+id/chat_message_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#FFFFFF"
-            android:hint="Message"
+            android:hint="type_message"
             android:inputType="textCapSentences|textMultiLine"
             android:minHeight="48dp"
             android:padding="10dp" />
 
+        <!-- Send Button -->
         <Button
             android:id="@+id/chat_send_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="send"
             android:background="@drawable/pink_rounded"/>
+
     </LinearLayout>
 
 </RelativeLayout>

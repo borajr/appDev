@@ -17,6 +17,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -217,10 +219,11 @@ public class CameraActivity extends AppCompatActivity {
                 images[i].compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] imageData = baos.toByteArray();
 
-                String imageFileName = UUID.randomUUID().toString(); // Generate a random file name
-
+                String imageFileName = "image"+i; // Generate a random file name
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
                 // Upload byte array to Firebase Storage
-                StorageReference storageRef = storage.getReference().child("images/" + imageFileName);
+                StorageReference storageRef = storage.getReference().child(currentUser.getEmail() + "/" + imageFileName);
                 storageRef.putBytes(imageData)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override

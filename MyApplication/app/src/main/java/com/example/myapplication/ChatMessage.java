@@ -2,48 +2,66 @@ package com.example.myapplication;
 
 public class ChatMessage {
     private String message;
-    private boolean isSent; // 'true' if this message was sent by the user, 'false' if received
-    private String timestamp; // Optional: For message time
-    private int userProfileImageId; // Optional: For the image resource ID (if message is received)
+    private boolean isSent;
+    private String timestamp;
+    private int userProfileImageId;
+    private String senderId; // Add senderId
+    private String receiverId; // Add receiverId
 
-    public ChatMessage(String message, boolean isSent, String timestamp, int userProfileImageId) {
+    // No-argument constructor for Firestore deserialization
+    public ChatMessage() {}
+
+    // Constructor with all arguments
+    public ChatMessage(String message, boolean isSent, String timestamp, int userProfileImageId, String senderId, String receiverId) {
         this.message = message;
         this.isSent = isSent;
         this.timestamp = timestamp;
         this.userProfileImageId = userProfileImageId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
 
-    // Getters
+
+// Getters and setters
+    // ... Include all getters and setters, including those for senderId and receiverId
+
+    // Getters and setters
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public boolean isSent() {
         return isSent;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public int getUserProfileImageId() {
-        return userProfileImageId;
-    }
-
-    // Setters
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public void setSent(boolean sent) {
         isSent = sent;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
     }
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
+    public int getUserProfileImageId() {
+        return userProfileImageId;
+    }
+
     public void setUserProfileImageId(int userProfileImageId) {
         this.userProfileImageId = userProfileImageId;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+    public String getReceiverId() {
+        return receiverId;
     }
 }

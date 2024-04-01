@@ -5,17 +5,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileCreationDetailTwo extends AppCompatActivity {
 
-    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner;
+    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner, starSignSpinner;
     private Button confirmButton;
 
     // initialize variables
@@ -87,17 +89,26 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
         setContentView(R.layout.activity_profiledetailtwo); // Ensure this matches your layout file
 
         // Initialize your views
-        genderSpinner = findViewById(R.id.editText1);
+        genderSpinner = findViewById(R.id.editText1); // TODO: this is called edittext1 but is a spinner?
         minHeightSpinner = findViewById(R.id.minHeightSpinner);
-        minAgeSpinner = findViewById(R.id.minAgeSpinner);
         confirmButton = findViewById(R.id.confirm_button);
         textView = findViewById(R.id.textview);
         selectedLanguage = new boolean[langArray.length];
+        departmentSpinner = findViewById(R.id.editText5);
+        starSignSpinner = findViewById(R.id.starSignSpinner);
+
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     // Move to the next appropriate page
+                    String gender = genderSpinner.getSelectedItem().toString();
+                    String height = minHeightSpinner.getSelectedItem().toString();
+                    String department = departmentSpinner.getSelectedItem().toString();
+                    String starSign = starSignSpinner.getSelectedItem().toString();
+                    DatabaseHandler db = new DatabaseHandler();
+                    Map<String, Object> data = createMap(gender, height, department, starSign); //TODO: ADD LANGLIST
+                    db.updateUser(data);
                     Intent nextIntent = new Intent(ProfileCreationDetailTwo.this, ProfileCreationDetailThree.class); // Adjust as needed
                     startActivity(nextIntent);
 
@@ -182,6 +193,23 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
                 builder.show();
             }
         });
+    }
+    private Map<String, Object> createMap(String gender, String height, String department, String starSign) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("gender", gender);
+        int heightInt = 0;
+
+        if (height.equals("<150")) {
+            heightInt = 149;
+        } else if (height.equals(">210")) {
+            heightInt = 211;
+        } else {
+            heightInt = Integer.parseInt(height);
+        }
+        map.put("height", heightInt);
+
+        map.put("department", department);
+        return map;
     }
 
 }
