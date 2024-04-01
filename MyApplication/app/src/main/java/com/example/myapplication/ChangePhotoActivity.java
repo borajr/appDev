@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -19,9 +20,16 @@ import android.net.Uri;
 import android.widget.Toast;
 import android.content.pm.PackageManager;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class ChangePhotoActivity extends AppCompatActivity {
 
@@ -238,6 +246,40 @@ public class ChangePhotoActivity extends AppCompatActivity {
                 }
                 break;
             }
+        }
+    }
+    private void downloadImagesFromFirebaseStorage() {
+        ImageView image1 = findViewById(R.id.imageView);
+        ImageView image2 = findViewById(R.id.imageView1);
+        ImageView image3 = findViewById(R.id.imageView2);
+        ImageView image4 = findViewById(R.id.imageView3);
+        ImageView image5 = findViewById(R.id.imageView4);
+        ImageView image6 = findViewById(R.id.imageView5);
+        ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
+        imageViews.add(image1);
+        imageViews.add(image2);
+        imageViews.add(image3);
+        imageViews.add(image4);
+        imageViews.add(image5);
+        imageViews.add(image6);
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        int x = 1;
+        for (ImageView i : imageViews) { // Assuming you have 6 images to download
+
+            // Create a reference to the image in Firebase Storage
+            Log.d("ProfileSetup", currentUser.getEmail() + "/image" + x);
+            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x + ".jpeg");
+            x++;
+            // Create a temporary file to store the downloaded image
+            imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    i.setImageBitmap(bitmap);
+                }
+            });
         }
     }
 
