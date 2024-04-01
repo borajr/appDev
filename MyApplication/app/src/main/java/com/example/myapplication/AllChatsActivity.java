@@ -32,7 +32,7 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         chatList = new ArrayList<>();
         // Initialize with your static chat data using a method that checks for user participation
         addStaticChatIfParticipant("User1", "Hello", "12:00", R.drawable.ic_profile_placeholder, "BTxyVjbfF8Y4TKmHmBvmgOPIdKb2", "mEjYhiMTzuSHtkV73HkYPSvrjD93");
-        addStaticChatIfParticipant("User2", "How are you?", "12:05", R.drawable.ic_profile_placeholder, "mEjYhiMTzuSHtkV73HkYPSvrjD93", "BTxyVjbfF8Y4TKmHmBvmgOPIdKb231");
+        addStaticChatIfParticipant("User2", "How are you?", "12:05", R.drawable.ic_profile_placeholder, "mEjYhiMTzuSHtkV73HkYPSvrjD93", "BTxyVjbfF8Y4TKmHmBvmgOPIdKb2");
 
         chatAdapter = new ChatAdapter(chatList, this); // Assuming ChatAdapter is implemented to handle your 'chat' model class
         recyclerViewChats.setAdapter(chatAdapter);
