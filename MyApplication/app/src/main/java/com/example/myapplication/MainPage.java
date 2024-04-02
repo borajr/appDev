@@ -84,6 +84,7 @@ public class MainPage extends AppCompatActivity {
                 String swipedUserEmail = swipedUser.getEmail();
                 // Do something with the dataObject if needed
                 mainMatch.recordSwipe(currentUser.getEmail(), swipedUser.getUserEmail(), "left");
+
             }
 
             @Override
@@ -94,7 +95,9 @@ public class MainPage extends AppCompatActivity {
                 String swipedUserEmail = swipedUser.getEmail();
                 // Do something with the dataObject if needed
                 mainMatch.recordSwipe(currentUser.getEmail(), swipedUser.getUserEmail(), "right");
+
                 mainMatch.checkForMatch(currentUser.getEmail(), swipedUser.getUserEmail());
+
             }
 
             @Override

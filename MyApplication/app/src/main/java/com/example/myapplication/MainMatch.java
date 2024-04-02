@@ -36,8 +36,14 @@ public class MainMatch extends AppCompatActivity {
     }
 
     public void recordSwipe(String swiperEmail, String swipedEmail, String direction) {
+        if (swiperEmail.equals(swipedEmail)) {
+            Log.w(TAG, "User attempted to swipe themselves, which is not allowed.");
+            return; // Exit the method early
+        }
+
         Map<String, Object> swipeData = new HashMap<>();
         swipeData.put("swiperEmail", swiperEmail);
+
         swipeData.put("swipedEmail", swipedEmail);
         swipeData.put("direction", direction);
 
