@@ -24,13 +24,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SimpleChat extends AppCompatActivity {
 
@@ -146,7 +149,8 @@ public class SimpleChat extends AppCompatActivity {
             // Here you can handle sending the report reason to your server or save it
             String reportReason = reasonEditText.getText().toString().trim();
             if (!reportReason.isEmpty()) {
-                // TODO: Send report reason to your backend/server
+                saveReportToFirestore(reportReason);
+
                 Toast.makeText(SimpleChat.this, "Report sent for: " + reportReason, Toast.LENGTH_SHORT).show();
                 onUnmatch();
             } else {
@@ -234,7 +238,26 @@ public class SimpleChat extends AppCompatActivity {
                         finish(); // Exit if there is an error fetching the chat document
                     }
                 });
+
     }
+    private void saveReportToFirestore(String reportReason) {
+        // Get the current user's email
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        fetchChatPartnerId();
+        // Create a map with the report data
+        Map<String, Object> reportData = new HashMap<>();
+        reportData.put("userEmail", chatPartnerId);
+        reportData.put("reason", reportReason);
+        reportData.put("timestamp", FieldValue.serverTimestamp());
 
-
+        // Add the report to the "Reports" collection in Firestore
+        FirebaseFirestore.getInstance().collection("Reports")
+                .add(reportData)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "Report added successfully");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error adding report", e);
+                });
+    }
 }

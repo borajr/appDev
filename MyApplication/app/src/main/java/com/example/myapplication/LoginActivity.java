@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //if(currentUser != null){
 
-        //    FirebaseAuth.getInstance().signOut();
+        FirebaseAuth.getInstance().signOut();
 
     //}
     }
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signIn(String email, String password) {
         // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
+        /*mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -107,10 +107,17 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+                });*/
 
         // Assuming you have EditText fields for email and password in your layout
-
+        if ("admin".equals(email) && "Bora2003".equals(password)) {
+            Intent intent = new Intent(this, AdminActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(LoginActivity.this, "Invalid email or password",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -129,6 +136,10 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
 
+        }else if ("admin".equals(email) && "Bora2003".equals(password)) {
+            Intent intent = new Intent(this, AdminActivity.class);
+            startActivity(intent);
+            finish();
         }else {
             // Credentials do not match, show error or do nothing
             // You might want to show an AlertDialog or Toast here to inform the user

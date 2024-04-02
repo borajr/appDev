@@ -32,23 +32,29 @@
             android:name=".SignupActivity"
             android:exported="true"
             android:label="activity_signup"
-            android:theme="@style/Theme.MyApplication" />
+            android:theme="@style/Theme.MyApplication"
+            />
 
         <activity
             android:name=".ConfirmationActivity"
-            android:exported="false"/>
+            android:exported="false"
+            />
         <activity
             android:name=".SimpleChat"
-            android:exported="true"/>
+            android:exported="true"
+            />
         <activity
             android:name=".ChatActivity"
-            android:exported="false"/>
+            android:exported="false"
+            />
         <activity
             android:name=".chat"
-            android:exported="true"/>
+            android:exported="true"
+            />
         <activity
             android:name=".ChatAdapter"
-            android:exported="true"/>
+            android:exported="true"
+            />
         <activity
             android:name=".ChatMessage"
             android:exported="true"/>
