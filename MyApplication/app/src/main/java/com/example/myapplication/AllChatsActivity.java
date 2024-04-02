@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.OnChatClickListener {
     private static final String TAG = "AllChatsActivity";
@@ -30,13 +29,13 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
     private ArrayList<chat> chatList; // Assuming 'chat' is your model class
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String currentUserId;
-
+    private AtomicInteger matchCount = new AtomicInteger(0);
+    private AtomicInteger processedMatches = new AtomicInteger(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_chats);
-
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getEmail(); // Assuming the user is already logged in
 
@@ -46,29 +45,30 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         recyclerViewChats.setLayoutManager(new LinearLayoutManager(this));
 
         chatList = new ArrayList<>();
-        // Initialize with your static chat data using a method that checks for user participation
-        //addStaticChatIfParticipant("User1", "Hello", "12:00", R.drawable.ic_profile_placeholder, "User1", "boram@student.tue.nl", "borambi@student.tue.nl");
-        //addStaticChatIfParticipant("User2", "How are you?", "12:05", R.drawable.ic_profile_placeholder,  "User1", "borambi@student.tue.nl", "boram@student.tue.nl");
-
         chatAdapter = new ChatAdapter(chatList, this); // Assuming ChatAdapter is implemented to handle your 'chat' model class
         recyclerViewChats.setAdapter(chatAdapter);
 
         createChatsForAllMatches();
-        fetchDynamicChats();
     }
 
     private void createChatsForAllMatches() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         db.collection("Matches")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
-                        for (DocumentSnapshot match : task.getResult()) {
+                        List<DocumentSnapshot> matches = task.getResult().getDocuments();
+                        matchCount.set(matches.size());
+                        if (matches.size() == 0) {
+                            // No matches to process, fetch chats immediately
+                            fetchDynamicChats();
+                        }
+                        for (DocumentSnapshot match : matches) {
                             String user1Email = match.getString("user1Mail");
                             String user2Email = match.getString("user2Mail");
                             if (user1Email != null && user2Email != null) {
                                 checkAndCreateChat(db, user1Email, user2Email);
+                            } else {
+                                processMatchCompletion(); // Decrement the count if match can't be processed
                             }
                         }
                     } else {
@@ -77,36 +77,33 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                 });
     }
 
-    // Method to check if a chat already exists for the given match and create one if it does not
     private void checkAndCreateChat(FirebaseFirestore db, String user1Email, String user2Email) {
         db.collection("chats")
                 .whereArrayContains("participantEmails", user1Email)
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful() && task.getResult() != null) {
                         QuerySnapshot chatsSnapshot = task.getResult();
                         boolean chatExists = false;
-
-                        if (chatsSnapshot != null) {
-                            for (DocumentSnapshot chatSnapshot : chatsSnapshot.getDocuments()) {
-                                List<String> participantEmails = (List<String>) chatSnapshot.get("participantEmails");
-                                if (participantEmails.contains(user2Email)) {
-                                    chatExists = true;
-                                    break;
-                                }
+                        for (DocumentSnapshot chatSnapshot : chatsSnapshot.getDocuments()) {
+                            List<String> participantEmails = (List<String>) chatSnapshot.get("participantEmails");
+                            if (participantEmails.contains(user2Email)) {
+                                chatExists = true;
+                                break;
                             }
                         }
-
                         if (!chatExists) {
                             createChatDocument(db, user1Email, user2Email);
+                        } else {
+                            processMatchCompletion(); // The chat already exists, no need to create a new one
                         }
                     } else {
                         Log.e(TAG, "Failed to check existing chats", task.getException());
+                        processMatchCompletion(); // Even if the check fails, process the completion
                     }
                 });
     }
 
-    // Method to create a chat document with participant emails
     private void createChatDocument(FirebaseFirestore db, String user1Email, String user2Email) {
         String uniqueChatID = db.collection("chats").document().getId();
         Map<String, Object> chatData = new HashMap<>();
@@ -114,38 +111,37 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
 
         db.collection("chats").document(uniqueChatID)
                 .set(chatData)
-                .addOnSuccessListener(unused -> Log.d(TAG, "Chat document created with ID: " + uniqueChatID))
-                .addOnFailureListener(e -> Log.w(TAG, "Error creating chat document", e));
+                .addOnSuccessListener(unused -> {
+                    Log.d(TAG, "Chat document created with ID: " + uniqueChatID);
+                    processMatchCompletion(); // Chat created, decrement the match count
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error creating chat document", e);
+                    processMatchCompletion(); // Even if creation fails, process the completion
+                });
     }
 
-    private void addStaticChatIfParticipant(String userName, String lastMessage, String timestamp, int profilePic, String chatID, String senderEmail, String receiverEmail) {
-        // Add the static chat only if the current user is either the sender or receiver
-        if (currentUserId.equals(senderEmail) || currentUserId.equals(receiverEmail)) {
-            chatList.add(new chat(userName, lastMessage, timestamp, profilePic, chatID, senderEmail, receiverEmail));
+    private void processMatchCompletion() {
+        if (processedMatches.incrementAndGet() == matchCount.get()) {
+            // All matches have been processed, fetch chats
+            fetchDynamicChats();
         }
     }
 
     private void fetchDynamicChats() {
-        // Assuming 'participantEmails' is the field that contains the array of emails
+        chatList.clear();
         db.collection("chats")
                 .whereArrayContains("participantEmails", currentUserId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Here you would extract and use the chat data as needed.
-                            // You might need to adjust this if the usernames are not stored
-                            // directly under the chat document.
-                            String userName = document.getId(); // Using the document ID as the chat ID.
+                            String userName = document.getId();
                             ArrayList<String> participantEmails = (ArrayList<String>) document.get("participantEmails");
-                            String lastMessage = "Last message here"; // Placeholder for last message
-                            String timestamp = "timestamp here"; // Placeholder for timestamp
-
-                            // Check if the current user's email is in the participants' list
+                            String lastMessage = "Last message here";
+                            String timestamp = "timestamp here";
                             if (participantEmails.contains(currentUserId)) {
-                                // The current user is a participant in this chat.
-                                // Add the chat to the chat list.
-                                chatList.add(new chat(userName, lastMessage, timestamp, R.drawable.ic_profile_placeholder, "", "", "")); // Replace with actual sender and receiver IDs
+                                chatList.add(new chat(userName, lastMessage, timestamp, R.drawable.ic_profile_placeholder, "", "", ""));
                             }
                         }
                         chatAdapter.notifyDataSetChanged();
@@ -164,12 +160,11 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         }
     }
 
-
     @Override
     public void onChatClicked(chat chat) {
         Intent intent = new Intent(AllChatsActivity.this, SimpleChat.class);
-        intent.putExtra("CHAT_ID", chat.getUserName()); // Assuming you modify your chat model to include a getChatId method
-        intent.putExtra("RECEIVER_ID", chat.getReceiverEmail()); // Ensure getReceiverId method exists and returns the correct ID
+        intent.putExtra("CHAT_ID", chat.getChatID());
+        intent.putExtra("RECEIVER_ID", chat.getReceiverEmail());
         startActivity(intent);
     }
 }
