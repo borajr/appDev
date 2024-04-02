@@ -155,6 +155,8 @@
 
         }
 
+
+
         public void compareGendersWithAllUsers() {
             if (currentUser != null) {
                 // Retrieve the email of the logged-in user
