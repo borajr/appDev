@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,10 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +26,6 @@ import java.util.Map;
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "SignupActivity";
-
-    private boolean resultF;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +43,6 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String repeatPassword = repeatPasswordEditText.getText().toString();
                 mAuth = FirebaseAuth.getInstance();
-                checkForEmail(emailInput);
 
                 // Check if the email contains "tue.nl"
                 if (!emailInput.contains("tue.nl")) {
@@ -58,11 +50,6 @@ public class SignupActivity extends AppCompatActivity {
                     // Corrected to ConfirmationActivity
                     correctInput = false;
                     Toast.makeText(SignupActivity.this, "Please enter a TU/e email address.", Toast.LENGTH_LONG).show();
-                }
-
-                if (!resultF) {
-                    correctInput = false;
-                    Toast.makeText(SignupActivity.this, "This account already exists", Toast.LENGTH_LONG).show();
                 }
 
                 if(emailInput.isEmpty()) { // Extend this condition for all fields
@@ -83,10 +70,8 @@ public class SignupActivity extends AppCompatActivity {
                 if (correctInput && !isStaff(emailInput)) {
                     createUser(emailInput, password);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    
                     Map<String,Object> user = new HashMap<>();
                     user.put("banned", false);
-                    //user.put("isStaff", true);
                     user.put("email", emailInput);
                     db.collection("users")
                             .document(emailInput)
@@ -96,6 +81,7 @@ public class SignupActivity extends AppCompatActivity {
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
                                     Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
+                                    finish();
                                     startActivity(intent);
                                 }
 
@@ -106,8 +92,6 @@ public class SignupActivity extends AppCompatActivity {
                                     Log.w(TAG, "Error writing document", e);
                                 }
                             });
-
-
 
 
                     // If all checks pass, proceed to the ConfirmationActivity
@@ -125,8 +109,10 @@ public class SignupActivity extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
-                                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
+                                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
+                                    finish();
                                     startActivity(intent);
                                 }
 
@@ -135,6 +121,7 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.w(TAG, "Error writing document", e);
+
                                 }
                             });
                 }
@@ -166,6 +153,8 @@ public class SignupActivity extends AppCompatActivity {
         }
         return false; // Password missing required character types
     }
+    boolean flag1 = false;
+    boolean flag2 = false;
     private void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -174,7 +163,7 @@ public class SignupActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            flag1 = true;
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -183,49 +172,10 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+        mAuth.signInWithEmailAndPassword(email, password);
     }
 
-    public void checkForEmail(final String email) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users")
-                .whereEqualTo("email", email)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                // Delete the match document
-                                db.collection("users").document(document.getId()).delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                // Redirect to MainPage
-                                                Toast.makeText(SignupActivity.this, "This account exists", Toast.LENGTH_LONG).show();
-                                                resultChanger(false);
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Handle failure
-                                                Log.w(TAG, "Error deleting match document", e);
-                                            }
-                                        });}
-                            }
-                        else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
-
-    private void resultChanger(boolean result){
-
-        resultF = result;
-    }
     private boolean isStaff(String email){
-        return !email.contains("@student.tue.nl");
-        }
+        return !email.endsWith("@student.tue.nl");
     }
-
+}
