@@ -59,28 +59,33 @@ public class MainMatch extends AppCompatActivity {
 
     public void checkForMatch(final String swiperEmail, final String swipedEmail) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Check if swiper has swiped right
         db.collection("Swipes")
                 .whereEqualTo("swiperEmail", swiperEmail)
                 .whereEqualTo("swipedEmail", swipedEmail)
                 .whereEqualTo("direction", "right")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String matchedSwipedEmail = document.getString("swipedEmail");
-                                if (!matchedSwipedEmail.equals(swiperEmail)) {
-                                    // If the swiped email is not the same as the swiper's email, create a match
-                                    createMatch(swiperEmail, swipedEmail);
-                                    return;
-                                }
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        // Check if swiped has also swiped right on swiper
+                        db.collection("Swipes")
+                                .whereEqualTo("swiperEmail", swipedEmail)
+                                .whereEqualTo("swipedEmail", swiperEmail)
+                                .whereEqualTo("direction", "right")
+                                .get()
+                                .addOnCompleteListener(task2 -> {
+                                    if (task2.isSuccessful() && !task2.getResult().isEmpty()) {
+                                        // Both users have swiped right on each other, create a match
+                                        createMatch(swiperEmail, swipedEmail);
+                                    } else {
+                                        Log.d(TAG, "No reciprocal swipe found.");
+                                    }
+                                });
+                    } else {
+                        Log.d(TAG, "Swiper did not swipe right or error occurred: ", task.getException());
+           }
+        });
     }
 
 
