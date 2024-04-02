@@ -43,7 +43,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
 
         MessageViewHolder(View itemView) {
             super(itemView);
-            messageText = itemView.findViewById(R.id.message_text);
+            messageText = itemView.findViewById(R.id.text_message_body_sent);
         }
 
         void bind(String message) {

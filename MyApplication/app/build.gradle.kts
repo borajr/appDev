@@ -73,5 +73,6 @@ dependencies {
     implementation ("com.google.firebase:firebase-database:9.8.0")
     implementation("com.lorentzos.swipecards:library:X.X.X@aar")
     implementation ("androidx.cardview:cardview:1.0.0")
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
 }
-

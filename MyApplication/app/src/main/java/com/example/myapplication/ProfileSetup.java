@@ -40,7 +40,7 @@ public class ProfileSetup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storage = FirebaseStorage.getInstance();
         setContentView(R.layout.activity_change_page);
 
         // Find the button by its ID
@@ -133,8 +133,19 @@ public class ProfileSetup extends AppCompatActivity {
             }
         });
 
+        // Set OnClickListener to the button
+        btnAccountInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to the activity_change_password.xml
+                Intent intent = new Intent(ProfileSetup.this, AccountInfo.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
+
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.navigation_profile);
 
         // Set OnClickListener to the button
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -174,12 +185,12 @@ public class ProfileSetup extends AppCompatActivity {
         imageViews.add(image6);
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
-        int x = 1;
+        int x = 0;
         for (ImageView i : imageViews) { // Assuming you have 6 images to download
 
             // Create a reference to the image in Firebase Storage
             Log.d("ProfileSetup", currentUser.getEmail() + "/image" + x);
-            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x + ".jpeg");
+            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x );
             x++;
             // Create a temporary file to store the downloaded image
             imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {

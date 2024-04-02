@@ -147,12 +147,13 @@
         android:layout_width="111dp"
         android:layout_height="27dp"
         android:text="Department"
+        android:layout_marginTop="8dp"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editText5"
-        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editText5"
         app:layout_constraintTop_toBottomOf="@+id/starSignSpinner"
         app:layout_constraintVertical_bias="0.0" />
@@ -161,14 +162,14 @@
         android:id="@+id/editText5"
         android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/rounded_spinner"
         android:entries="@array/academic"
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="@+id/Gender"
         app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="@+id/Gender"
-        app:layout_constraintTop_toBottomOf="@+id/starSignSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/year" />
 
     <TextView
         android:id="@+id/language"

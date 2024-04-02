@@ -26,6 +26,25 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "LoginActivity";
 
+    @Override
+
+    public void onStart() {
+
+        super.onStart();
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+
+        mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        //if(currentUser != null){
+
+        //    FirebaseAuth.getInstance().signOut();
+
+    //}
+    }
+
     private EditText emailEditText;
     private EditText passwordEditText;
 

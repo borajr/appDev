@@ -10,11 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
-
     private List<chat> chatList;
+    private OnChatClickListener listener;
 
-    public ChatAdapter(List<chat> chatList) {
+    public ChatAdapter(List<chat> chatList, OnChatClickListener listener) {
         this.chatList = chatList;
+        this.listener = listener;
+    }
+
+    public interface OnChatClickListener {
+        void onChatClicked(chat chat);
     }
 
     @Override
@@ -30,6 +35,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.lastMessageView.setText(chat.getLastMessage());
         holder.timestampView.setText(chat.getTimestamp());
         holder.userImageView.setImageResource(chat.getUserProfileImageId());
+
+        holder.itemView.setOnClickListener(v -> listener.onChatClicked(chat));
     }
 
     @Override
@@ -38,8 +45,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView userImageView;
-        public TextView userNameView, lastMessageView, timestampView;
+        ImageView userImageView;
+        TextView userNameView, lastMessageView, timestampView;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -30,9 +30,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:id="@+id/image"
-                android:scaleType="centerCrop">
-
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo">
             </ImageView>
+
             <TextView
                 android:id="@+id/name"
                 android:textSize="30sp"
@@ -42,13 +43,16 @@
                 android:gravity="center|left"
                 tools:text="hello"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                />
+                android:layout_height="60dp" />
+
+            <Button
+                android:id="@+id/infoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+
         </LinearLayout>
 
-
-
     </androidx.cardview.widget.CardView>
-
 
 </LinearLayout>
