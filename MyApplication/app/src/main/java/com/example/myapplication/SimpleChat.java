@@ -1,15 +1,27 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,23 +40,33 @@ public class SimpleChat extends AppCompatActivity {
     private SingleChatAdapter chatAdapter;
     private List<ChatMessage> messageList;
     private String currentUserId;
+    private String chatPartnerId;
     private EditText messageInput;
     private Button sendButton;
+
+    private ChatActivity chatActivity;
+
+
+    private ImageView burgerMenu;
     private String chatId; // The unique ID for the chat
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simplechat);
 
+        ImageView menuButton = findViewById(R.id.chat_menu_button);
+        menuButton.setOnClickListener(view -> PopupUtils.showMenuPopup(this, this::onUnmatch, this::onReport));
         db = FirebaseFirestore.getInstance();
-        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         messageList = new ArrayList<>();
         chatAdapter = new SingleChatAdapter(messageList, currentUserId);
 
         recyclerViewChat = findViewById(R.id.chat_messages_recycler_view);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewChat.setAdapter(chatAdapter);
+
 
         messageInput = findViewById(R.id.chat_message_input);
         sendButton = findViewById(R.id.chat_send_button);
@@ -53,12 +75,14 @@ public class SimpleChat extends AppCompatActivity {
         // Retrieve the chat ID passed from AllChatsActivity
         chatId = getIntent().getStringExtra("CHAT_ID");
         if (chatId != null && !chatId.isEmpty()) {
+            fetchChatPartnerId();
             fetchMessages();
         } else {
             Log.e(TAG, "No chat ID provided.");
             finish(); // Optionally, exit if there's no chat ID
         }
     }
+
 
     private void sendMessage() {
         String messageText = messageInput.getText().toString().trim();
@@ -110,4 +134,107 @@ public class SimpleChat extends AppCompatActivity {
                     }
                 });
     }
+
+    private void onReport() {
+        View reportPopupView = LayoutInflater.from(SimpleChat.this).inflate(R.layout.report_pop_up, null);
+        AlertDialog.Builder reportDialogBuilder = new AlertDialog.Builder(SimpleChat.this);
+        reportDialogBuilder.setView(reportPopupView);
+        AlertDialog reportDialog = reportDialogBuilder.create();
+        reportDialog.setCanceledOnTouchOutside(true);
+        EditText reasonEditText = reportPopupView.findViewById(R.id.edittext_report_reason); // Ensure this ID matches your layout
+        reportPopupView.findViewById(R.id.button_send_report).setOnClickListener(v -> {
+            // Here you can handle sending the report reason to your server or save it
+            String reportReason = reasonEditText.getText().toString().trim();
+            if (!reportReason.isEmpty()) {
+                // TODO: Send report reason to your backend/server
+                Toast.makeText(SimpleChat.this, "Report sent for: " + reportReason, Toast.LENGTH_SHORT).show();
+                onUnmatch();
+            } else {
+                Toast.makeText(SimpleChat.this, "Please enter a reason for reporting.", Toast.LENGTH_SHORT).show();
+            }
+            reportDialog.dismiss();
+            transitionToMainActivity(); // Transition to the main activity after reporting
+        });
+
+        reportDialog.show();
+    }
+
+    private void transitionToMainActivity() {
+        // Transition to the main activity
+        Intent intent = new Intent(SimpleChat.this, MainPage.class);
+        startActivity(intent);
+        finish(); // Close the current activity
+    }
+
+    // Assume 'currentUserId' is the ID of the signed-in user
+// 'chatPartnerId' is the ID of the user they are chatting with
+    public void onUnmatch() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String chatPartnerId = "tst";
+        // Query for the match document
+        Task<QuerySnapshot> querySnapshotTask = db.collection("Matches")
+                .whereEqualTo("user1Mail", currentUserId)
+                .whereEqualTo("user2Mail", chatPartnerId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                // Delete the match document
+                                db.collection("Matches").document(document.getId()).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // Redirect to MainPage
+                                                transitionToMainActivity();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Handle failure
+                                                Log.w(TAG, "Error deleting match document", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting match documents: ", task.getException());
+                        }
+                    }
+                });
+        }
+
+    private void fetchChatPartnerId() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Query for the match document using currentUserId
+        db.collection("Matches")
+                .whereArrayContains("participantEmails", currentUserId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        boolean matchFound = false;
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String user1Email = document.getString("user1Mail");
+                            String user2Email = document.getString("user2Mail");
+                            if (currentUserId.equals(user1Email)) {
+                                chatPartnerId = user2Email;
+                                matchFound = true;
+                                break;
+                            } else if (currentUserId.equals(user2Email)) {
+                                chatPartnerId = user1Email;
+                                matchFound = true;
+                                break;
+                            }
+                        }
+                        if (!matchFound) {
+                            Log.e(TAG, "Chat partner not found.");
+                            finish(); // Exit if the chat partner ID is not found
+                        }
+                    } else {
+                        Log.e(TAG, "Error getting match documents: ", task.getException());
+                    }
+                });
+    }
+
 }

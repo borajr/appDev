@@ -83,8 +83,7 @@ public class ChatActivity extends AppCompatActivity {
         fetchMessages(conversationId);
 
         // Setup the menu button
-        ImageView menuButton = findViewById(R.id.chat_menu_button);
-        menuButton.setOnClickListener(view -> showMenuPopup());
+
 
         // TODO: Setup the send button and message input
         // You will need to add code here that sends a message when the send button is clicked
@@ -119,98 +118,6 @@ public class ChatActivity extends AppCompatActivity {
 
     // ... Existing methods for showing pop-ups and transitioning to main activity ...
 
-    private void showMenuPopup() {
-        View popupView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.chat_pop_up_menu, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChatActivity.this);
-        alertDialogBuilder.setView(popupView);
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
 
-        // Handle "Unmatch" button click
-        popupView.findViewById(R.id.button_unmatch).setOnClickListener(v -> {
-            // Add logic to handle unmatching here, if needed
-            transitionToMainActivity();
-            alertDialog.dismiss();
-        });
 
-        // Handle "Report" button click
-        popupView.findViewById(R.id.button_report).setOnClickListener(v -> {
-            alertDialog.dismiss();
-            showReportPopup();
-        });
-
-        alertDialog.show();
-    }
-
-    private void showReportPopup() {
-        View reportPopupView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.report_pop_up, null);
-        AlertDialog.Builder reportDialogBuilder = new AlertDialog.Builder(ChatActivity.this);
-        reportDialogBuilder.setView(reportPopupView);
-        AlertDialog reportDialog = reportDialogBuilder.create();
-        reportDialog.setCanceledOnTouchOutside(true);
-        EditText reasonEditText = reportPopupView.findViewById(R.id.edittext_report_reason); // Ensure this ID matches your layout
-        reportPopupView.findViewById(R.id.button_send_report).setOnClickListener(v -> {
-            // Here you can handle sending the report reason to your server or save it
-            String reportReason = reasonEditText.getText().toString().trim();
-            if (!reportReason.isEmpty()) {
-                // TODO: Send report reason to your backend/server
-                Toast.makeText(ChatActivity.this, "Report sent for: " + reportReason, Toast.LENGTH_SHORT).show();
-                unmatchUser(currentUser, otherUser);
-            } else {
-                Toast.makeText(ChatActivity.this, "Please enter a reason for reporting.", Toast.LENGTH_SHORT).show();
-            }
-            reportDialog.dismiss();
-            transitionToMainActivity(); // Transition to the main activity after reporting
-        });
-
-        reportDialog.show();
-    }
-
-    private void transitionToMainActivity() {
-        // Transition to the main activity
-        Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish(); // Close the current activity
-    }
-
-    // Assume 'currentUserId' is the ID of the signed-in user
-// 'chatPartnerId' is the ID of the user they are chatting with
-    public void unmatchUser(String currentUserId, String chatPartnerId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Query for the match document
-        Task<QuerySnapshot> querySnapshotTask = db.collection("Matches")
-                .whereEqualTo("user1Mail", currentUserId)
-                .whereEqualTo("user2Mail", chatPartnerId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                // Delete the match document
-                                db.collection("Matches").document(document.getId()).delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                // Redirect to MainPage
-                                                Intent intent = new Intent(ChatActivity.this, MainPage.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Handle failure
-                                                Log.w(TAG, "Error deleting match document", e);
-                                            }
-                                        });
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting match documents: ", task.getException());
-                        }
-                    }
-                });
-    }
 }
