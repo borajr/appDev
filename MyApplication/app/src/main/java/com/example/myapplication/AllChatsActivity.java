@@ -3,11 +3,16 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,6 +54,29 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         recyclerViewChats.setAdapter(chatAdapter);
 
         createChatsForAllMatches();
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.navigation_chats);
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Get the item ID
+                int id = item.getItemId();
+
+                // Use if-else blocks to determine which item was selected
+                if (id == R.id.navigation_profile) {
+                    startActivity(new Intent(AllChatsActivity.this, ProfileSetup.class));
+                    return true;
+                } else if (id == R.id.navigation_main) {
+                    startActivity(new Intent(AllChatsActivity.this, MainPage.class));
+                    return true;
+                } else if (id == R.id.navigation_chats) {
+                    startActivity(new Intent(AllChatsActivity.this, AllChatsActivity.class));
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void createChatsForAllMatches() {
@@ -162,6 +190,7 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
 
     @Override
     public void onChatClicked(chat chat) {
+        Log.w(TAG, chat.getChatID());
         Intent intent = new Intent(AllChatsActivity.this, SimpleChat.class);
         intent.putExtra("CHAT_ID", chat.getChatID());
         intent.putExtra("RECEIVER_ID", chat.getReceiverEmail());
