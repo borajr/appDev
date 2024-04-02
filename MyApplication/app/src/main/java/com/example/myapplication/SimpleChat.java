@@ -84,6 +84,51 @@ public class SimpleChat extends AppCompatActivity {
     }
 
 
+    public void onUnmatch() {
+        // First delete the chat document from 'chats' collection
+        deleteChatDocument(chatId, () -> {
+            // Then query and delete the match document
+            queryAndDeleteMatch(currentUserId, chatPartnerId);
+        });
+    }
+
+    // Helper method to delete chat document
+    private void deleteChatDocument(String chatId, Runnable onSuccessCallback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("chats").document(chatId)
+                .delete()
+                .addOnSuccessListener(unused -> {
+                    Log.d(TAG, "Chat document successfully deleted");
+                    onSuccessCallback.run(); // Run the callback on success
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting chat document", e));
+    }
+
+    // Helper method to query and delete match document
+    private void queryAndDeleteMatch(String currentUserEmail, String partnerEmail) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Query for the match document
+        db.collection("Matches")
+                .whereEqualTo("user1Mail", currentUserEmail)
+                .whereEqualTo("user2Mail", partnerEmail)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            // Delete the match document
+                            db.collection("Matches").document(document.getId()).delete()
+                                    .addOnSuccessListener(unused -> {
+                                        Log.d(TAG, "Match document successfully deleted");
+                                        transitionToMainActivity(); // Redirect to MainPage after deleting the match
+                                    })
+                                    .addOnFailureListener(e -> Log.w(TAG, "Error deleting match document", e));
+                        }
+                    } else {
+                        Log.d(TAG, "Error getting match documents: ", task.getException());
+                    }
+                });
+    }
+
     private void sendMessage() {
         String messageText = messageInput.getText().toString().trim();
         if (!messageText.isEmpty() && chatId != null) {
@@ -168,6 +213,7 @@ public class SimpleChat extends AppCompatActivity {
 
     // Assume 'currentUserId' is the ID of the signed-in user
 // 'chatPartnerId' is the ID of the user they are chatting with
+    /*
     public void onUnmatch() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String partner = chatPartnerId;
@@ -204,7 +250,7 @@ public class SimpleChat extends AppCompatActivity {
                     }
                 });
         }
-
+    */
     private void fetchChatPartnerId() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Assuming the chat document contains a field called "participantEmails" which is a list
