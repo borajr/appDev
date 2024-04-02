@@ -67,12 +67,14 @@ public class SignupActivity extends AppCompatActivity {
                     correctInput = false;
                     Toast.makeText(SignupActivity.this, "Password must contain 8+ characters, a letter, a number, and a capital letter.", Toast.LENGTH_LONG).show();
                 }
-                if (correctInput) {
+                if (correctInput && ! isStaff(emailInput)) {
                     createUser(emailInput, password);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     
                     Map<String,Object> user = new HashMap<>();
                     user.put("banned", false);
+                    //user.put("isStaff", true);
+                    user.put("email", emailInput);
                     db.collection("users")
                             .document(emailInput)
                             .set(user)
@@ -95,6 +97,31 @@ public class SignupActivity extends AppCompatActivity {
 
                     // If all checks pass, proceed to the ConfirmationActivity
 
+                } else if (correctInput && isStaff(emailInput)) {
+                    createUser(emailInput, password);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String,Object> user = new HashMap<>();
+                    user.put("banned", false);
+                    user.put("email", emailInput);
+                    //user.put("isStaff", true);
+                    db.collection("users_staff")
+                            .document(emailInput)
+                            .set(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
+                                    startActivity(intent);
+                                }
+
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
                 }
             }
         });
@@ -141,5 +168,9 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private boolean isStaff(String email){
+        return email.endsWith("tue.nl") && !email.contains("student@tue.nl");
     }
 }
