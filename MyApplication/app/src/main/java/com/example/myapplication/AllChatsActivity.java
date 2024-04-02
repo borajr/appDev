@@ -10,9 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.OnChatClickListener {
     private static final String TAG = "AllChatsActivity";
@@ -39,13 +47,75 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
 
         chatList = new ArrayList<>();
         // Initialize with your static chat data using a method that checks for user participation
-        addStaticChatIfParticipant("User1", "Hello", "12:00", R.drawable.ic_profile_placeholder, "User1", "boram@student.tue.nl", "borambi@student.tue.nl");
-        addStaticChatIfParticipant("User2", "How are you?", "12:05", R.drawable.ic_profile_placeholder,  "User1", "borambi@student.tue.nl", "boram@student.tue.nl");
+        //addStaticChatIfParticipant("User1", "Hello", "12:00", R.drawable.ic_profile_placeholder, "User1", "boram@student.tue.nl", "borambi@student.tue.nl");
+        //addStaticChatIfParticipant("User2", "How are you?", "12:05", R.drawable.ic_profile_placeholder,  "User1", "borambi@student.tue.nl", "boram@student.tue.nl");
 
         chatAdapter = new ChatAdapter(chatList, this); // Assuming ChatAdapter is implemented to handle your 'chat' model class
         recyclerViewChats.setAdapter(chatAdapter);
 
+        createChatsForAllMatches();
         fetchDynamicChats();
+    }
+
+    private void createChatsForAllMatches() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Matches")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (DocumentSnapshot match : task.getResult()) {
+                            String user1Email = match.getString("user1Mail");
+                            String user2Email = match.getString("user2Mail");
+                            if (user1Email != null && user2Email != null) {
+                                checkAndCreateChat(db, user1Email, user2Email);
+                            }
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting matches: ", task.getException());
+                    }
+                });
+    }
+
+    // Method to check if a chat already exists for the given match and create one if it does not
+    private void checkAndCreateChat(FirebaseFirestore db, String user1Email, String user2Email) {
+        db.collection("chats")
+                .whereArrayContains("participantEmails", user1Email)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot chatsSnapshot = task.getResult();
+                        boolean chatExists = false;
+
+                        if (chatsSnapshot != null) {
+                            for (DocumentSnapshot chatSnapshot : chatsSnapshot.getDocuments()) {
+                                List<String> participantEmails = (List<String>) chatSnapshot.get("participantEmails");
+                                if (participantEmails.contains(user2Email)) {
+                                    chatExists = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!chatExists) {
+                            createChatDocument(db, user1Email, user2Email);
+                        }
+                    } else {
+                        Log.e(TAG, "Failed to check existing chats", task.getException());
+                    }
+                });
+    }
+
+    // Method to create a chat document with participant emails
+    private void createChatDocument(FirebaseFirestore db, String user1Email, String user2Email) {
+        String uniqueChatID = db.collection("chats").document().getId();
+        Map<String, Object> chatData = new HashMap<>();
+        chatData.put("participantEmails", Arrays.asList(user1Email, user2Email));
+
+        db.collection("chats").document(uniqueChatID)
+                .set(chatData)
+                .addOnSuccessListener(unused -> Log.d(TAG, "Chat document created with ID: " + uniqueChatID))
+                .addOnFailureListener(e -> Log.w(TAG, "Error creating chat document", e));
     }
 
     private void addStaticChatIfParticipant(String userName, String lastMessage, String timestamp, int profilePic, String chatID, String senderEmail, String receiverEmail) {
