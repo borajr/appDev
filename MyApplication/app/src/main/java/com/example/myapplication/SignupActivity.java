@@ -107,6 +107,8 @@ public class SignupActivity extends AppCompatActivity {
                                 }
                             });
 
+                    
+
 
                     // If all checks pass, proceed to the ConfirmationActivity
 
