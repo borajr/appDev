@@ -64,7 +64,7 @@
             boolean matched = true;
 
 
-            MainMatch mainMatch = new MainMatch();
+            MainMatch mainMatch = new MainMatch(this);
 
             flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
@@ -154,6 +154,8 @@
 
 
         }
+
+
 
         public void compareGendersWithAllUsers() {
             if (currentUser != null) {
@@ -293,12 +295,9 @@
             alcoholTextView.setText("Alcohol: " + user.getAlcohol());
             TextView foodTextView = popupView.findViewById(R.id.textViewFood);
             foodTextView.setText("Diet: " + user.getPreferredDiet());
-
-
-            
         }
 
-        private void showMatchPopup() {
+        public void showMatchPopup() {
             // Inflate the match_popup.xml layout
             View popupView = LayoutInflater.from(this).inflate(R.layout.match_popup, null);
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
