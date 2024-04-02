@@ -69,8 +69,18 @@ public class ChatActivity extends AppCompatActivity {
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewChat.setAdapter(chatAdapter);
 
-        // Fetch and display messages
-        fetchMessages();
+        Intent intent = getIntent();
+        String conversationId = intent.getStringExtra("CHAT_ID");
+        otherUser = intent.getStringExtra("RECEIVER_ID");
+
+        if (conversationId == null || otherUser == null) {
+            Log.e(TAG, "No conversation ID or other user's email found.");
+            finish(); // Finish activity if required data is not available
+            return;
+        }
+
+        // Fetch messages using the retrieved conversation ID
+        fetchMessages(conversationId);
 
         // Setup the menu button
         ImageView menuButton = findViewById(R.id.chat_menu_button);
@@ -80,9 +90,8 @@ public class ChatActivity extends AppCompatActivity {
         // You will need to add code here that sends a message when the send button is clicked
     }
 
-    private void fetchMessages() {
+    private void fetchMessages(String conversationId) {
         // Assuming you have a conversationId that you have received from the previous screen (chat list)
-        String conversationId = "CONVERSATION_ID"; // TODO: Get this from the intent or chat selection
 
         db.collection("messages")
                 .whereEqualTo("conversationId", conversationId)

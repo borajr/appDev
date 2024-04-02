@@ -192,8 +192,9 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
     public void onChatClicked(chat chat) {
         Log.w(TAG, chat.getChatID());
         Intent intent = new Intent(AllChatsActivity.this, SimpleChat.class);
-        intent.putExtra("CHAT_ID", chat.getChatID());
+        intent.putExtra("CHAT_ID", chat.getUserName());
         intent.putExtra("RECEIVER_ID", chat.getReceiverEmail());
         startActivity(intent);
     }
+
 }
