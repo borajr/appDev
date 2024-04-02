@@ -91,7 +91,7 @@ public class PreferenceOne extends AppCompatActivity {
             "Uzbek",
             "Vietnamese"};
 
-    String[] langArray1 = {
+    String[] starSignArray = {
             "Aries",
             "Taurus",
             "Gemini",
@@ -105,7 +105,7 @@ public class PreferenceOne extends AppCompatActivity {
             "Aquarius",
             "Pisces"};
 
-    String[] langArray2 = {
+    String[] genderArray = {
             "Male",
             "Female",
             "Non-binary",
@@ -239,7 +239,7 @@ public class PreferenceOne extends AppCompatActivity {
                 // set dialog non cancelable
                 builder.setCancelable(false);
 
-                builder.setMultiChoiceItems(langArray1, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
+                builder.setMultiChoiceItems(starSignArray, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean b) {
                         // check condition
@@ -265,7 +265,7 @@ public class PreferenceOne extends AppCompatActivity {
                         // use for loop
                         for (int j = 0; j < langList.size(); j++) {
                             // concat array value
-                            stringBuilder.append(langArray1[langList.get(j)]);
+                            stringBuilder.append(starSignArray[langList.get(j)]);
                             // check condition
                             if (j != langList.size() - 1) {
                                 // When j value  not equal
@@ -318,7 +318,7 @@ public class PreferenceOne extends AppCompatActivity {
                 // set dialog non cancelable
                 builder.setCancelable(false);
 
-                builder.setMultiChoiceItems(langArray2, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
+                builder.setMultiChoiceItems(genderArray, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean b) {
                         // check condition
@@ -344,7 +344,7 @@ public class PreferenceOne extends AppCompatActivity {
                         // use for loop
                         for (int j = 0; j < langList.size(); j++) {
                             // concat array value
-                            stringBuilder.append(langArray2[langList.get(j)]);
+                            stringBuilder.append(genderArray[langList.get(j)]);
                             // check condition
                             if (j != langList.size() - 1) {
                                 // When j value  not equal
