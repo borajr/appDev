@@ -104,7 +104,7 @@ public class MainMatch extends AppCompatActivity {
                 Log.w(TAG, "Error adding match document", e);
             }
         });
-    }
+}
 
 
 
