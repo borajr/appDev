@@ -67,7 +67,7 @@ public class SignupActivity extends AppCompatActivity {
                     correctInput = false;
                     Toast.makeText(SignupActivity.this, "Password must contain 8+ characters, a letter, a number, and a capital letter.", Toast.LENGTH_LONG).show();
                 }
-                if (correctInput && ! isStaff(emailInput)) {
+                if (correctInput && !isStaff(emailInput)) {
                     createUser(emailInput, password);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     
@@ -171,6 +171,6 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean isStaff(String email){
-        return email.endsWith("tue.nl") && !email.contains("student@tue.nl");
+        return !email.contains("@student.tue.nl");
     }
 }
