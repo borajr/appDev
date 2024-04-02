@@ -57,6 +57,7 @@ public class MainMatch extends AppCompatActivity {
         });
     }
 
+    
     public void checkForMatch(final String swiperEmail, final String swipedEmail) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
