@@ -67,12 +67,11 @@ public class SignupActivity extends AppCompatActivity {
                     correctInput = false;
                     Toast.makeText(SignupActivity.this, "Password must contain 8+ characters, a letter, a number, and a capital letter.", Toast.LENGTH_LONG).show();
                 }
-                if (correctInput && ! isStaff(emailInput)) {
+                if (correctInput && !isStaff(emailInput)) {
                     createUser(emailInput, password);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String,Object> user = new HashMap<>();
                     user.put("banned", false);
-                    //user.put("isStaff", true);
                     user.put("email", emailInput);
                     db.collection("users")
                             .document(emailInput)
@@ -81,7 +80,8 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
-                                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
+                                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
+                                    finish();
                                     startActivity(intent);
                                 }
 
@@ -109,8 +109,10 @@ public class SignupActivity extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
-                                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
+                                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
+                                    finish();
                                     startActivity(intent);
                                 }
 
@@ -119,6 +121,7 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.w(TAG, "Error writing document", e);
+
                                 }
                             });
                 }
@@ -150,6 +153,8 @@ public class SignupActivity extends AppCompatActivity {
         }
         return false; // Password missing required character types
     }
+    boolean flag1 = false;
+    boolean flag2 = false;
     private void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -158,7 +163,7 @@ public class SignupActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            flag1 = true;
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -167,9 +172,10 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+        mAuth.signInWithEmailAndPassword(email, password);
     }
 
     private boolean isStaff(String email){
-        return email.endsWith("tue.nl") && !email.contains("student@tue.nl");
+        return !email.endsWith("@student.tue.nl");
     }
 }
