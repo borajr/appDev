@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +20,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +31,8 @@ import java.util.Map;
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "SignupActivity";
+
+    private boolean resultF;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +50,7 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String repeatPassword = repeatPasswordEditText.getText().toString();
                 mAuth = FirebaseAuth.getInstance();
+                checkForEmail(emailInput);
 
                 // Check if the email contains "tue.nl"
                 if (!emailInput.contains("tue.nl")) {
@@ -50,6 +58,11 @@ public class SignupActivity extends AppCompatActivity {
                     // Corrected to ConfirmationActivity
                     correctInput = false;
                     Toast.makeText(SignupActivity.this, "Please enter a TU/e email address.", Toast.LENGTH_LONG).show();
+                }
+
+                if (!resultF) {
+                    correctInput = false;
+                    Toast.makeText(SignupActivity.this, "This account already exists", Toast.LENGTH_LONG).show();
                 }
 
                 if(emailInput.isEmpty()) { // Extend this condition for all fields
@@ -170,7 +183,47 @@ public class SignupActivity extends AppCompatActivity {
                 });
     }
 
+    public void checkForEmail(final String email) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                // Delete the match document
+                                db.collection("users").document(document.getId()).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // Redirect to MainPage
+                                                Toast.makeText(SignupActivity.this, "This account exists", Toast.LENGTH_LONG).show();
+                                                resultChanger(false);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Handle failure
+                                                Log.w(TAG, "Error deleting match document", e);
+                                            }
+                                        });}
+                            }
+                        else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void resultChanger(boolean result){
+
+        resultF = result;
+    }
     private boolean isStaff(String email){
         return !email.contains("@student.tue.nl");
+        }
     }
-}
+
