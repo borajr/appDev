@@ -41,22 +41,30 @@
         private FirebaseAuth mAuth;
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+
         private SwipeFlingAdapterView flingContainer;
         private ArrayList<User> users; // Assuming you have a User class with info to display
         private ArrayAdapter<User> arrayAdapter;
         private boolean temp = false; // This boolean is set based on swipe
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
-        private MainMatch mainMatch = new MainMatch(this);
+        private MainMatch mainMatch;
+
+
 
         CollectionReference usersReference = db.collection("users");
         ListView listView;
         List<User> rowItems;
 
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+            boolean matched = true;
+
+
+            MainMatch mainMatch = new MainMatch();
 
             flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
@@ -84,6 +92,7 @@
                     String swipedUserEmail = swipedUser.getEmail();
                     // Do something with the dataObject if needed
                     mainMatch.recordSwipe(currentUser.getEmail(), swipedUser.getUserEmail(), "left");
+                    Log.d(TAG, "right");
                 }
 
                 @Override
@@ -94,7 +103,7 @@
                     String swipedUserEmail = swipedUser.getEmail();
                     // Do something with the dataObject if needed
                     mainMatch.recordSwipe(currentUser.getEmail(), swipedUser.getUserEmail(), "right");
-                    mainMatch.checkForMatch(currentUser.getEmail(), swipedUser.getUserEmail());
+                    Log.d(TAG, "right:");
                 }
 
                 @Override
@@ -138,8 +147,15 @@
 
             compareGendersWithAllUsers();
 
+            if (matched) {
+                //moreInfo();
+                showMatchPopup();
+            }
+
 
         }
+
+
 
         public void compareGendersWithAllUsers() {
             if (currentUser != null) {
@@ -279,11 +295,9 @@
             alcoholTextView.setText("Alcohol: " + user.getAlcohol());
             TextView foodTextView = popupView.findViewById(R.id.textViewFood);
             foodTextView.setText("Diet: " + user.getPreferredDiet());
-
-
         }
 
-        public void showMatchPopup() {
+        private void showMatchPopup() {
             // Inflate the match_popup.xml layout
             View popupView = LayoutInflater.from(this).inflate(R.layout.match_popup, null);
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -327,7 +341,6 @@
             timeTextView.setText("Time: " + randomTime);
 
         }
-
 
     }
 

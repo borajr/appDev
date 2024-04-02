@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,33 +20,19 @@ import android.net.Uri;
 import android.widget.Toast;
 import android.content.pm.PackageManager;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-
 public class ChangePhotoActivity extends AppCompatActivity {
 
-    FirebaseUser currentUser;
-    FirebaseAuth mAuth;
-
-    StorageReference storageRef;
-
-    FirebaseStorage storage;
-
-    private Bitmap[] images = new Bitmap[6];
-
-    private int imageIndex = 0;
     // Existing constants...
     private static final int PICK_IMAGE = 3; // Choose an unused request code
     private static final int CAMERA_REQUEST = 2;
@@ -63,10 +47,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_photo);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        storage = FirebaseStorage.getInstance();
-
         // Initialize image view placeholders with actual ImageView references from your layout
         imageViews[0] = findViewById(R.id.imageView);
         imageViews[1] = findViewById(R.id.imageView1);
@@ -74,7 +54,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
         imageViews[3] = findViewById(R.id.imageView3);
         imageViews[4] = findViewById(R.id.imageView4);
         imageViews[5] = findViewById(R.id.imageView5);
-        downloadImagesFromFirebaseStorage();
 
 
         Button btnChoosePhoto = findViewById(R.id.btn_choose_photo);
@@ -175,7 +154,10 @@ public class ChangePhotoActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadImagesToFirebaseStorage();
+                // Here you would handle what happens when the Continue button is clicked
+                // This might involve validating that at least one photo has been selected,
+                // and then proceeding to the next step of your application.
+                // For example:
                 boolean atLeastOneImageSelected = false;
                 for (ImageView imageView : imageViews) {
                     if (imageView.getDrawable() != null) {
@@ -188,7 +170,9 @@ public class ChangePhotoActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     Toast.makeText(ChangePhotoActivity.this, "Please upload at least 1 photo.", Toast.LENGTH_LONG).show();
-                }}
+                    return;
+                }
+            }
         });
     }
 
@@ -264,14 +248,13 @@ public class ChangePhotoActivity extends AppCompatActivity {
             }
         }
     }
-
     private void downloadImagesFromFirebaseStorage() {
-        ImageView image1 = findViewById(R.id.image1);
-        ImageView image2 = findViewById(R.id.image2);
-        ImageView image3 = findViewById(R.id.image3);
-        ImageView image4 = findViewById(R.id.image4);
-        ImageView image5 = findViewById(R.id.image5);
-        ImageView image6 = findViewById(R.id.image6);
+        ImageView image1 = findViewById(R.id.imageView);
+        ImageView image2 = findViewById(R.id.imageView1);
+        ImageView image3 = findViewById(R.id.imageView2);
+        ImageView image4 = findViewById(R.id.imageView3);
+        ImageView image5 = findViewById(R.id.imageView4);
+        ImageView image6 = findViewById(R.id.imageView5);
         ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
         imageViews.add(image1);
         imageViews.add(image2);
@@ -280,13 +263,14 @@ public class ChangePhotoActivity extends AppCompatActivity {
         imageViews.add(image5);
         imageViews.add(image6);
         FirebaseStorage storage = FirebaseStorage.getInstance();
-
-        int x = 0;
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        int x = 1;
         for (ImageView i : imageViews) { // Assuming you have 6 images to download
 
             // Create a reference to the image in Firebase Storage
-            Log.d("ChangePhotoActivity", currentUser.getEmail() + "/image" + x);
-            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x +"/jpeg");
+            Log.d("ProfileSetup", currentUser.getEmail() + "/image" + x);
+            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x + ".jpeg");
             x++;
             // Create a temporary file to store the downloaded image
             imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -299,33 +283,5 @@ public class ChangePhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadImagesToFirebaseStorage() {
-        for (int i = 0; i < imageIndex; i++) {
-            if (images[i] != null) {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                images[i].compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageData = baos.toByteArray();
-
-                String imageFileName = "image"+i; // Generate a random file name
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                // Upload byte array to Firebase Storage
-                StorageReference storageRef = storage.getReference().child(currentUser.getEmail() + "/" + imageFileName);
-                storageRef.putBytes(imageData)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Toast.makeText(ChangePhotoActivity.this, "Images uploaded successfully", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(ChangePhotoActivity.this, "Failed to upload images", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        }
-    }
 }
 
