@@ -170,11 +170,11 @@ public class SimpleChat extends AppCompatActivity {
 // 'chatPartnerId' is the ID of the user they are chatting with
     public void onUnmatch() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String chatPartnerId = "tst";
+        String partner = chatPartnerId;
         // Query for the match document
         Task<QuerySnapshot> querySnapshotTask = db.collection("Matches")
                 .whereEqualTo("user1Mail", currentUserId)
-                .whereEqualTo("user2Mail", chatPartnerId)
+                .whereEqualTo("user2Mail", partner)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -207,34 +207,34 @@ public class SimpleChat extends AppCompatActivity {
 
     private void fetchChatPartnerId() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Query for the match document using currentUserId
-        db.collection("Matches")
-                .whereArrayContains("participantEmails", currentUserId)
+        // Assuming the chat document contains a field called "participantEmails" which is a list
+        db.collection("chats").document(chatId)
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        boolean matchFound = false;
-                        for (DocumentSnapshot document : task.getResult()) {
-                            String user1Email = document.getString("user1Mail");
-                            String user2Email = document.getString("user2Mail");
-                            if (currentUserId.equals(user1Email)) {
-                                chatPartnerId = user2Email;
-                                matchFound = true;
-                                break;
-                            } else if (currentUserId.equals(user2Email)) {
-                                chatPartnerId = user1Email;
-                                matchFound = true;
-                                break;
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot chatDocument = task.getResult();
+                        List<String> participantEmails = (List<String>) chatDocument.get("participantEmails");
+                        if (participantEmails != null && participantEmails.size() == 2) {
+                            for (String email : participantEmails) {
+                                if (!email.equals(currentUserId)) {
+                                    chatPartnerId = email;
+                                    break;
+                                }
                             }
-                        }
-                        if (!matchFound) {
-                            Log.e(TAG, "Chat partner not found.");
-                            finish(); // Exit if the chat partner ID is not found
+                            if (chatPartnerId == null) {
+                                Log.e(TAG, "Chat partner not found.");
+                                finish(); // Exit if the chat partner ID is not found
+                            }
+                        } else {
+                            Log.e(TAG, "Unexpected number of participants found or participantEmails is null.");
+                            finish(); // Exit if the structure is not as expected
                         }
                     } else {
-                        Log.e(TAG, "Error getting match documents: ", task.getException());
+                        Log.e(TAG, "Error getting chat document: ", task.getException());
+                        finish(); // Exit if there is an error fetching the chat document
                     }
                 });
     }
+
 
 }
