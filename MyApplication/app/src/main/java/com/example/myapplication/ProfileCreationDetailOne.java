@@ -1,6 +1,8 @@
 package com.example.myapplication; // Replace with your actual package name
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
@@ -62,7 +64,7 @@ public class ProfileCreationDetailOne extends AppCompatActivity {
         });
 
 
-        // Further initialization can be done as needed
+
     }
 
     private boolean isOldEnough() {

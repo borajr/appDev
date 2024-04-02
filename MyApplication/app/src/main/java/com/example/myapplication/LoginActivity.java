@@ -1,6 +1,13 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         EditText editTextEmail = findViewById(R.id.editText1);
         EditText passwordEditText = findViewById(R.id.editText2);
         super.onCreate(savedInstanceState);
@@ -86,11 +94,16 @@ public class LoginActivity extends AppCompatActivity {
                 signIn(email, password);
             }
         });
+
+
+
+
     }
+
 
     private void signIn(String email, String password) {
         // [START sign_in_with_email]
-        /*mAuth.signInWithEmailAndPassword(email, password)
+        mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -107,17 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
-                });*/
-
-        // Assuming you have EditText fields for email and password in your layout
-        if ("admin".equals(email) && "Bora2003".equals(password)) {
-            Intent intent = new Intent(this, AdminActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Toast.makeText(LoginActivity.this, "Invalid email or password",
-                    Toast.LENGTH_SHORT).show();
-        }
+                });
     }
 
 
@@ -146,4 +149,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Invalid email or password", Toast.LENGTH_LONG).show();
         }
     }
+
+
+
+
 }

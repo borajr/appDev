@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -77,6 +79,8 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                 return false;
             }
         });
+
+
     }
 
     private void createChatsForAllMatches() {

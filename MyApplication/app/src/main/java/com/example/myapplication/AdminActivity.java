@@ -3,6 +3,8 @@ package com.example.myapplication;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -73,12 +75,10 @@ public class AdminActivity extends AppCompatActivity {
 
         // Set click listeners for buttons
         btnBanUser.setOnClickListener(v -> {
-            int selectedPosition = spinnerReportedUsers.getSelectedItemPosition();
-            if (selectedPosition != AdapterView.INVALID_POSITION) {
-                String userEmail = reportedUsers.get(selectedPosition);
+            int position = spinnerReportedUsers.getSelectedItemPosition();
+            if (position >= 0 && position < reportedUsers.size()) {
+                String userEmail = reportedUsers.get(position);
                 banUser(userEmail);
-            } else {
-                Toast.makeText(AdminActivity.this, "Please select a reported user to ban", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -90,6 +90,7 @@ public class AdminActivity extends AppCompatActivity {
         btnSignOut.setOnClickListener(v -> {
             // Implement sign out logic here
         });
+
     }
 
     private void fetchReportedUsers() {

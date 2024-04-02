@@ -3,8 +3,11 @@ package com.example.myapplication;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +34,7 @@ import java.util.Map;
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "SignupActivity";
-
+    private OrientationEventListener orientationEventListener;
     private boolean resultF;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,10 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
     }
 
     private boolean isValidPassword(String password) {
@@ -220,6 +227,7 @@ public class SignupActivity extends AppCompatActivity {
                 });
     }
 
+
     private void resultChanger(boolean result){
 
         resultF = result;
@@ -228,4 +236,5 @@ public class SignupActivity extends AppCompatActivity {
         return !email.contains("@student.tue.nl");
         }
     }
+
 
