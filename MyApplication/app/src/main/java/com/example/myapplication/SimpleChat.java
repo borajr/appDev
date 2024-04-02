@@ -30,6 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SimpleChat extends AppCompatActivity {
@@ -107,27 +108,34 @@ public class SimpleChat extends AppCompatActivity {
     // Helper method to query and delete match document
     private void queryAndDeleteMatch(String currentUserEmail, String partnerEmail) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Query for the match document
+        // Query for the match document with currentUserEmail as user1Mail and partnerEmail as user2Mail
         db.collection("Matches")
-                .whereEqualTo("user1Mail", currentUserEmail)
-                .whereEqualTo("user2Mail", partnerEmail)
+                .whereIn("user1Mail", Arrays.asList(currentUserEmail, partnerEmail))
+                .whereIn("user2Mail", Arrays.asList(currentUserEmail, partnerEmail))
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
                         for (DocumentSnapshot document : task.getResult()) {
-                            // Delete the match document
-                            db.collection("Matches").document(document.getId()).delete()
-                                    .addOnSuccessListener(unused -> {
-                                        Log.d(TAG, "Match document successfully deleted");
-                                        transitionToMainActivity(); // Redirect to MainPage after deleting the match
-                                    })
-                                    .addOnFailureListener(e -> Log.w(TAG, "Error deleting match document", e));
+                            // Ensure the correct match is being deleted
+                            String user1Mail = document.getString("user1Mail");
+                            String user2Mail = document.getString("user2Mail");
+                            if ((user1Mail.equals(currentUserEmail) && user2Mail.equals(partnerEmail)) ||
+                                    (user1Mail.equals(partnerEmail) && user2Mail.equals(currentUserEmail))) {
+                                // Delete the match document
+                                db.collection("Matches").document(document.getId()).delete()
+                                        .addOnSuccessListener(unused -> {
+                                            Log.d(TAG, "Match document successfully deleted");
+                                            transitionToMainActivity(); // Redirect to MainPage after deleting the match
+                                        })
+                                        .addOnFailureListener(e -> Log.w(TAG, "Error deleting match document", e));
+                            }
                         }
                     } else {
                         Log.d(TAG, "Error getting match documents: ", task.getException());
                     }
                 });
     }
+
 
     private void sendMessage() {
         String messageText = messageInput.getText().toString().trim();
