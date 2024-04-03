@@ -102,7 +102,6 @@ public class SignupActivity extends AppCompatActivity {
                     Map<String,Object> user = new HashMap<>();
                     user.put("banned", false);
                     user.put("email", emailInput);
-                    //user.put("isStaff", true);
                     db.collection("users_staff")
                             .document(emailInput)
                             .set(user)
