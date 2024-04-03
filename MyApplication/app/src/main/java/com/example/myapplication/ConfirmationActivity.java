@@ -19,8 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class ConfirmationActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
     private Handler handler;
     private boolean isVerified;
     long startTime;
@@ -34,7 +34,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         long startTime = Timestamp.now().toDate().getTime();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        Log.d("CURRUSER", currentUser.toString());
+
 
         Button resendCode = findViewById(R.id.resendCode); // Your confirmation Button
         Button continueb = findViewById(R.id.button2);

@@ -50,7 +50,7 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String repeatPassword = repeatPasswordEditText.getText().toString();
                 mAuth = FirebaseAuth.getInstance();
-                checkForEmail(emailInput);
+                //checkForEmail(emailInput);
 
                 // Check if the email contains "tue.nl"
                 if (!emailInput.contains("tue.nl")) {
@@ -60,11 +60,11 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, "Please enter a TU/e email address.", Toast.LENGTH_LONG).show();
                 }
 
-                if(!result) {
-                    correctInput = false;
-                    result = true;
-                    Toast.makeText(SignupActivity.this, "This account exists", Toast.LENGTH_LONG).show();
-                }
+//                if(!result) {
+//                    correctInput = false;
+//                    result = true;
+//                    Toast.makeText(SignupActivity.this, "This account exists", Toast.LENGTH_LONG).show();
+//                }
 
                 if(emailInput.isEmpty()) { // Extend this condition for all fields
                     correctInput = false;
@@ -106,6 +106,7 @@ public class SignupActivity extends AppCompatActivity {
                                     Log.w(TAG, "Error writing document", e);
                                 }
                             });
+                    mAuth.signInWithEmailAndPassword(emailInput, password);
 
 
                     // If all checks pass, proceed to the ConfirmationActivity
@@ -138,6 +139,7 @@ public class SignupActivity extends AppCompatActivity {
 
                                 }
                             });
+                    mAuth.signInWithEmailAndPassword(emailInput, password);
                 }
             }
         });
