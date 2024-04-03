@@ -34,8 +34,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         long startTime = Timestamp.now().toDate().getTime();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-
-        sendEmailVerification();
+        Log.d("CURRUSER", currentUser.toString());
 
         Button resendCode = findViewById(R.id.resendCode); // Your confirmation Button
         Button continueb = findViewById(R.id.button2);
@@ -65,6 +64,8 @@ public class ConfirmationActivity extends AppCompatActivity {
             }
 
         });
+
+
     }
 
     private void sendEmailVerification() {
@@ -85,6 +86,7 @@ public class ConfirmationActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }

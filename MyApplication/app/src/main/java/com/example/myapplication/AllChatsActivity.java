@@ -1,9 +1,11 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,6 +36,8 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
     private ArrayList<chat> chatList; // Assuming 'chat' is your model class
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String currentUserId;
+    private OrientationEventListener orientationEventListener;
+
     private AtomicInteger matchCount = new AtomicInteger(0);
     private AtomicInteger processedMatches = new AtomicInteger(0);
 
@@ -103,6 +107,28 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                         Log.w(TAG, "Error getting matches: ", task.getException());
                     }
                 });
+
+        orientationEventListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                if (orientation >= 45 && orientation < 135) {
+                    // Landscape mode, set screen orientation to reverse portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (orientation >= 135 && orientation < 225) {
+                    // Upside down mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else if (orientation >= 225 && orientation < 315) {
+                    // Reverse landscape mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else {
+                    // Portrait mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+            }
+        };
+
+        // Start the OrientationEventListener
+        orientationEventListener.enable();
     }
 
     private void checkAndCreateChat(FirebaseFirestore db, String user1Email, String user2Email) {
@@ -196,6 +222,13 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         intent.putExtra("RECEIVER_ID", chat.getReceiverEmail());
 
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Disable the OrientationEventListener to prevent memory leaks
+        orientationEventListener.disable();
     }
 
 }
