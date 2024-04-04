@@ -20,6 +20,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -144,8 +146,6 @@ public class MainPage extends AppCompatActivity {
             }
         });
 
-        compareGendersWithAllUsers();
-
         orientationEventListener = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
@@ -167,8 +167,11 @@ public class MainPage extends AppCompatActivity {
 
         // Start the OrientationEventListener
         orientationEventListener.enable();
+        compareGendersWithAllUsers();
 
     }
+
+
 
     public void compareGendersWithAllUsers() {
         if (currentUser != null) {
@@ -176,108 +179,147 @@ public class MainPage extends AppCompatActivity {
             String userEmail = currentUser.getEmail();
 
             // Fetch the data of the logged-in user
-            db.collection("users").document(userEmail).get()
+            db.collection("preferences").document(userEmail).get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            DocumentSnapshot loggedInUserDoc = task.getResult();
-                            if (loggedInUserDoc.exists()) {
-                                String loggedInUserGender = loggedInUserDoc.getString("gender");
-                                String loggedInUserPreference = loggedInUserDoc.getString("preference");
-                                //Log.d(TAG, "ALOALO loggedin user name: " + loggedInUserDoc.get("name")+ "gender: " +  loggedInUserGender + " logged in user preference: " + loggedInUserPreference);
+                            DocumentSnapshot loggedInUserPrefDoc = task.getResult();
+                            if (loggedInUserPrefDoc.exists()) {
+                                List<String> loggedInUserGenderPrefs = (List<String>) loggedInUserPrefDoc.get("gender");
 
                                 // Query all users
                                 db.collection("users").get()
                                         .addOnCompleteListener(task1 -> {
                                             if (task1.isSuccessful()) {
+                                                users.clear(); // Clear the list before adding matched users
 
                                                 for (QueryDocumentSnapshot userDoc : task1.getResult()) {
                                                     String userGender = userDoc.getString("gender");
-                                                    String userPreference = userDoc.getString("preference");
                                                     String displayedUserEmail = userDoc.getString("email");
-                                                    Log.d(TAG, "ALOALO db user name: " + userDoc.get("name") + " gender: " +  userGender + " db user preference: "+ userPreference);
-                                                    if (loggedInUserGender != null && userPreference != null &&
-                                                            loggedInUserGender.equals(userPreference) &&
-                                                            userGender != null && loggedInUserPreference != null &&
-                                                            userGender.equals(loggedInUserPreference)) {
 
-                                                           /*cards item = new cards(userDoc.getString("email"),
-                                                                    userDoc.getString("name"),
-                                                                    userDoc.getString("images"));
-                                                            rowItems.add(item);
-                                                            arrayAdapter.notifyDataSetChanged();*/
+                                                    // Make sure we do not add the current user
+                                                    if (!displayedUserEmail.equals(userEmail) &&
+                                                            loggedInUserGenderPrefs.contains(userGender)) {
 
-
-                                                        //Log.d(TAG, "Displays" + loggedInUserDoc.get("name") + " matches the logged-in user: " + userDoc.get("name"));
-
-                                                        // Gender and preference match
-                                                        Log.d(TAG, "User with email " + userDoc.get("name") + " matches the logged-in user's gender and preference.");
-                                                    } else {
-
-                                                        Log.d(TAG, "User with email " + userDoc.get("name") + " does not match the logged-in user's gender and preference.");
+                                                        // Gender matches the preference
+                                                        // Now create a User object and add it to the users list
+                                                        User matchedUser = createUserFromDocument(userDoc);
+                                                        users.add(matchedUser);
                                                     }
                                                 }
+                                                arrayAdapter.notifyDataSetChanged(); // Notify the adapter
                                             } else {
                                                 // Failed to fetch users
                                                 Log.d(TAG, "Error getting users: ", task1.getException());
                                             }
                                         });
                             } else {
-                                // Logged-in user document does not exist
-                                Log.d(TAG, "Logged-in user document does not exist.");
+                                // Logged-in user's preferences do not exist
+                                Log.d(TAG, "Logged-in user's preferences do not exist.");
                             }
                         } else {
-                            // Failed to fetch logged-in user data
-                            Log.d(TAG, "Error getting logged-in user data: ", task.getException());
+                            // Failed to fetch logged-in user's preferences
+                            Log.d(TAG, "Error getting logged-in user's preferences: ", task.getException());
                         }
                     });
         } else {
             // No user is logged in
             Log.d(TAG, "No user logged in.");
         }
-
     }
 
-
+    private User createUserFromDocument(DocumentSnapshot document) {
+        // Here you need to extract all the user information from the document and create a User object.
+        // For example:
+        return new User(
+                document.getString("email"),
+                document.getString("name"),
+                document.getString("profileImageUrl"), // Update this to fetch from Firebase Storage if needed
+                document.getString("department"),
+                document.getString("food"),
+                document.getBoolean("alcohol") != null ? document.getBoolean("alcohol") : false,
+                document.getBoolean("smoking") != null ? document.getBoolean("smoking") : false,
+                document.getBoolean("marijuana") != null ? document.getBoolean("marijuana") : false,
+                document.getLong("age") != null ? document.getLong("age").intValue() : 20, // Add a default value for age
+                document.getLong("height") != null ? document.getLong("height").intValue() : 160, // Add a default value for height
+                document.getString("gender")
+        );
+    }
 
     private void fetchUsersFromBackend() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        // First, get the current user's gender preferences
+        String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        DocumentReference preferencesRef = db.collection("preferences").document(currentUserEmail);
+
+        preferencesRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String userEmail = document.getString("email");
-                        String name = document.getString("name");
-                        String gender = document.getString("gender");
-                        String profileImageUrl = document.getString("image"); // Update this to fetch from Firebase Storage if needed
-                        String department = document.getString("department");
-                        String food = document.getString("food");
-
-                        boolean alcohol = document.getBoolean("alcohol") != null ? document.getBoolean("alcohol") : false;
-                        boolean smoking = document.getBoolean("smoking") != null ? document.getBoolean("smoking") : false;
-                        boolean weed = document.getBoolean("marijuana") != null ? document.getBoolean("marijuana") : false;
-
-                        // Assuming age and height are stored as numbers (long in Firestore)
-                        Long ageLong = document.getLong("age"); // This could be null if "age" field is missing
-                        int DEFAULT_AGE = 20;
-                        int age = (ageLong != null) ? ageLong.intValue() : DEFAULT_AGE;
-                        Long heightLong = document.getLong("height");
-                        int DEFAULT_HEIGHT = 160;
-                        int height = (heightLong != null) ? heightLong.intValue() :DEFAULT_HEIGHT;// Add null check if necessary
-
-                        User user = new User(userEmail, name, profileImageUrl, department, food,
-                                alcohol, smoking, weed, age, height, gender);
-
-                        users.add(user);
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    List<String> genderPreferences = (List<String>) documentSnapshot.get("genderPreferences");
+                    if (genderPreferences != null && !genderPreferences.isEmpty()) {
+                        // Now use these preferences to filter the users
+                        fetchFilteredUsers(genderPreferences);
+                    } else {
+                        // No gender preferences set, handle accordingly
                     }
-                    arrayAdapter.notifyDataSetChanged();
+
                 } else {
-                    Log.w(TAG, "Error getting documents.", task.getException());
+                    // Preferences not found, handle accordingly
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Handle error
             }
         });
     }
 
+    private void fetchFilteredUsers(List<String> genderPreferences) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Fetch users with the specified genders
+        db.collection("users").whereIn("gender", genderPreferences).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            users.clear(); // Clear the existing list before adding new data
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Create a new User object from the document data
+                                String userEmail = document.getString("email");
+                                // ... (the rest of your code to create a User instance)
+                                String name = document.getString("name");
+                                String gender = document.getString("gender");
+                                String profileImageUrl = document.getString("image"); // Update this to fetch from Firebase Storage if needed
+                                String department = document.getString("department");
+                                String food = document.getString("food");
+
+                                boolean alcohol = document.getBoolean("alcohol") != null ? document.getBoolean("alcohol") : false;
+                                boolean smoking = document.getBoolean("smoking") != null ? document.getBoolean("smoking") : false;
+                                boolean weed = document.getBoolean("marijuana") != null ? document.getBoolean("marijuana") : false;
+
+                                // Assuming age and height are stored as numbers (long in Firestore)
+                                Long ageLong = document.getLong("age"); // This could be null if "age" field is missing
+                                int DEFAULT_AGE = 20;
+                                int age = (ageLong != null) ? ageLong.intValue() : DEFAULT_AGE;
+                                Long heightLong = document.getLong("height");
+                                int DEFAULT_HEIGHT = 160;
+                                int height = (heightLong != null) ? heightLong.intValue() :DEFAULT_HEIGHT;// Add null check if necessary
+
+                                User user = new User(userEmail, name, profileImageUrl, department, food,
+                                        alcohol, smoking, weed, age, height, gender);
+
+                                users.add(user);
+                            }
+                            arrayAdapter.notifyDataSetChanged(); // Notify the adapter to update the UI
+                        } else {
+                            Log.w(TAG, "Error getting filtered documents.", task.getException());
+                        }
+                    }
+                });
+    }
 
 
     public void moreInfo(User user) {

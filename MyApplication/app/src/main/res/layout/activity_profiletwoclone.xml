@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:text="Preferred Gender:"
+        android:text="Gender:"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -88,7 +88,7 @@
             android:layout_width="303dp"
             android:layout_height="48dp"
             android:layout_marginLeft="30dp"
-            android:background="@drawable/rounded_spinner"
+            android:background="#ffffff"
             android:entries="@array/height"
             app:layout_constraintEnd_toStartOf="@id/gap"
             app:layout_constraintStart_toStartOf="parent"
@@ -113,95 +113,53 @@
         app:layout_constraintTop_toBottomOf="@id/linear"
         app:layout_constraintVertical_bias="0.01" />
 
+    <!-- Academic year -->
+
     <Spinner
         android:id="@+id/starSignSpinner"
         android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/rounded_spinner"
         android:entries="@array/star_signs"
         android:hint="  Enter star sign"
         android:textColor="#000000"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/Gender"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="@+id/Gender"
         app:layout_constraintTop_toBottomOf="@id/star" />
-
-    <!-- Academic year -->
-
-    <TextView
-        android:id="@+id/age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/element_spacing"
-        android:text="Random data"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/starSignSpinner"
-        app:layout_constraintVertical_bias="0.019" />
-
-    <LinearLayout
-        android:id="@+id/linear2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:gravity="left"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/age"
-        tools:layout_editor_absoluteX="0dp">
-
-        <Spinner
-            android:id="@+id/minAgeSpinner"
-            android:layout_width="297dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="30dp"
-            android:background="#ffffff"
-            android:entries="@array/age_range"
-            app:layout_constraintEnd_toStartOf="@+id/gap"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-    </LinearLayout>
 
     <!-- Language -->
 
     <TextView
         android:id="@+id/year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/element_spacing"
+        android:layout_width="111dp"
+        android:layout_height="27dp"
         android:text="Department"
+        android:layout_marginTop="8dp"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.063"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear2"
+        app:layout_constraintEnd_toEndOf="@+id/editText5"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editText5"
+        app:layout_constraintTop_toBottomOf="@+id/starSignSpinner"
         app:layout_constraintVertical_bias="0.0" />
 
     <Spinner
         android:id="@+id/editText5"
         android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/rounded_spinner"
         android:entries="@array/academic"
         android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.27"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/year" />
+        app:layout_constraintEnd_toEndOf="@+id/Gender"
+        app:layout_constraintHorizontal_bias="0.021"
+        app:layout_constraintStart_toStartOf="@+id/Gender"
+        app:layout_constraintTop_toBottomOf="@+id/year" />
 
     <TextView
         android:id="@+id/language"
@@ -220,6 +178,7 @@
         app:layout_constraintTop_toBottomOf="@id/editText5"
         app:layout_constraintVertical_bias="0.0" />
 
+
     <TextView
         android:id="@+id/textview"
         android:layout_width="300dp"
@@ -228,24 +187,24 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/signup_rectangle"
         android:hint="Select Language"
-        android:textColorHint="@color/black"
         android:padding="12dp"
+        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/Gender"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="@+id/Gender"
         app:layout_constraintTop_toBottomOf="@id/language" />
-
 
     <Button
         android:id="@+id/confirm_button"
         android:layout_width="309dp"
         android:layout_height="60dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/pink_rounded"
         android:text="Confirm"
         android:textColor="#ffffff"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.294"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview"
         app:layout_constraintWidth_percent="0.8" />

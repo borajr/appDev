@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PreferenceOne extends AppCompatActivity {
@@ -31,6 +32,7 @@ public class PreferenceOne extends AppCompatActivity {
     private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner;
     private Button confirmButton;
     private OrientationEventListener orientationEventListener;
+    private List<String> genderPreferences = new ArrayList<>();
 
 
     TextView textView;
@@ -52,48 +54,11 @@ public class PreferenceOne extends AppCompatActivity {
             "Finnish",
             "French",
             "German",
-            "Gujarati",
-            "Hausa",
-            "Hebrew",
-            "Hindi",
-            "Indonesian",
-            "Italian",
-            "Japanese",
-            "Javanese",
-            "Kannada",
-            "Kazakh",
-            "Khmer",
-            "Korean",
-            "Lao",
-            "Malagasy",
-            "Malay",
-            "Marathi",
-            "Maithili",
-            "Nepali",
-            "Norwegian",
-            "Odia (Oriya)",
-            "Pashto",
-            "Polish",
-            "Portuguese",
-            "Punjabi",
-            "Russian",
-            "Serbian",
-            "Sindhi",
-            "Sinhalese",
-            "Somali",
-            "Spanish",
-            "Sudanese",
-            "Swahili",
-            "Swedish",
-            "Tamil",
-            "Telugu",
-            "Thai",
-            "Tigrinya",
-            "Turkish",
-            "Ukrainian",
-            "Urdu",
-            "Uzbek",
-            "Vietnamese"};
+            "Gujarati", "Hausa", "Hebrew", "Hindi", "Indonesian", "Italian", "Japanese", "Javanese", "Kannada",
+            "Kazakh", "Khmer", "Korean", "Lao", "Malagasy", "Malay", "Marathi", "Maithili",
+            "Nepali", "Norwegian", "Odia (Oriya)", "Pashto", "Polish", "Portuguese", "Punjabi", "Russian",
+            "Serbian", "Sindhi", "Sinhalese", "Somali", "Spanish", "Sudanese", "Swahili", "Swedish", "Tamil", "Telugu",
+            "Thai", "Tigrinya", "Turkish", "Ukrainian", "Urdu", "Uzbek", "Vietnamese"};
 
     String[] starSignArray = {
             "Aries",
@@ -137,14 +102,17 @@ public class PreferenceOne extends AppCompatActivity {
         String department = departmentSpinner.getSelectedItem().toString();
         String minHeight = minHeightSpinner.getSelectedItem().toString();
         String maxHeight = maxHeightSpinner.getSelectedItem().toString();
-        Integer minAge =  Integer.parseInt(minAgeSpinner.getSelectedItem().toString());
-        Integer maxAge = Integer.parseInt(maxAgeSpinner.getSelectedItem().toString());
+        String minAge =  (minAgeSpinner.getSelectedItem().toString());
+        String maxAge = (maxAgeSpinner.getSelectedItem().toString());
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validatePreferences()) { //createUserPref only used here, after this use Update
-                    createUserPref(getData(gender, minHeight, maxHeight,starSign, department, minAge, maxAge));
+                // Only proceed if preferences are valid
+                if (validatePreferences()) {
+                    // Convert gender preferences to a list before calling createUserPref
+                    genderPreferences = getSelectedGenderPreferencesFromDialog();
+                    createUserPref(getData(genderPreferences, minHeight, maxHeight, starSign, department, minAge, maxAge));
                     Intent nextIntent = new Intent(PreferenceOne.this, PreferenceTwo.class);
                     startActivity(nextIntent);
                 }
@@ -343,22 +311,7 @@ public class PreferenceOne extends AppCompatActivity {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
-                        StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
-                        for (int j = 0; j < langList.size(); j++) {
-                            // concat array value
-                            stringBuilder.append(genderArray[langList.get(j)]);
-                            // check condition
-                            if (j != langList.size() - 1) {
-                                // When j value  not equal
-                                // to lang list size - 1
-                                // add comma
-                                stringBuilder.append(", ");
-                            }
-                        }
-                        // set text on textView
-                        textgender.setText(stringBuilder.toString());
+                        genderPreferences = getSelectedGenderPreferencesFromDialog();
                     }
                 });
 
@@ -434,33 +387,33 @@ public class PreferenceOne extends AppCompatActivity {
     }
 
 
-    private Map<String, Object> getData(String gender, String minHeight, String maxHeight, String starSign,
-                                          String department, Integer minAge, Integer maxAge) {
+    private Map<String, Object> getData(List<String> genderPreferences, String minHeight, String maxHeight, String starSign,
+                                          String department, String minAge, String maxAge) {
         Map<String, Object> map = new HashMap<>();
-        int minHeightInt = 0;
-        int maxHeightInt = 0;
-        if (minHeight.equals("<150")) {
-            minHeightInt = 149;
-        } else if (minHeight.equals(">210")) {
-            minHeightInt = 211;
-        } else {
-            minHeightInt = Integer.parseInt(minHeight);
-        }
-        if (maxHeight.equals("<150")) {
-            maxHeightInt = 149;
-        } else if (minHeight.equals(">210")) {
-            maxHeightInt = 211;
-        } else {
-            maxHeightInt = Integer.parseInt(minHeight);
-        }
-        map.put("gender", gender);
+        map.put("gender", genderPreferences);
+        int minHeightInt = parseHeight(minHeight);
+        int maxHeightInt = parseHeight(maxHeight);
+        int minAgeInt = Integer.parseInt(minAge);
+        int maxAgeInt = Integer.parseInt(maxAge);
+
+
         map.put("minHeight", minHeightInt);
         map.put("maxHeight", maxHeightInt);
         map.put("starSign", starSign);
         map.put("department", department);
-        map.put("minAge", minAge);
-        map.put("maxAge", maxAge);
+        map.put("minAge", minAgeInt);
+        map.put("maxAge", maxAgeInt);
         return map;
+    }
+
+    private int parseHeight(String height) {
+        if ("<150".equals(height)) {
+            return 149;
+        } else if (">210".equals(height)) {
+            return 211;
+        } else {
+            return Integer.parseInt(height);
+        }
     }
     FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -482,6 +435,16 @@ public class PreferenceOne extends AppCompatActivity {
                         Log.w("PrefOne", "Error writing document", e);
                     }
                 });
+    }
+
+    private List<String> getSelectedGenderPreferencesFromDialog() {
+        List<String> selectedGenders = new ArrayList<>();
+        for (int i = 0; i < selectedLanguage.length; i++) {
+            if (selectedLanguage[i]) {
+                selectedGenders.add(genderArray[i]);
+            }
+        }
+        return selectedGenders;
     }
 
     @Override
