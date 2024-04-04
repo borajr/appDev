@@ -45,12 +45,12 @@ public class ConfirmationActivity extends AppCompatActivity {
                 currentUser.reload();
                 long timePassedMillis = Timestamp.now().toDate().getTime() - startTime;
                 long timePassedMinutes = timePassedMillis / (60 * 1000); // Convert milliseconds to minutes
-                if (currentUser.isEmailVerified() && timePassedMinutes < 3) {
+                if (currentUser.isEmailVerified() && timePassedMinutes < 30) {
                     Toast.makeText(ConfirmationActivity.this, "Successfully verified", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ConfirmationActivity.this, ProfileCreationDetailOne.class);
                     startActivity(intent);
                     finish();
-                } else if (currentUser.isEmailVerified() && timePassedMinutes > 3) {
+                } else if (currentUser.isEmailVerified() && timePassedMinutes > 30) {
                     Toast.makeText(ConfirmationActivity.this, "Time expired", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ConfirmationActivity.this, "Email not verified", Toast.LENGTH_SHORT).show();
