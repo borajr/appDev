@@ -1,0 +1,4 @@
+You can access our firebase server through here: https://console.firebase.google.com/u/0/project/dbl-app-development-ccc78/overview
+
+
+Note: Sepehr has been invited to to our server.
