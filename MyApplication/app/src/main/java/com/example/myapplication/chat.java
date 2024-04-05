@@ -11,6 +11,9 @@ public class chat {
     private String senderEmail; // Sender's email address
     private String receiverEmail; // Receiver's email address
 
+    public chat() {
+    }
+
     // Constructor updated to include sender and receiver email
     public chat(String userName,  int userProfileImageId, String chatID, String senderEmail, String receiverEmail) {
         this.userName = userName;

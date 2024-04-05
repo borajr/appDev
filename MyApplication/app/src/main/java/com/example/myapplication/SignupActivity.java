@@ -27,12 +27,20 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * SignupActivity facilitates user registration, validating inputs and creating new users in Firebase.
+ */
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private boolean result;
     private static final String TAG = "SignupActivity";
     private OrientationEventListener orientationEventListener;
 
+    /**
+     * Initializes the activity, setting the content view and configuring input validation and
+     * submission logic for user signup.
+     * @param savedInstanceState Contains data supplied in onSaveInstanceState(Bundle) if the activity is re-initialized.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +176,11 @@ public class SignupActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Validates the password against specified criteria - length and character composition.
+     * @param password The password entered by the user.
+     * @return True if the password meets the criteria, otherwise false.
+     */
     private boolean isValidPassword(String password) {
         if (password.length() < 8) {
             return false; // Password too short
@@ -194,6 +207,12 @@ public class SignupActivity extends AppCompatActivity {
     }
     boolean flag1 = false;
     boolean flag2 = false;
+
+    /**
+     * Creates a new user account with the specified email and password, handling success and failure cases.
+     * @param email The user's email address.
+     * @param password The user's chosen password.
+     */
     private void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -214,6 +233,10 @@ public class SignupActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password);
     }
 
+    /**
+     * Checks for the existence of an email in the Firestore database to ensure uniqueness.
+     * @param email The email address to check.
+     */
     public void checkForEmail(final String email) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
@@ -253,11 +276,19 @@ public class SignupActivity extends AppCompatActivity {
         result = b;
     }
 
+    /**
+     * Determines if the email belongs to a staff member by checking if it does not end with "@student.tue.nl".
+     * @param email The email address to check.
+     * @return True if the email does not end with "@student.tue.nl", indicating a staff member.
+     */
     private boolean isStaff(String email){
         return !email.endsWith("@student.tue.nl");
     }
 
 
+    /**
+     * Disables the OrientationEventListener when the activity is destroyed to prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

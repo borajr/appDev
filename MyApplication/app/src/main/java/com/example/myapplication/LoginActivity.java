@@ -23,6 +23,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * LoginActivity handles user authentication, providing fields for email and password input,
+ * and options to sign in or navigate to password recovery and admin sign-in.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -46,13 +50,19 @@ public class LoginActivity extends AppCompatActivity {
 
         //    FirebaseAuth.getInstance().signOut();
 
-    //}
+        //}
     }
 
     private EditText emailEditText;
     private EditText passwordEditText;
 
 
+    /**
+     * Called when the activity is starting. This method initializes the activity,
+     * sets up the login button's click listener, and handles the layout setup.
+     *
+     * @param savedInstanceState Contains data supplied in onSaveInstanceState(Bundle) if the activity is re-initialized.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         EditText editTextEmail = findViewById(R.id.editText1);
@@ -97,7 +107,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Adjusts the screen orientation based on the current device orientation.
+         *
+         * @param orientation The current orientation of the device.
+         */
         orientationEventListener = new OrientationEventListener(this) {
+
             @Override
             public void onOrientationChanged(int orientation) {
                 if (orientation >= 45 && orientation < 135) {
@@ -120,6 +136,12 @@ public class LoginActivity extends AppCompatActivity {
         orientationEventListener.enable();
     }
 
+    /**
+     * Signs in the user with the specified email and password.
+     *
+     * @param email    The user's email address.
+     * @param password The user's password.
+     */
     private void signIn(String email, String password) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
@@ -145,7 +167,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Attempts to login the user with the provided email and password.
+     * Special credentials navigate the user to specific activities (e.g., MainPage, AdminActivity),
+     * while invalid credentials show an error message.
+     */
     public void attemptLogin() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();

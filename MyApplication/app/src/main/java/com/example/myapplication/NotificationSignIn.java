@@ -6,6 +6,11 @@ import android.os.Handler;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+/**
+ * NotificationSignIn activity is responsible for displaying a sign-in notification screen to the user,
+ * with an option to navigate to the starting page of the application either after a delay or immediately upon user action.
+ */
 public class NotificationSignIn extends AppCompatActivity {
 
     private final Handler handler = new Handler();
@@ -16,6 +21,12 @@ public class NotificationSignIn extends AppCompatActivity {
         }
     };
 
+    /**
+     * Initializes the activity, sets the content view, and schedules navigation to the Starting Page.
+     * Also provides a mechanism for immediate navigation if the user chooses.
+     *
+     * @param savedInstanceState Contains data supplied in onSaveInstanceState(Bundle) if the activity is re-initialized.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +47,18 @@ public class NotificationSignIn extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initiates the transition to the Starting Page of the application and finishes the current activity.
+     */
     private void goToStartingPage() {
         Intent intent = new Intent(NotificationSignIn.this, MainActivity.class);
         startActivity(intent);
         finish(); // Optional: Finish this Activity so the user can't navigate back to it with the back button
     }
 
+    /**
+     * Ensures that any scheduled navigation is canceled when the activity is destroyed to prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

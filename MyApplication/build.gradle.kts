@@ -27,7 +27,7 @@ sonar {
         ).joinToString(", "))
         property("sonar.java.coveragePlugin", "jacoco")
         property("sonar.junit.reportPaths", "**/test-results/**/*.xml")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/build/reports/jacoco/jacocoFullReport/jacocoFullReport.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", "C:/Users/20222057/Documents/TU-eVania/appDev/MyApplication/build/reports/jacoco/jacocoFullReport/jacocoFullReport.xml")
     }
 }
 

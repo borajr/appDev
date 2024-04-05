@@ -44,18 +44,6 @@
             android:name=".ChatActivity"
             android:exported="false"/>
         <activity
-            android:name=".chat"
-            android:exported="true"/>
-        <activity
-            android:name=".ChatAdapter"
-            android:exported="true"/>
-        <activity
-            android:name=".ChatMessage"
-            android:exported="true"/>
-        <activity
-            android:name=".SingleChatAdapter"
-            android:exported="true"/>
-        <activity
             android:name=".AllChatsActivity"
             android:exported="true"/>
         <activity

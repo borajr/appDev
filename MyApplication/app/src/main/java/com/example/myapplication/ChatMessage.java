@@ -9,9 +9,22 @@ public class ChatMessage {
     private String receiverId; // Add receiverId
 
     // No-argument constructor for Firestore deserialization
+
+    /**
+     * Represents a single chat message in a chat application.
+     */
     public ChatMessage() {}
 
-    // Constructor with all arguments
+    /**
+     * Constructor to create a ChatMessage with all available details.
+     *
+     * @param message The message text.
+     * @param isSent Indicates if the message was sent by the user.
+     * @param timestamp The timestamp of the message.
+     * @param userProfileImageId The resource ID of the user's profile image.
+     * @param senderId The unique identifier of the sender.
+     * @param receiverId The unique identifier of the receiver.
+     */
     public ChatMessage(String message, boolean isSent, String timestamp, int userProfileImageId, String senderId, String receiverId) {
         this.message = message;
         this.isSent = isSent;
