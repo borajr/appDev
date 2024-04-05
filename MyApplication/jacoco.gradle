@@ -14,7 +14,6 @@ ext {
             '**/R.class',
             '**/R$*.class',
             '**/BuildConfig.*',
-            '**/res.*'
     ]
 }
 
