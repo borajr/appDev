@@ -15,29 +15,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileCloneThree extends AppCompatActivity {
-    private Spinner alcoholMenu, smokingMenu, foodMenu, marijuanaMenu;
-    String alcohol, smoking, food, marijuana;
-
-    private OrientationEventListener orientationEventListener;
+    private Spinner spinner_alcohol, spinner_smoking, spinner_diet, spinner_marijuana;
+    private OrientationEventListener verticalOrient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profiledetailthree);
 
-        alcoholMenu = findViewById(R.id.alcohol_menu);
-        smokingMenu = findViewById(R.id.smoking_menu);
-        foodMenu = findViewById(R.id.Food_menu);
-        marijuanaMenu = findViewById(R.id.Marijuana_menu);
+        spinner_alcohol = findViewById(R.id.alcohol_menu);
+        spinner_smoking = findViewById(R.id.smoking_menu);
+        spinner_diet = findViewById(R.id.Food_menu);
+        spinner_marijuana = findViewById(R.id.Marijuana_menu);
         DatabaseHandler db = new DatabaseHandler();
-        TextView Alcohol = findViewById(R.id.Alcohol);
-
-        int unicodeAlcohol = 0x1F37A;
-
-        String emojiAlcohol = getEmoji(unicodeAlcohol);
-
-        String textAlcohol = "Alcohol" + emojiAlcohol;
-        Alcohol.setText(textAlcohol);
 
         // Find the button by its ID
         findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
@@ -50,7 +40,7 @@ public class ProfileCloneThree extends AppCompatActivity {
             }
         });
 
-        orientationEventListener = new OrientationEventListener(this) {
+        verticalOrient = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
                 if (orientation >= 45 && orientation < 135) {
@@ -70,26 +60,26 @@ public class ProfileCloneThree extends AppCompatActivity {
         };
 
         // Start the OrientationEventListener
-        orientationEventListener.enable();
+        verticalOrient.enable();
     }
 
     private Map<String, Object> getData() {
-        String alcohol = alcoholMenu.getSelectedItem().toString();
-        String smoking = smokingMenu.getSelectedItem().toString();
-        String food = foodMenu.getSelectedItem().toString();
-        String marijuana = marijuanaMenu.getSelectedItem().toString();
+        String alcohol = spinner_alcohol.getSelectedItem().toString();
+        String smoking = spinner_smoking.getSelectedItem().toString();
+        String food = spinner_diet.getSelectedItem().toString();
+        String marijuana = spinner_marijuana.getSelectedItem().toString();
         Boolean alcoholBoolean = convertToBoolean(alcohol);
         Boolean smokingBoolean = convertToBoolean(smoking);
         Boolean marijuanaBoolean = convertToBoolean(marijuana);
 
 
         // Call createMap() with the collected data
-        Map<String, Object> map = new HashMap<>();
-        map.put("alcohol", alcoholBoolean);
-        map.put("smoking", smokingBoolean);
-        map.put("food", food);
-        map.put("marijuana", marijuanaBoolean);
-        return map;
+        Map<String, Object> PreferenceMap = new HashMap<>();
+        PreferenceMap.put("alcohol", alcoholBoolean);
+        PreferenceMap.put("smoking", smokingBoolean);
+        PreferenceMap.put("food", food);
+        PreferenceMap.put("marijuana", marijuanaBoolean);
+        return PreferenceMap;
     }
     private Boolean convertToBoolean(String input) {
         if (input == null) {
@@ -98,15 +88,10 @@ public class ProfileCloneThree extends AppCompatActivity {
         return input.equals("Yes");
     }
 
-    public String getEmoji(int uni){
-
-        return new String(Character.toChars(uni));
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // Disable the OrientationEventListener to prevent memory leaks
-        orientationEventListener.disable();
+        verticalOrient.disable();
     }
 }
