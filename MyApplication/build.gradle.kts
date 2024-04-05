@@ -12,7 +12,7 @@ sonar {
     properties {
         property("sonar.projectKey", "DBL-App-Dev")
         property("sonar.host.url", "http://localhost:9000")
-        property ("sonar.login", "sqp_e2b43b2e19ac1bf34567e454e4692762f088ecc2")
+        property ("sonar.token", "sqp_e2b43b2e19ac1bf34567e454e4692762f088ecc2")
         property("sonar.tests", "src/test/java")
         property("sonar.test.inclusions", "**/*Test*/**")
         property("sonar.sourceEncoding", "UTF-8")
@@ -42,7 +42,8 @@ val testExecutionFile = "/outputs/unit_test_code_coverage/debugUnitTest/testDebu
 val coverageExclusions = listOf(
         "**/R.class",
         "**/R$*.class",
-        "**/BuildConfig.*"
+        "**/BuildConfig.*",
+        "**/res.*"
 )
 
 // Apply additional build steps to sub-projects
