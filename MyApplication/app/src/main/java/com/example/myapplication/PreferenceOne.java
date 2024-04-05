@@ -1,5 +1,4 @@
 package com.example.myapplication;
-
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -9,18 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,51 +24,23 @@ import java.util.List;
 import java.util.Map;
 
 public class PreferenceOne extends AppCompatActivity {
-
     private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner;
     private Button confirmButton;
     private OrientationEventListener orientationEventListener;
     private List<String> genderPreferences = new ArrayList<>();
-
-
     TextView textView;
     boolean[] selectedLanguage;
     ArrayList<Integer> langList = new ArrayList<>();
     String[] langArray = {
-            "Amharic",
-            "Arabic",
-            "Armenian",
-            "Azerbaijani",
-            "Bengali",
-            "Bhojpuri",
-            "Bulgarian",
-            "Burmese",
-            "Chinese (Mandarin)",
-            "Dutch",
-            "English",
-            "Farsi (Persian)",
-            "Finnish",
-            "French",
-            "German",
+            "Amharic", "Arabic", "Armenian", "Azerbaijani", "Bengali", "Bhojpuri", "Bulgarian",
+            "Burmese", "Chinese (Mandarin)", "Dutch", "English", "Farsi (Persian)", "Finnish", "French", "German",
             "Gujarati", "Hausa", "Hebrew", "Hindi", "Indonesian", "Italian", "Japanese", "Javanese", "Kannada",
             "Kazakh", "Khmer", "Korean", "Lao", "Malagasy", "Malay", "Marathi", "Maithili",
             "Nepali", "Norwegian", "Odia (Oriya)", "Pashto", "Polish", "Portuguese", "Punjabi", "Russian",
             "Serbian", "Sindhi", "Sinhalese", "Somali", "Spanish", "Sudanese", "Swahili", "Swedish", "Tamil", "Telugu",
             "Thai", "Tigrinya", "Turkish", "Ukrainian", "Urdu", "Uzbek", "Vietnamese"};
 
-    String[] starSignArray = {
-            "Aries",
-            "Taurus",
-            "Gemini",
-            "Cancer",
-            "Leo",
-            "Virgo",
-            "Libra",
-            "Scorpio",
-            "Sagittarius",
-            "Capricorn",
-            "Aquarius",
-            "Pisces"};
+    String[] starSignArray = {"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"};
 
     String[] genderArray = {
             "Male",
@@ -85,19 +53,11 @@ public class PreferenceOne extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference_detail);
 
-        minHeightSpinner = findViewById(R.id.minHeightSpinner);
-        maxHeightSpinner = findViewById(R.id.maxHeightSpinner);
-        minAgeSpinner = findViewById(R.id.minAgeSpinner);
-        maxAgeSpinner = findViewById(R.id.maxAgeSpinner);
-        confirmButton = findViewById(R.id.confirm_button);
-        departmentSpinner = findViewById(R.id.editText5);
-        textView = findViewById(R.id.textview);
-        selectedLanguage = new boolean[langArray.length];
+        minHeightSpinner = findViewById(R.id.minHeightSpinner); maxHeightSpinner = findViewById(R.id.maxHeightSpinner); minAgeSpinner = findViewById(R.id.minAgeSpinner);
+        maxAgeSpinner = findViewById(R.id.maxAgeSpinner); confirmButton = findViewById(R.id.confirm_button); departmentSpinner = findViewById(R.id.editText5); textView = findViewById(R.id.textview); selectedLanguage = new boolean[langArray.length];
         TextView textstar = findViewById(R.id.textstar);
         TextView textgender = findViewById(R.id.textgender);
-        
 
-        String gender = textgender.getText().toString();
         String starSign = textstar.getText().toString();
         String department = departmentSpinner.getSelectedItem().toString();
         String minHeight = minHeightSpinner.getSelectedItem().toString();
@@ -280,16 +240,12 @@ public class PreferenceOne extends AppCompatActivity {
         textgender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // Initialize alert dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(PreferenceOne.this);
-
                 // set title
                 builder.setTitle("Select Gender");
-
                 // set dialog non cancelable
                 builder.setCancelable(false);
-
                 builder.setMultiChoiceItems(genderArray, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean b) {
@@ -307,14 +263,12 @@ public class PreferenceOne extends AppCompatActivity {
                         }
                     }
                 });
-
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         genderPreferences = getSelectedGenderPreferencesFromDialog();
                     }
                 });
-
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -340,7 +294,6 @@ public class PreferenceOne extends AppCompatActivity {
                 builder.show();
             }
         });
-
         orientationEventListener = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
@@ -359,14 +312,11 @@ public class PreferenceOne extends AppCompatActivity {
                 }
             }
         };
-
         // Start the OrientationEventListener
         orientationEventListener.enable();
     }
-
     private boolean validatePreferences() {
         // Ensure a gender is selected
-
         // Validate heights
         int minHeightIndex = minHeightSpinner.getSelectedItemPosition();
         int maxHeightIndex = maxHeightSpinner.getSelectedItemPosition();
@@ -374,7 +324,6 @@ public class PreferenceOne extends AppCompatActivity {
             Toast.makeText(this, "Minimum height cannot be greater than maximum height", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         // Validate ages
         int minAgeIndex = minAgeSpinner.getSelectedItemPosition();
         int maxAgeIndex = maxAgeSpinner.getSelectedItemPosition();
@@ -382,11 +331,8 @@ public class PreferenceOne extends AppCompatActivity {
             Toast.makeText(this, "Minimum age cannot be greater than maximum age", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true; // All validations passed
     }
-
-
     private Map<String, Object> getData(List<String> genderPreferences, String minHeight, String maxHeight, String starSign,
                                           String department, String minAge, String maxAge) {
         Map<String, Object> map = new HashMap<>();
@@ -395,8 +341,6 @@ public class PreferenceOne extends AppCompatActivity {
         int maxHeightInt = parseHeight(maxHeight);
         int minAgeInt = Integer.parseInt(minAge);
         int maxAgeInt = Integer.parseInt(maxAge);
-
-
         map.put("minHeight", minHeightInt);
         map.put("maxHeight", maxHeightInt);
         map.put("starSign", starSign);
@@ -405,7 +349,6 @@ public class PreferenceOne extends AppCompatActivity {
         map.put("maxAge", maxAgeInt);
         return map;
     }
-
     private int parseHeight(String height) {
         if ("<150".equals(height)) {
             return 149;
@@ -436,7 +379,6 @@ public class PreferenceOne extends AppCompatActivity {
                     }
                 });
     }
-
     private List<String> getSelectedGenderPreferencesFromDialog() {
         List<String> selectedGenders = new ArrayList<>();
         for (int i = 0; i < selectedLanguage.length; i++) {
@@ -446,7 +388,6 @@ public class PreferenceOne extends AppCompatActivity {
         }
         return selectedGenders;
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

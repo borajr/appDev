@@ -30,41 +30,10 @@ public class PreferenceCloneOne extends AppCompatActivity {
     String[] langArray = {
             "Amharic", "Arabic", "Armenian", "Azerbaijani", "Bengali", "Bhojpuri",
             "Bulgarian", "Burmese", "Chinese (Mandarin)", "Dutch", "English", "Farsi (Persian)", "Finnish", "French", "German", "Gujarati",
-            "Hausa", "Hebrew", "Hindi", "Indonesian", "Italian", "Japanese", "Javanese",
-            "Kannada",
-            "Kazakh",
-            "Khmer",
-            "Korean",
-            "Lao",
-            "Malagasy",
-            "Malay",
-            "Marathi",
-            "Maithili",
-            "Nepali",
-            "Norwegian",
-            "Odia (Oriya)",
-            "Pashto",
-            "Polish",
-            "Portuguese",
-            "Punjabi",
-            "Russian",
-            "Serbian",
-            "Sindhi",
-            "Sinhalese",
-            "Somali",
-            "Spanish",
-            "Sudanese",
-            "Swahili",
-            "Swedish",
-            "Tamil",
-            "Telugu",
-            "Thai",
-            "Tigrinya",
-            "Turkish",
-            "Ukrainian",
-            "Urdu",
-            "Uzbek",
-            "Vietnamese"};
+            "Hausa", "Hebrew", "Hindi", "Indonesian", "Italian", "Japanese", "Javanese", "Kannada", "Kazakh", "Khmer", "Korean", "Lao", "Malagasy", "Malay",
+            "Marathi", "Maithili", "Nepali", "Norwegian", "Odia (Oriya)", "Pashto", "Polish", "Portuguese", "Punjabi", "Russian",
+            "Serbian", "Sindhi", "Sinhalese", "Somali", "Spanish", "Sudanese", "Swahili", "Swedish", "Tamil", "Telugu", "Thai", "Tigrinya", "Turkish",
+            "Ukrainian", "Urdu", "Uzbek", "Vietnamese"};
 
     String[] langArray1 = {
             "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
@@ -376,7 +345,6 @@ public class PreferenceCloneOne extends AppCompatActivity {
 
     private boolean validatePreferences() {
         // Ensure a gender is selected
-
         // Validate heights
         int minHeightIndex = minHeightSpinner.getSelectedItemPosition();
         int maxHeightIndex = maxHeightSpinner.getSelectedItemPosition();
@@ -384,7 +352,6 @@ public class PreferenceCloneOne extends AppCompatActivity {
             Toast.makeText(this, "Minimum height cannot be greater than maximum height", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         // Validate ages
         int minAgeIndex = minAgeSpinner.getSelectedItemPosition();
         int maxAgeIndex = maxAgeSpinner.getSelectedItemPosition();
@@ -392,10 +359,8 @@ public class PreferenceCloneOne extends AppCompatActivity {
             Toast.makeText(this, "Minimum age cannot be greater than maximum age", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true; // All validations passed
     }
-
 
     private Map<String, Object> getData(String gender, String minHeight, String maxHeight, String starSign,
                                         String department, Integer minAge, Integer maxAge) {

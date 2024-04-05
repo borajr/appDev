@@ -14,10 +14,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages the third step of the profile creation or update process, capturing preferences related to lifestyle choices.
+ */
 public class ProfileCloneThree extends AppCompatActivity {
     private Spinner spinner_alcohol, spinner_smoking, spinner_diet, spinner_marijuana;
     private OrientationEventListener verticalOrient;
 
+    /**
+     * Initializes the activity, its views, and the orientation event listener.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +71,11 @@ public class ProfileCloneThree extends AppCompatActivity {
         verticalOrient.enable();
     }
 
+    /**
+     * Collects user preferences from spinners and constructs a map with the data.
+     *
+     * @return A map containing user preferences.
+     */
     private Map<String, Object> getData() {
         String alcohol = spinner_alcohol.getSelectedItem().toString();
         String smoking = spinner_smoking.getSelectedItem().toString();
@@ -81,6 +94,13 @@ public class ProfileCloneThree extends AppCompatActivity {
         PreferenceMap.put("marijuana", marijuanaBoolean);
         return PreferenceMap;
     }
+
+    /**
+     * Converts a string representation ("Yes" or "No") to a Boolean value.
+     *
+     * @param input The string input to convert.
+     * @return True if the input is "Yes", otherwise false.
+     */
     private Boolean convertToBoolean(String input) {
         if (input == null) {
             return null;
@@ -88,6 +108,9 @@ public class ProfileCloneThree extends AppCompatActivity {
         return input.equals("Yes");
     }
 
+    /**
+     * Disables the OrientationEventListener when the activity is destroyed to prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

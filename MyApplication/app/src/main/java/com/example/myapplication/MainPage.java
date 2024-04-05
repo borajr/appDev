@@ -141,11 +141,9 @@ public class MainPage extends AppCompatActivity {
                     startActivity(new Intent(MainPage.this, AllChatsActivity.class));
                     return true;
                 }
-
                 return false;
             }
         });
-
         orientationEventListener = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
@@ -164,15 +162,10 @@ public class MainPage extends AppCompatActivity {
                 }
             }
         };
-
         // Start the OrientationEventListener
         orientationEventListener.enable();
         compareGendersWithAllUsers();
-
     }
-
-
-
     public void compareGendersWithAllUsers() {
         if (currentUser != null) {
             // Retrieve the email of the logged-in user
@@ -263,7 +256,6 @@ public class MainPage extends AppCompatActivity {
                     } else {
                         // No gender preferences set, handle accordingly
                     }
-
                 } else {
                     // Preferences not found, handle accordingly
                 }
@@ -389,9 +381,7 @@ public class MainPage extends AppCompatActivity {
         Random random = new Random();
         String randomLocation = locations[random.nextInt(locations.length)];
         String randomTime = times[random.nextInt(times.length)];
-
         // Find the TextViews and set the location and time
-
         TextView locationTextView = popupView.findViewById(R.id.textViewMatchLocation);
         locationTextView.setText("Location: " + randomLocation);
         TextView timeTextView = popupView.findViewById(R.id.textViewMatchTime);
