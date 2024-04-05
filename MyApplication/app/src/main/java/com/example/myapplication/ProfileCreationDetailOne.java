@@ -17,45 +17,40 @@ import java.util.Map;
 
 public class ProfileCreationDetailOne extends AppCompatActivity {
 
-    private OrientationEventListener orientationEventListener;
+    private OrientationEventListener orientation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Set the content view to your layout
-        setContentView(R.layout.activity_profiledetailone); // Ensure this matches your XML file name
+        setContentView(R.layout.activity_profiledetailone);
 
         // Initialize your UI components here
-        EditText firstNameEditText = findViewById(R.id.editText1);
-        EditText lastNameEditText = findViewById(R.id.editText2);
-        DatePicker datePicker = findViewById(R.id.datePicker); // If you plan to use the DatePicker value
-        Button confirmButton = findViewById(R.id.confirm_button);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        DatePicker dateSelect = findViewById(R.id.datePicker);
+        Button btnConfirm = findViewById(R.id.confirm_button);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Assuming you have EditText fields for first name, last name, etc.
                 EditText firstNameEditText = findViewById(R.id.editText1);
                 EditText lastNameEditText = findViewById(R.id.editText2);
-                // Continue for other EditTexts as necessary
-
                 String firstName = firstNameEditText.getText().toString().trim();
                 String lastName = lastNameEditText.getText().toString().trim();
                 // Continue for other fields as necessary
 
                 // Check if any field is empty
                 if(firstName.isEmpty() || lastName.isEmpty()) { // Extend this condition for all fields
-                    Toast.makeText(ProfileCreationDetailOne.this, "Please fill in all fields.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProfileCreationDetailOne.this, "Please fill in all the fields.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 // Age check - Reuse isOldEnough() method from previous example
                 if (!isOldEnough()) {
-                    Toast.makeText(ProfileCreationDetailOne.this, "You must be at least 18 years old.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProfileCreationDetailOne.this, "You must be 18 years old, or older.", Toast.LENGTH_LONG).show();
                     return;
                 }
                 DatabaseHandler db = new DatabaseHandler();
-                int year = datePicker.getYear();
-                Calendar today = Calendar.getInstance(); //CREATE HASHMAP HERE, DB.UPDATEUSER SHOULD JUST UPLOAD THE HASHMAP!!
+                int year = dateSelect.getYear();
+                Calendar today = Calendar.getInstance();
                 Map<String, Object> data = createMap(firstName, lastName, 2024-year);
                 db.updateUser(data);
                 // If all validations pass, navigate to the next page
@@ -65,7 +60,7 @@ public class ProfileCreationDetailOne extends AppCompatActivity {
             }
         });
 
-        orientationEventListener = new OrientationEventListener(this) {
+        orientation = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
                 if (orientation >= 45 && orientation < 135) {
@@ -85,16 +80,16 @@ public class ProfileCreationDetailOne extends AppCompatActivity {
         };
 
         // Start the OrientationEventListener
-        orientationEventListener.enable();
+        orientation.enable();
 
         // Further initialization can be done as needed
     }
 
     private boolean isOldEnough() {
-        DatePicker datePicker = findViewById(R.id.datePicker); // Make sure the ID matches
-        int day = datePicker.getDayOfMonth();
-        int month = datePicker.getMonth();
-        int year = datePicker.getYear();
+        DatePicker dateSelector = findViewById(R.id.datePicker); // Make sure the ID matches
+        int day = dateSelector.getDayOfMonth();
+        int month = dateSelector.getMonth();
+        int year = dateSelector.getYear();
 
         Calendar selectedDate = Calendar.getInstance();
         selectedDate.set(year, month, day);
@@ -106,17 +101,17 @@ public class ProfileCreationDetailOne extends AppCompatActivity {
     }
 
     private Map<String, Object> createMap(String name, String lastName, Integer age) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", name);
-        map.put("lastName", lastName);
-        map.put("age", age);
-        return map;
+        Map<String, Object> mapDetail = new HashMap<>();
+        mapDetail.put("name", name);
+        mapDetail.put("lastName", lastName);
+        mapDetail.put("age", age);
+        return mapDetail;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // Disable the OrientationEventListener to prevent memory leaks
-        orientationEventListener.disable();
+        orientation.disable();
     }
 }
