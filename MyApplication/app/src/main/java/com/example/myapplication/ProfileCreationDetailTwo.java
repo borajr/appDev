@@ -19,11 +19,11 @@ import java.util.Map;
 
 public class ProfileCreationDetailTwo extends AppCompatActivity {
 
+    //spinner for gender
     private Spinner spinnerGender;
+    //spinner for minHegiht
     private Spinner spinnerMinHeight;
-    private Spinner spinnerMaxHeight;
-    private Spinner spinnerMinAge;
-    private Spinner spinnerMaxAge;
+    //spinner for department
     private Spinner spinnerDepartment;
     private Spinner spinnerStarSign;
     private Button buttonConfirm;
