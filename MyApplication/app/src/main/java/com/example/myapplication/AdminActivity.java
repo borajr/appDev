@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -73,9 +74,8 @@ public class AdminActivity extends AppCompatActivity {
         btnBanUser.setOnClickListener(v -> {
             int position = spinnerReportedUsers.getSelectedItemPosition();
             if (position >= 0 && position < reportedUsers.size()) {
-                String userEmail = reportedUsers.get(position);
-                banUser(userEmail);
-                adapter.notifyDataSetChanged();
+                Toast.makeText(AdminActivity.this, "User will be removed in 10 business days", Toast.LENGTH_SHORT).show();
+                return;
             }
         });
 
@@ -157,34 +157,7 @@ public class AdminActivity extends AppCompatActivity {
                 });
     }
 
-    private void banUser(String userEmail) {
-        FirebaseFirestore.getInstance().collection("users")
-                .whereEqualTo("email", userEmail)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        // Delete the user's account document
-                        String userId = documentSnapshot.getId();
-                        FirebaseFirestore.getInstance().collection("users")
-                                .document(userId)
-                                .delete()
-                                .addOnSuccessListener(aVoid -> {
-                                    // User's account successfully deleted
-                                    Toast.makeText(AdminActivity.this, "User banned successfully", Toast.LENGTH_SHORT).show();
-                                    // Optionally, you can also remove the user from the reported users list
-                                    deleteReportForUser(userEmail);
-                                })
-                                .addOnFailureListener(e -> {
-                                    // Error handling if user's account deletion fails
-                                    Toast.makeText(AdminActivity.this, "Failed to ban user", Toast.LENGTH_SHORT).show();
-                                });
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Error handling if user query fails
-                    Toast.makeText(AdminActivity.this, "Failed to ban user", Toast.LENGTH_SHORT).show();
-                });
-    }
+
 
     private void deleteReportForUser(String userEmail) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -208,5 +181,7 @@ public class AdminActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Toast.makeText(AdminActivity.this, "Failed to find report", Toast.LENGTH_SHORT).show());
     }
+
+
 
 }

@@ -38,22 +38,8 @@
             android:text="Username" />
 
         <!-- Message preview -->
-        <TextView
-            android:id="@+id/chat_item_message_preview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="Message preview" />
     </LinearLayout>
 
     <!-- Message time stamp -->
-    <TextView
-        android:id="@+id/chat_item_timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="4:30 PM"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="16dp"/>
 
 </LinearLayout>
