@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class PreferenceTwo extends AppCompatActivity {
 
-    private Spinner alcoholMenu, smokingMenu, foodMenu, marijuanaMenu;
+    private Spinner preferenceAlcohol, preferenceSmoke, preferenceDiet, preferenceWeed;
     String alcohol, smoking, food, marijuana;
-    private OrientationEventListener orientationEventListener;
+    private OrientationEventListener verticalEventListener;
 
 
     @Override
@@ -30,18 +30,10 @@ public class PreferenceTwo extends AppCompatActivity {
         DatabaseHandler db = new DatabaseHandler();
         // Set OnClickListener to the button
 
-        alcoholMenu = findViewById(R.id.alcohol_menu);
-        smokingMenu = findViewById(R.id.smoking_menu);
-        foodMenu = findViewById(R.id.Food_menu);
-        marijuanaMenu = findViewById(R.id.Marijuana_menu);
-        TextView Alcohol = findViewById(R.id.Alcohol);
-
-        int unicodeAlcohol = 0x1F37A;
-
-        String emojiAlcohol = getEmoji(unicodeAlcohol);
-
-        String textAlcohol = "Alcohol" + emojiAlcohol;
-        Alcohol.setText(textAlcohol);
+        preferenceAlcohol = findViewById(R.id.alcohol_menu);
+        preferenceSmoke = findViewById(R.id.smoking_menu);
+        preferenceDiet = findViewById(R.id.Food_menu);
+        preferenceWeed = findViewById(R.id.Marijuana_menu);
 
         // Find the button by its ID
         findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
@@ -54,7 +46,7 @@ public class PreferenceTwo extends AppCompatActivity {
             }
         });
 
-        orientationEventListener = new OrientationEventListener(this) {
+        verticalEventListener = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
                 if (orientation >= 45 && orientation < 135) {
@@ -74,33 +66,29 @@ public class PreferenceTwo extends AppCompatActivity {
         };
 
         // Start the OrientationEventListener
-        orientationEventListener.enable();
+        verticalEventListener.enable();
 
     }
 
 
     private Map<String, Object> getData() {
-        String alcohol = alcoholMenu.getSelectedItem().toString();
-        String smoking = smokingMenu.getSelectedItem().toString();
-        String food = foodMenu.getSelectedItem().toString();
-        String marijuana = marijuanaMenu.getSelectedItem().toString();
-        Boolean alcoholBoolean = convertToBoolean(alcohol);
-        Boolean smokingBoolean = convertToBoolean(smoking);
-        Boolean marijuanaBoolean = convertToBoolean(marijuana);
+        String alcohol = preferenceAlcohol.getSelectedItem().toString();
+        String smoking = preferenceSmoke.getSelectedItem().toString();
+        String food = preferenceDiet.getSelectedItem().toString();
+        String marijuana = preferenceWeed.getSelectedItem().toString();
+        Boolean alcoholBool = convertToBoolean(alcohol);
+        Boolean smokingBool = convertToBoolean(smoking);
+        Boolean marijuanaBool = convertToBoolean(marijuana);
 
 
         // Call createMap() with the collected data
-        Map<String, Object> map = new HashMap<>();
-        map.put("alcohol", alcoholBoolean);
-        map.put("smoking", smokingBoolean);
-        map.put("food", food);
-        map.put("marijuana", marijuanaBoolean);
-        return map;
+        Map<String, Object> unhealthyMap = new HashMap<>();
+        unhealthyMap.put("alcohol", alcoholBool);
+        unhealthyMap.put("smoking", smokingBool);
+        unhealthyMap.put("food", food);
+        unhealthyMap.put("marijuana", marijuanaBool);
+        return unhealthyMap;
     }
-        public String getEmoji(int uni){
-
-            return new String(Character.toChars(uni));
-        }
     private Boolean convertToBoolean(String input) {
         if (input == null) {
             return null;
@@ -112,6 +100,6 @@ public class PreferenceTwo extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // Disable the OrientationEventListener to prevent memory leaks
-        orientationEventListener.disable();
+        verticalEventListener.disable();
     }
 }
