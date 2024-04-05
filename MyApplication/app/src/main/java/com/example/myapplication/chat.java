@@ -12,7 +12,7 @@ public class chat {
     private String receiverEmail; // Receiver's email address
 
     // Constructor updated to include sender and receiver email
-    public chat(String userName, int userProfileImageId, String chatID, String senderEmail, String receiverEmail) {
+    public chat(String userName,  int userProfileImageId, String chatID, String senderEmail, String receiverEmail) {
         this.userName = userName;
         this.userProfileImageId = userProfileImageId;
         this.chatID = chatID;

@@ -1,3 +1,4 @@
+
 package com.example.myapplication;
 import android.Manifest;
 import android.content.Intent;
@@ -164,7 +165,7 @@ public class CameraActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     Toast.makeText(CameraActivity.this, "Please upload at least 1 photo.", Toast.LENGTH_LONG).show();
-            }}
+                }}
         });
 
         orientationEventListener = new OrientationEventListener(this) {

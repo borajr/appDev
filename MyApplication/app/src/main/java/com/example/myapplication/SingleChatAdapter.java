@@ -12,8 +12,8 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<ChatMessage> messages;
     private String currentUserId;
 
-    private static final int VIEW_TYPE_SENT = 1;
-    private static final int VIEW_TYPE_RECEIVED = 2;
+    public static final int VIEW_TYPE_SENT = 1;
+    public static final int VIEW_TYPE_RECEIVED = 2;
 
     public SingleChatAdapter(List<ChatMessage> messages, String currentUserId) {
         this.messages = messages;
@@ -57,7 +57,7 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return messages.size();
     }
 
-    private static class SentMessageViewHolder extends RecyclerView.ViewHolder {
+    public static class SentMessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageText;
 
         SentMessageViewHolder(View itemView) {
@@ -70,7 +70,7 @@ public class SingleChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    private static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
+    public static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageText;
 
         ReceivedMessageViewHolder(View itemView) {

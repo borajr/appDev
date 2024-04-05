@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DatabaseHandler {
-    private FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
     private static final String TAG = "DatabaseHandler";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();

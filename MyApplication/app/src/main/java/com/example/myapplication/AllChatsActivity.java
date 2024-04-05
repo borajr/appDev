@@ -182,7 +182,7 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         }
     }
 
-    private void fetchDynamicChats() {
+    public void fetchDynamicChats() {
         chatList.clear();
         db.collection("chats")
                 .whereArrayContains("participantEmails", currentUserId)
@@ -192,6 +192,8 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String userName = document.getId();
                             ArrayList<String> participantEmails = (ArrayList<String>) document.get("participantEmails");
+                            String lastMessage = "Last message here";
+                            String timestamp = "timestamp here";
                             if (participantEmails.contains(currentUserId)) {
                                 chatList.add(new chat(userName, R.drawable.ic_profile_placeholder, "", "", ""));
                             }
