@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileCreationDetailThree extends AppCompatActivity {
-    private Spinner alcoholMenu, smokingMenu, foodMenu, marijuanaMenu;
+    private Spinner alcoholSpinner, smokingSpinner, foodSpinner, marijuanaSpinner;
     String alcohol, smoking, food, marijuana;
 
     private OrientationEventListener orientationEventListener;
@@ -25,19 +25,12 @@ public class ProfileCreationDetailThree extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profiledetailthree);
 
-        alcoholMenu = findViewById(R.id.alcohol_menu);
-        smokingMenu = findViewById(R.id.smoking_menu);
-        foodMenu = findViewById(R.id.Food_menu);
-        marijuanaMenu = findViewById(R.id.Marijuana_menu);
+        alcoholSpinner = findViewById(R.id.alcohol_menu);
+        smokingSpinner = findViewById(R.id.smoking_menu);
+        foodSpinner = findViewById(R.id.Food_menu);
+        marijuanaSpinner = findViewById(R.id.Marijuana_menu);
         DatabaseHandler db = new DatabaseHandler();
         TextView Alcohol = findViewById(R.id.Alcohol);
-
-        int unicodeAlcohol = 0x1F37A;
-
-        String emojiAlcohol = getEmoji(unicodeAlcohol);
-
-        String textAlcohol = "Alcohol" + emojiAlcohol;
-        Alcohol.setText(textAlcohol);
 
         // Find the button by its ID
         findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
@@ -74,10 +67,10 @@ public class ProfileCreationDetailThree extends AppCompatActivity {
     }
 
     private Map<String, Object> getData() {
-        String alcohol = alcoholMenu.getSelectedItem().toString();
-        String smoking = smokingMenu.getSelectedItem().toString();
-        String food = foodMenu.getSelectedItem().toString();
-        String marijuana = marijuanaMenu.getSelectedItem().toString();
+        String food = foodSpinner.getSelectedItem().toString();
+        String marijuana = marijuanaSpinner.getSelectedItem().toString();
+        String alcohol = alcoholSpinner.getSelectedItem().toString();
+        String smoking = smokingSpinner.getSelectedItem().toString();
         Boolean alcoholBoolean = convertToBoolean(alcohol);
         Boolean smokingBoolean = convertToBoolean(smoking);
         Boolean marijuanaBoolean = convertToBoolean(marijuana);
@@ -96,11 +89,6 @@ public class ProfileCreationDetailThree extends AppCompatActivity {
             return null;
         }
         return input.equals("Yes");
-    }
-
-    public String getEmoji(int uni){
-
-        return new String(Character.toChars(uni));
     }
 
     @Override
