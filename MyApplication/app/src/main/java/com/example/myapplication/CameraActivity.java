@@ -39,7 +39,7 @@ public class CameraActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 100;
 
     private FirebaseStorage storage;
-    private ImageView[] imageViews = new ImageView[6];
+    private ImageView[] viewImages = new ImageView[6];
     private Bitmap[] images = new Bitmap[6];
     private int imageIndex = 0;
     private OrientationEventListener orientationEventListener;
@@ -52,12 +52,12 @@ public class CameraActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance();
 
-        imageViews[0] = findViewById(R.id.imageView);
-        imageViews[1] = findViewById(R.id.imageView1);
-        imageViews[2] = findViewById(R.id.imageView2);
-        imageViews[3] = findViewById(R.id.imageView3);
-        imageViews[4] = findViewById(R.id.imageView4);
-        imageViews[5] = findViewById(R.id.imageView5);
+        viewImages[0] = findViewById(R.id.imageView);
+        viewImages[1] = findViewById(R.id.imageView1);
+        viewImages[2] = findViewById(R.id.imageView2);
+        viewImages[3] = findViewById(R.id.imageView3);
+        viewImages[4] = findViewById(R.id.imageView4);
+        viewImages[5] = findViewById(R.id.imageView5);
 
         Button btnChoosePhoto = findViewById(R.id.btn_choose_photo);
         Button btnTakePhoto = findViewById(R.id.btn_take_photo);
@@ -154,7 +154,7 @@ public class CameraActivity extends AppCompatActivity {
             public void onClick(View v) {
                 uploadImagesToFirebaseStorage();
                 boolean atLeastOneImageSelected = false;
-                for (ImageView imageView : imageViews) {
+                for (ImageView imageView : viewImages) {
                     if (imageView.getDrawable() != null) {
                         atLeastOneImageSelected = true;
                         break;
@@ -233,7 +233,7 @@ public class CameraActivity extends AppCompatActivity {
 
     private void setImage(Bitmap imageBitmap) {
         if (imageIndex < 6) {
-            imageViews[imageIndex].setImageBitmap(imageBitmap);
+            viewImages[imageIndex].setImageBitmap(imageBitmap);
             images[imageIndex] = imageBitmap;
             imageIndex++;
         }
