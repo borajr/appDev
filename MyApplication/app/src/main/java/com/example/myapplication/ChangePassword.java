@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Activity to allow users to change their password with validations for password matching and strength.
+ */
 public class ChangePassword extends AppCompatActivity {
 
     private EditText editTextNewPassword;
@@ -16,7 +19,12 @@ public class ChangePassword extends AppCompatActivity {
     private Button changeButton;
     private OrientationEventListener orientationEventListener;
 
-
+    /**
+     * Called when the activity is starting.
+     * Initializes the activity, UI components, and sets up the orientation event listener.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +78,12 @@ public class ChangePassword extends AppCompatActivity {
         orientationEventListener.enable();
     }
 
+    /**
+     * Checks if the provided password meets the specified strength criteria.
+     *
+     * @param password The password to check.
+     * @return True if the password is strong, false otherwise.
+     */
     private boolean isPasswordStrong(String password) {
         boolean hasLetter = false;
         boolean hasDigit = false;
@@ -98,6 +112,9 @@ public class ChangePassword extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Disables the OrientationEventListener when the activity is destroyed to prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

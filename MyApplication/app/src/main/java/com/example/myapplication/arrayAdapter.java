@@ -20,6 +20,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
+
+/**
+ * An ArrayAdapter for displaying a list of User objects, each with a name and profile image.
+ */
 public class arrayAdapter extends ArrayAdapter<User> {
     Context context;
     private MainPage mainPage;
@@ -27,11 +31,26 @@ public class arrayAdapter extends ArrayAdapter<User> {
     // Firebase Storage initialization
     private FirebaseStorage storage = FirebaseStorage.getInstance();
 
+
+    /**
+     * Constructs an ArrayAdapter for User objects.
+     *
+     * @param mainPage The MainPage context this adapter is used in.
+     * @param users    The list of User objects to display.
+     */
     public arrayAdapter(MainPage mainPage, List<User> users) {
         super(mainPage, R.layout.item, users);
         this.mainPage = mainPage;
     }
 
+    /**
+     * Provides a view for an AdapterView (ListView, GridView, etc.).
+     *
+     * @param position    The position of the item within the adapter's data set of the item whose view we want.
+     * @param convertView The old view to reuse, if possible.
+     * @param parent      The parent that this view will eventually be attached to.
+     * @return A View corresponding to the data at the specified position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         User card_item = getItem(position);

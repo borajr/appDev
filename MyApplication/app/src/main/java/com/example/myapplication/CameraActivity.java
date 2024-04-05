@@ -1,4 +1,3 @@
-
 package com.example.myapplication;
 import android.Manifest;
 import android.content.Intent;
@@ -32,6 +31,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+/**
+ * CameraActivity allows users to take photos using the device's camera or choose photos from the gallery.
+ * Users can upload these photos to Firebase Storage. The activity handles permission requests for the camera
+ * and adjusts the orientation of the activity based on the device's orientation.
+ */
 public class CameraActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 3;
@@ -44,7 +48,14 @@ public class CameraActivity extends AppCompatActivity {
     private int imageIndex = 0;
     private OrientationEventListener orientationEventListener;
 
-
+    /**
+     * Sets up the activity layout, initializes Firebase storage, image view placeholders, and button click
+     * listeners. It also initializes an orientation event listener to handle the orientation changes.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,6 +202,15 @@ public class CameraActivity extends AppCompatActivity {
         orientationEventListener.enable();
     }
 
+    /**
+     * Handles the result from either taking a photo with the camera or picking an image from the gallery.
+     * Sets the chosen or captured image in the next available image view.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -214,6 +234,13 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the result of the permission request for using the camera.
+     *
+     * @param requestCode  The request code passed in requestPermissions(android.app.Activity, String[], int).
+     * @param permissions  The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -226,11 +253,19 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Opens the device camera to take a photo.
+     */
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA_REQUEST);
     }
 
+    /**
+     * Sets the given Bitmap image to the next available ImageView and stores the Bitmap in an array for future use.
+     *
+     * @param imageBitmap The Bitmap image to set in an ImageView and store in the array.
+     */
     private void setImage(Bitmap imageBitmap) {
         if (imageIndex < 6) {
             viewImages[imageIndex].setImageBitmap(imageBitmap);
@@ -239,6 +274,9 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Uploads the images stored in the Bitmap array to Firebase Storage under the current user's email directory.
+     */
     private void uploadImagesToFirebaseStorage() {
         for (int i = 0; i < imageIndex; i++) {
             if (images[i] != null) {
@@ -268,6 +306,9 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Disables the OrientationEventListener when the activity is destroyed to prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -11,15 +11,30 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+/**
+ * Adapter for handling chat items in a RecyclerView. This adapter manages a list of chat objects
+ * and binds them to views for display. It also handles click events for each chat item, delegating
+ * the click action to a listener.
+ */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<chat> chatList;
     private OnChatClickListener listener;
 
+    /**
+     * Constructs a new ChatAdapter with the specified list of chats and a listener for handling
+     * chat click events.
+     *
+     * @param chatList A list of chat objects to be displayed.
+     * @param listener A listener that handles click events on chat items.
+     */
     public ChatAdapter(List<chat> chatList, OnChatClickListener listener) {
         this.chatList = chatList;
         this.listener = listener;
     }
 
+    /**
+     * Interface definition for a callback to be invoked when a chat item is clicked.
+     */
     public interface OnChatClickListener {
         void onChatClicked(chat chat);
     }
@@ -47,6 +62,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return chatList.size();
     }
 
+    /**
+     * Provides a reference to the type of views that you are using (custom ViewHolder).
+     * Used to cache the views within the item layout for fast access.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView userImageView;
         TextView userNameView, lastMessageView, timestampView;

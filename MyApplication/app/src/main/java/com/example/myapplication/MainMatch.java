@@ -27,20 +27,36 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Handles the matching logic between users in an app, including recording swipes and checking for matches.
+ */
 public class MainMatch extends AppCompatActivity {
 
     private MainPage mainPage;
 
+    /**
+     * Constructor to create a MainMatch instance with a reference to MainPage for callbacks.
+     *
+     * @param mainPage The MainPage instance for callback invocation.
+     */
     public MainMatch(MainPage mainPage){
         this.mainPage =  mainPage;
     }
 
+    /**
+     * Records a swipe action from one user towards another in the Firestore database.
+     *
+     * @param swiperEmail The email of the user who performed the swipe.
+     * @param swipedEmail The email of the user who was swiped on.
+     * @param direction   The direction of the swipe ("left" or "right").
+     */
     public void recordSwipe(String swiperEmail, String swipedEmail, String direction) {
         if (swiperEmail.equals(swipedEmail)) {
             Log.w(TAG, "User attempted to swipe themselves, which is not allowed.");
             return; // Exit the method early
         }
 
+        // Prepare the swipe data for saving.
         Map<String, Object> swipeData = new HashMap<>();
         swipeData.put("swiperEmail", swiperEmail);
 
@@ -64,6 +80,12 @@ public class MainMatch extends AppCompatActivity {
     }
 
 
+    /**
+     * Checks if two users have mutually swiped right on each other, indicating a match.
+     *
+     * @param swiperEmail The email of the user who performed the swipe.
+     * @param swipedEmail The email of the user who was swiped on.
+     */
     public void checkForMatch(final String swiperEmail, final String swipedEmail) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -91,11 +113,16 @@ public class MainMatch extends AppCompatActivity {
                                 });
                     } else {
                         Log.d(TAG, "Swiper did not swipe right or error occurred: ", task.getException());
-           }
-        });
+                    }
+                });
     }
 
-
+    /**
+     * Creates a match between two users when a mutual right swipe is detected.
+     *
+     * @param userEmail1 Email of the first user involved in the match.
+     * @param userEmail2 Email of the second user involved in the match.
+     */
     private void createMatch(String userEmail1, String userEmail2) {
         Map<String, Object> matchData = new HashMap<>();
         matchData.put("user1Mail", userEmail1);
@@ -116,7 +143,7 @@ public class MainMatch extends AppCompatActivity {
                 Log.w(TAG, "Error adding match document", e);
             }
         });
-}
+    }
 
 
 

@@ -34,6 +34,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Activity to change or add new photos by the user. It allows capturing new photos with the device's camera,
+ * selecting photos from the device's gallery, and uploading these to Firebase Storage. The activity also
+ * downloads and displays existing photos from Firebase Storage.
+ */
 public class ChangePhotoActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 3;
@@ -48,7 +53,13 @@ public class ChangePhotoActivity extends AppCompatActivity {
     FirebaseUser currentUser = mAuth.getCurrentUser();
     private OrientationEventListener orientationEventListener;
 
-
+    /**
+     * Initializes the activity, sets up UI components, and downloads existing images from Firebase Storage.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,6 +208,14 @@ public class ChangePhotoActivity extends AppCompatActivity {
         orientationEventListener.enable();
     }
 
+    /**
+     * Handles result from photo selection or capture activities.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -220,6 +239,13 @@ public class ChangePhotoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Processes the result of the camera permission request.
+     *
+     * @param requestCode  The request code passed in requestPermissions().
+     * @param permissions  The requested permissions.
+     * @param grantResults The grant results for the corresponding permissions.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -232,11 +258,19 @@ public class ChangePhotoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initiates capturing a photo with the device's camera.
+     */
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA_REQUEST);
     }
 
+    /**
+     * Sets the selected or captured image to an ImageView and stores it for uploading.
+     *
+     * @param imageBitmap The bitmap of the image to be displayed and uploaded.
+     */
     private void setImage(Bitmap imageBitmap) {
         if (imageIndex < 6) {
             imageViews[imageIndex].setImageBitmap(imageBitmap);
@@ -245,6 +279,9 @@ public class ChangePhotoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Uploads the selected or captured images to Firebase Storage under the current user's email directory.
+     */
     private void uploadImagesToFirebaseStorage() {
         for (int i = 0; i < imageIndex; i++) {
             if (images[i] != null) {
@@ -273,7 +310,12 @@ public class ChangePhotoActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Downloads and displays images from Firebase Storage.
+     */
     private void downloadImagesFromFirebaseStorage() {
+        //initilazing the image array
         ImageView image1 = findViewById(R.id.imageView);
         ImageView image2 = findViewById(R.id.imageView1);
         ImageView image3 = findViewById(R.id.imageView2);
@@ -281,6 +323,7 @@ public class ChangePhotoActivity extends AppCompatActivity {
         ImageView image5 = findViewById(R.id.imageView4);
         ImageView image6 = findViewById(R.id.imageView5);
         ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
+        //ui image adding
         imageViews.add(image1);
         imageViews.add(image2);
         imageViews.add(image3);
@@ -291,6 +334,7 @@ public class ChangePhotoActivity extends AppCompatActivity {
 
         final StorageReference okref = storage.getReference().child(currentUser.getEmail()+"/");
 
+        //initiliaing the photo array
         final int[] countofimages = {0};
         okref.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override
@@ -300,6 +344,7 @@ public class ChangePhotoActivity extends AppCompatActivity {
                 }
             }
         });
+        //for loop for all images
         int x = 0;
         for (int i = 0; i < countofimages[0]; i++) { // Assuming you have 6 images to download
 
@@ -312,6 +357,7 @@ public class ChangePhotoActivity extends AppCompatActivity {
             imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
+                    //bitmap to store the image
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     imageViews.get(finalX).setImageBitmap(bitmap);
                 }
@@ -319,6 +365,9 @@ public class ChangePhotoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Cleans up resources, particularly the OrientationEventListener, when the activity is destroyed.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
