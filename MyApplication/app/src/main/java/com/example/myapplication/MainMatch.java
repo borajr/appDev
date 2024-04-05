@@ -2,9 +2,14 @@ package com.example.myapplication;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Dialog;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,12 +25,25 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class MainMatch extends AppCompatActivity {
 
+    private MainPage mainPage;
+
+    public MainMatch(MainPage mainPage){
+        this.mainPage =  mainPage;
+    }
+
     public void recordSwipe(String swiperEmail, String swipedEmail, String direction) {
+        if (swiperEmail.equals(swipedEmail)) {
+            Log.w(TAG, "User attempted to swipe themselves, which is not allowed.");
+            return; // Exit the method early
+        }
+
         Map<String, Object> swipeData = new HashMap<>();
         swipeData.put("swiperEmail", swiperEmail);
+
         swipeData.put("swipedEmail", swipedEmail);
         swipeData.put("direction", direction);
 
@@ -45,29 +63,38 @@ public class MainMatch extends AppCompatActivity {
         });
     }
 
-    private void checkForMatch(final String swiperEmail, final String swipedEmail) { //efranin gotu kocaman izmitin yollari tastan
+
+    public void checkForMatch(final String swiperEmail, final String swipedEmail) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Check if swiper has swiped right
         db.collection("Swipes")
                 .whereEqualTo("swiperEmail", swiperEmail)
                 .whereEqualTo("swipedEmail", swipedEmail)
                 .whereEqualTo("direction", "right")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.exists()) {
-                                    createMatch(swiperEmail, swiperEmail);
-                                    break;
-                                }
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        // Check if swiped has also swiped right on swiper
+                        db.collection("Swipes")
+                                .whereEqualTo("swiperEmail", swipedEmail)
+                                .whereEqualTo("swipedEmail", swiperEmail)
+                                .whereEqualTo("direction", "right")
+                                .get()
+                                .addOnCompleteListener(task2 -> {
+                                    if (task2.isSuccessful() && !task2.getResult().isEmpty()) {
+                                        // Both users have swiped right on each other, create a match
+                                        createMatch(swiperEmail, swipedEmail);
+                                    } else {
+                                        Log.d(TAG, "No reciprocal swipe found.");
+                                    }
+                                });
+                    } else {
+                        Log.d(TAG, "Swiper did not swipe right or error occurred: ", task.getException());
+           }
+        });
     }
+
 
     private void createMatch(String userEmail1, String userEmail2) {
         Map<String, Object> matchData = new HashMap<>();
@@ -80,6 +107,7 @@ public class MainMatch extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "Match created with ID: " + documentReference.getId());
+                mainPage.showMatchPopup();
                 // Here you can update UI or send notifications
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -88,7 +116,8 @@ public class MainMatch extends AppCompatActivity {
                 Log.w(TAG, "Error adding match document", e);
             }
         });
-    }
+}
+
 
 
 }

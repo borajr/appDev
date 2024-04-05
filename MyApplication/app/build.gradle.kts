@@ -75,4 +75,8 @@ dependencies {
     implementation ("androidx.cardview:cardview:1.0.0")
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
+    testImplementation ("org.mockito:mockito-core:4.0.0") // Use the latest version
+    // Robolectric for running Android tests on the JVM
+    testImplementation ("org.robolectric:robolectric:4.7.3")
+    testImplementation ("androidx.test:core:1.4.0")
 }

@@ -1,32 +1,29 @@
 package com.example.myapplication;
-
-// Existing imports...
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
-
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-// Add these new imports
-import android.widget.Button;
-import android.widget.ImageView;
-import android.net.Uri;
-import android.widget.Toast;
-import android.content.pm.PackageManager;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -35,47 +32,38 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
+import java.util.UUID;
 
 public class ChangePhotoActivity extends AppCompatActivity {
 
-    FirebaseUser currentUser;
-    FirebaseAuth mAuth;
-
-    StorageReference storageRef;
-
-    FirebaseStorage storage;
-
-    private Bitmap[] images = new Bitmap[6];
-
-    private int imageIndex = 0;
-    // Existing constants...
-    private static final int PICK_IMAGE = 3; // Choose an unused request code
+    private static final int PICK_IMAGE = 3;
     private static final int CAMERA_REQUEST = 2;
-
     private static final int CAMERA_PERMISSION_CODE = 100;
 
-    // New instance variables for the image view placeholders
+    private FirebaseStorage storage;
     private ImageView[] imageViews = new ImageView[6];
+    private Bitmap[] images = new Bitmap[6];
+    private int imageIndex = 0;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = mAuth.getCurrentUser();
+    private OrientationEventListener orientationEventListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_photo);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
 
-        // Initialize image view placeholders with actual ImageView references from your layout
         imageViews[0] = findViewById(R.id.imageView);
         imageViews[1] = findViewById(R.id.imageView1);
         imageViews[2] = findViewById(R.id.imageView2);
         imageViews[3] = findViewById(R.id.imageView3);
         imageViews[4] = findViewById(R.id.imageView4);
         imageViews[5] = findViewById(R.id.imageView5);
-        downloadImagesFromFirebaseStorage();
 
+        downloadImagesFromFirebaseStorage();
 
         Button btnChoosePhoto = findViewById(R.id.btn_choose_photo);
         Button btnTakePhoto = findViewById(R.id.btn_take_photo);
@@ -146,11 +134,11 @@ public class ChangePhotoActivity extends AppCompatActivity {
                 // Optionally, hide the button itself if desired
             }
         });
+
         // Set click listener for Choose Photo button
         btnChoosePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent to pick an image from the gallery
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, PICK_IMAGE);
             }
@@ -159,20 +147,15 @@ public class ChangePhotoActivity extends AppCompatActivity {
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Check for camera permission before opening the camera
                 if (ContextCompat.checkSelfPermission(ChangePhotoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // If permission is not granted, request it
                     ActivityCompat.requestPermissions(ChangePhotoActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
                 } else {
-                    // If permission is granted, open the camera
                     openCamera();
                 }
             }
         });
-
-
-        // Set click listener for Continue button
         btnContinue.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 uploadImagesToFirebaseStorage();
@@ -190,27 +173,53 @@ public class ChangePhotoActivity extends AppCompatActivity {
                     Toast.makeText(ChangePhotoActivity.this, "Please upload at least 1 photo.", Toast.LENGTH_LONG).show();
                 }}
         });
+
+        orientationEventListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                if (orientation >= 45 && orientation < 135) {
+                    // Landscape mode, set screen orientation to reverse portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (orientation >= 135 && orientation < 225) {
+                    // Upside down mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else if (orientation >= 225 && orientation < 315) {
+                    // Reverse landscape mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else {
+                    // Portrait mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+            }
+        };
+
+        // Start the OrientationEventListener
+        orientationEventListener.enable();
     }
 
-    // Overriding onActivityResult to handle image selection/taking photo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Check which request we're responding to
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            // Handle the camera photo
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            setNextAvailableImageView(imageBitmap);
+            setImage(imageBitmap);
         } else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
-            // Handle the chosen image
             Uri selectedImage = data.getData();
-            setNextAvailableImageView(selectedImage);
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(selectedImage);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                setImage(bitmap);
+                inputStream.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    // Handling runtime permissions results for the camera
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -221,81 +230,18 @@ public class ChangePhotoActivity extends AppCompatActivity {
                 Toast.makeText(this, "Camera permission is needed to take photos", Toast.LENGTH_LONG).show();
             }
         }
-        // Handle other permissions that your app might request here
     }
 
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //if (intent.resolveActivity(getPackageManager()) != null) {
         startActivityForResult(intent, CAMERA_REQUEST);
-        //} else {
-        Toast.makeText(this, "No camera found on this device", Toast.LENGTH_LONG).show();
-        //}
     }
 
-
-    private void setNextAvailableImageView(Bitmap imageBitmap) {
-        for (ImageView imageView : imageViews) {
-            if (imageView.getDrawable() == null) { // Check if ImageView is empty
-                imageView.setImageBitmap(imageBitmap);
-                break;
-            }
-        }
-    }
-
-    // Same method for Uri images from gallery
-    private void setNextAvailableImageView(Uri imageUri) {
-        for (ImageView imageView : imageViews) {
-            if (imageView.getDrawable() == null) {
-                try {
-                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    imageView.setImageBitmap(bitmap);
-                    inputStream.close();
-                    break;
-                } catch (FileNotFoundException e) {
-                    Toast.makeText(this, "File not found.", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    Toast.makeText(this, "Error getting selected file.", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-                break;
-            }
-        }
-    }
-
-    private void downloadImagesFromFirebaseStorage() {
-        ImageView image1 = findViewById(R.id.image1);
-        ImageView image2 = findViewById(R.id.image2);
-        ImageView image3 = findViewById(R.id.image3);
-        ImageView image4 = findViewById(R.id.image4);
-        ImageView image5 = findViewById(R.id.image5);
-        ImageView image6 = findViewById(R.id.image6);
-        ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
-        imageViews.add(image1);
-        imageViews.add(image2);
-        imageViews.add(image3);
-        imageViews.add(image4);
-        imageViews.add(image5);
-        imageViews.add(image6);
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-
-        int x = 0;
-        for (ImageView i : imageViews) { // Assuming you have 6 images to download
-
-            // Create a reference to the image in Firebase Storage
-            Log.d("ChangePhotoActivity", currentUser.getEmail() + "/image" + x);
-            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x +"/jpeg");
-            x++;
-            // Create a temporary file to store the downloaded image
-            imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    i.setImageBitmap(bitmap);
-                }
-            });
+    private void setImage(Bitmap imageBitmap) {
+        if (imageIndex < 6) {
+            imageViews[imageIndex].setImageBitmap(imageBitmap);
+            images[imageIndex] = imageBitmap;
+            imageIndex++;
         }
     }
 
@@ -327,5 +273,56 @@ public class ChangePhotoActivity extends AppCompatActivity {
             }
         }
     }
-}
+    private void downloadImagesFromFirebaseStorage() {
+        ImageView image1 = findViewById(R.id.imageView);
+        ImageView image2 = findViewById(R.id.imageView1);
+        ImageView image3 = findViewById(R.id.imageView2);
+        ImageView image4 = findViewById(R.id.imageView3);
+        ImageView image5 = findViewById(R.id.imageView4);
+        ImageView image6 = findViewById(R.id.imageView5);
+        ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
+        imageViews.add(image1);
+        imageViews.add(image2);
+        imageViews.add(image3);
+        imageViews.add(image4);
+        imageViews.add(image5);
+        imageViews.add(image6);
+        FirebaseStorage storage = FirebaseStorage.getInstance();
 
+        final StorageReference okref = storage.getReference().child(currentUser.getEmail()+"/");
+
+        final int[] countofimages = {0};
+        okref.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult listResult) {
+                for (StorageReference item : listResult.getItems()) {
+                    countofimages[0] =  listResult.getItems().size();//will give you number of files present in your firebase storage folder
+                }
+            }
+        });
+        int x = 0;
+        for (int i = 0; i < countofimages[0]; i++) { // Assuming you have 6 images to download
+
+            // Create a reference to the image in Firebase Storage
+            Log.d("ChangePhoto", currentUser.getEmail() + "/image" + x);
+            StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x );
+            x++;
+            // Create a temporary file to store the downloaded image
+            int finalX = x;
+            imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    imageViews.get(finalX).setImageBitmap(bitmap);
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Disable the OrientationEventListener to prevent memory leaks
+        orientationEventListener.disable();
+    }
+}

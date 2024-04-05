@@ -6,27 +6,41 @@ public class chat {
     private String userName;
     private String lastMessage;
     private String timestamp;
-    private String recId;
-
-    private String chatID;
     private int userProfileImageId; // Drawable resource ID for the user image
+    private String chatID; // Chat ID
+    private String senderEmail; // Sender's email address
+    private String receiverEmail; // Receiver's email address
 
-    public chat(String userName, String lastMessage, String timestamp, int userProfileImageId, String recId, String chatID) {
+    // Constructor updated to include sender and receiver email
+    public chat(String userName,  int userProfileImageId, String chatID, String senderEmail, String receiverEmail) {
         this.userName = userName;
-        this.lastMessage = lastMessage;
-        this.timestamp = timestamp;
         this.userProfileImageId = userProfileImageId;
-        this.recId = recId;
         this.chatID = chatID;
+        this.senderEmail = senderEmail;
+        this.receiverEmail = receiverEmail;
+    }
+
+    // Getters and setters for new fields
+    public String getSenderEmail() {
+        return senderEmail;
+    }
+
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
+    }
+
+    public String getReceiverEmail() {
+        return receiverEmail;
+    }
+
+    public void setReceiverEmail(String receiverEmail) {
+        this.receiverEmail = receiverEmail;
     }
 
     public String getChatID() {
         return chatID;
     }
 
-    public String getRecId() {
-        return recId;
-    }
 
     // Getters and setters
     public String getUserName() {

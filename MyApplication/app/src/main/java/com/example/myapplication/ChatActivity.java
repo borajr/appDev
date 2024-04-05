@@ -1,18 +1,27 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,8 +38,10 @@ public class ChatActivity extends AppCompatActivity {
     private SingleChatAdapter chatAdapter;
     private List<ChatMessage> messageList;
     private FirebaseFirestore db;
-    private String currentUserId; // The current user's ID
-    private String otherUserId; // The ID of the other user in the chat
+    private String currentUser;
+    private String otherUser; // The ID of the other user in the chat
+    private OrientationEventListener orientationEventListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +50,13 @@ public class ChatActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
+        FirebaseUser currentUse = FirebaseAuth.getInstance().getCurrentUser();
 
         // Set the user IDs. In a real app, these would be determined based on the chat selected.
         if (currentUser != null) {
-            currentUserId = currentUser.getUid();
+            currentUser = currentUse.getEmail();
             // For demonstration purposes, we're using a fixed otherUserId.
-            otherUserId = "OTHER_USER_ID"; // TODO: Set this based on the chat selected.
+            otherUser = "OTHER_USER_ID"; // TODO: Set this based on the chat selected.
         } else {
             // Handle the case where the user is not logged in (this shouldn't happen in this activity)
             Log.e(TAG, "No user logged in!");
@@ -55,27 +66,35 @@ public class ChatActivity extends AppCompatActivity {
 
         // Initialize the message list and adapter
         messageList = new ArrayList<>();
-        chatAdapter = new SingleChatAdapter(messageList, currentUserId);
+        chatAdapter = new SingleChatAdapter(messageList, currentUser);
 
         // Setup RecyclerView
         recyclerViewChat = findViewById(R.id.chat_messages_recycler_view);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewChat.setAdapter(chatAdapter);
 
-        // Fetch and display messages
-        fetchMessages();
+        Intent intent = getIntent();
+        String conversationId = intent.getStringExtra("CHAT_ID");
+        otherUser = intent.getStringExtra("RECEIVER_ID");
+
+        if (conversationId == null || otherUser == null) {
+            Log.e(TAG, "No conversation ID or other user's email found.");
+            finish(); // Finish activity if required data is not available
+            return;
+        }
+
+        // Fetch messages using the retrieved conversation ID
+        fetchMessages(conversationId);
 
         // Setup the menu button
-        ImageView menuButton = findViewById(R.id.chat_menu_button);
-        menuButton.setOnClickListener(view -> showMenuPopup());
+
 
         // TODO: Setup the send button and message input
         // You will need to add code here that sends a message when the send button is clicked
     }
 
-    private void fetchMessages() {
+    private void fetchMessages(String conversationId) {
         // Assuming you have a conversationId that you have received from the previous screen (chat list)
-        String conversationId = "CONVERSATION_ID"; // TODO: Get this from the intent or chat selection
 
         db.collection("messages")
                 .whereEqualTo("conversationId", conversationId)
@@ -99,60 +118,37 @@ public class ChatActivity extends AppCompatActivity {
                         chatAdapter.notifyDataSetChanged();
                     }
                 });
+        orientationEventListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                if (orientation >= 45 && orientation < 135) {
+                    // Landscape mode, set screen orientation to reverse portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (orientation >= 135 && orientation < 225) {
+                    // Upside down mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else if (orientation >= 225 && orientation < 315) {
+                    // Reverse landscape mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else {
+                    // Portrait mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+            }
+        };
+
+        // Start the OrientationEventListener
+        orientationEventListener.enable();
     }
 
     // ... Existing methods for showing pop-ups and transitioning to main activity ...
 
-    private void showMenuPopup() {
-        View popupView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.chat_pop_up_menu, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChatActivity.this);
-        alertDialogBuilder.setView(popupView);
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
 
-        // Handle "Unmatch" button click
-        popupView.findViewById(R.id.button_unmatch).setOnClickListener(v -> {
-            // Add logic to handle unmatching here, if needed
-            transitionToMainActivity();
-            alertDialog.dismiss();
-        });
 
-        // Handle "Report" button click
-        popupView.findViewById(R.id.button_report).setOnClickListener(v -> {
-            alertDialog.dismiss();
-            showReportPopup();
-        });
-
-        alertDialog.show();
-    }
-
-    private void showReportPopup() {
-        View reportPopupView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.report_pop_up, null);
-        AlertDialog.Builder reportDialogBuilder = new AlertDialog.Builder(ChatActivity.this);
-        reportDialogBuilder.setView(reportPopupView);
-        AlertDialog reportDialog = reportDialogBuilder.create();
-        reportDialog.setCanceledOnTouchOutside(true);
-        EditText reasonEditText = reportPopupView.findViewById(R.id.edittext_report_reason); // Ensure this ID matches your layout
-        reportPopupView.findViewById(R.id.button_send_report).setOnClickListener(v -> {
-            // Here you can handle sending the report reason to your server or save it
-            String reportReason = reasonEditText.getText().toString().trim();
-            if (!reportReason.isEmpty()) {
-                // TODO: Send report reason to your backend/server
-                Toast.makeText(ChatActivity.this, "Report sent for: " + reportReason, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(ChatActivity.this, "Please enter a reason for reporting.", Toast.LENGTH_SHORT).show();
-            }
-            reportDialog.dismiss();
-            transitionToMainActivity(); // Transition to the main activity after reporting
-        });
-
-        reportDialog.show();
-    }
-
-    private void transitionToMainActivity() {
-        // Transition to the main activity
-        Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish(); // Close the current activity
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Disable the OrientationEventListener to prevent memory leaks
+        orientationEventListener.disable();
     }
 }

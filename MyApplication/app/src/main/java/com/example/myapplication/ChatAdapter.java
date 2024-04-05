@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
@@ -32,9 +34,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         chat chat = chatList.get(position);
         holder.userNameView.setText(chat.getUserName());
-        holder.lastMessageView.setText(chat.getLastMessage());
-        holder.timestampView.setText(chat.getTimestamp());
-        holder.userImageView.setImageResource(chat.getUserProfileImageId());
+        Glide.with(holder.itemView.getContext())
+                .load(chat.getUserProfileImageId()) // Use the correct getter method
+                .placeholder(R.drawable.ic_profile_placeholder) // Placeholder image
+                .into(holder.userImageView);
 
         holder.itemView.setOnClickListener(v -> listener.onChatClicked(chat));
     }
@@ -52,8 +55,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             super(itemView);
             userImageView = itemView.findViewById(R.id.chat_item_image);
             userNameView = itemView.findViewById(R.id.chat_item_name);
-            lastMessageView = itemView.findViewById(R.id.chat_item_message_preview);
-            timestampView = itemView.findViewById(R.id.chat_item_timestamp);
         }
     }
 }

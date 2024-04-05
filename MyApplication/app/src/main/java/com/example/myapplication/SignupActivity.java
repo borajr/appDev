@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,14 +20,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private boolean result;
     private static final String TAG = "SignupActivity";
+    private OrientationEventListener orientationEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +50,7 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String repeatPassword = repeatPasswordEditText.getText().toString();
                 mAuth = FirebaseAuth.getInstance();
+                //checkForEmail(emailInput);
 
                 // Check if the email contains "tue.nl"
                 if (!emailInput.contains("tue.nl")) {
@@ -51,6 +59,12 @@ public class SignupActivity extends AppCompatActivity {
                     correctInput = false;
                     Toast.makeText(SignupActivity.this, "Please enter a TU/e email address.", Toast.LENGTH_LONG).show();
                 }
+
+//                if(!result) {
+//                    correctInput = false;
+//                    result = true;
+//                    Toast.makeText(SignupActivity.this, "This account exists", Toast.LENGTH_LONG).show();
+//                }
 
                 if(emailInput.isEmpty()) { // Extend this condition for all fields
                     correctInput = false;
@@ -67,11 +81,12 @@ public class SignupActivity extends AppCompatActivity {
                     correctInput = false;
                     Toast.makeText(SignupActivity.this, "Password must contain 8+ characters, a letter, a number, and a capital letter.", Toast.LENGTH_LONG).show();
                 }
-                if (correctInput) {
+                if (correctInput && !isStaff(emailInput)) {
                     createUser(emailInput, password);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String,Object> user = new HashMap<>();
                     user.put("banned", false);
+                    user.put("email", emailInput);
                     db.collection("users")
                             .document(emailInput)
                             .set(user)
@@ -79,7 +94,8 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
-                                    Intent intent = new Intent(SignupActivity.this, ProfileCreationDetailOne.class);
+                                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
+                                    finish();
                                     startActivity(intent);
                                 }
 
@@ -90,13 +106,66 @@ public class SignupActivity extends AppCompatActivity {
                                     Log.w(TAG, "Error writing document", e);
                                 }
                             });
+                    mAuth.signInWithEmailAndPassword(emailInput, password);
 
 
                     // If all checks pass, proceed to the ConfirmationActivity
 
+                } else if (correctInput && isStaff(emailInput)) {
+                    createUser(emailInput, password);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String,Object> user = new HashMap<>();
+                    user.put("banned", false);
+                    user.put("email", emailInput);
+                    //user.put("isStaff", true);
+                    db.collection("users_staff")
+                            .document(emailInput)
+                            .set(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    Intent intent = new Intent(SignupActivity.this, ConfirmationActivity.class);
+                                    finish();
+                                    startActivity(intent);
+                                }
+
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+
+                                }
+                            });
+                    mAuth.signInWithEmailAndPassword(emailInput, password);
                 }
             }
         });
+
+        orientationEventListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                if (orientation >= 45 && orientation < 135) {
+                    // Landscape mode, set screen orientation to reverse portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (orientation >= 135 && orientation < 225) {
+                    // Upside down mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else if (orientation >= 225 && orientation < 315) {
+                    // Reverse landscape mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else {
+                    // Portrait mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+            }
+        };
+
+        // Start the OrientationEventListener
+        orientationEventListener.enable();
+
     }
 
     private boolean isValidPassword(String password) {
@@ -123,6 +192,8 @@ public class SignupActivity extends AppCompatActivity {
         }
         return false; // Password missing required character types
     }
+    boolean flag1 = false;
+    boolean flag2 = false;
     private void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -131,7 +202,7 @@ public class SignupActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            flag1 = true;
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -140,5 +211,57 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+        mAuth.signInWithEmailAndPassword(email, password);
+    }
+
+    public void checkForEmail(final String email) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                // Delete the match document
+                                db.collection("users").document(document.getId()).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // Redirect to MainPage
+                                                Toast.makeText(SignupActivity.this, "This account exists", Toast.LENGTH_LONG).show();
+                                                resultChanger(false);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Handle failure
+                                                Log.w(TAG, "Error deleting match document", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void resultChanger(boolean b){
+        result = b;
+    }
+
+    private boolean isStaff(String email){
+        return !email.endsWith("@student.tue.nl");
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Disable the OrientationEventListener to prevent memory leaks
+        orientationEventListener.disable();
     }
 }

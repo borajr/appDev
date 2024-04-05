@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -21,6 +23,9 @@ public class ProfileCloneTwo extends AppCompatActivity {
 
     private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner;
     private Button confirmButton;
+
+    private OrientationEventListener orientationEventListener;
+
 
     TextView textView;
     boolean[] selectedLanguage;
@@ -199,6 +204,29 @@ public class ProfileCloneTwo extends AppCompatActivity {
                 builder.show();
             }
         });
+
+        orientationEventListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                if (orientation >= 45 && orientation < 135) {
+                    // Landscape mode, set screen orientation to reverse portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (orientation >= 135 && orientation < 225) {
+                    // Upside down mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else if (orientation >= 225 && orientation < 315) {
+                    // Reverse landscape mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else {
+                    // Portrait mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+            }
+        };
+
+        // Start the OrientationEventListener
+        orientationEventListener.enable();
+
     }
 
     private boolean validatePreferences() {
@@ -225,5 +253,12 @@ public class ProfileCloneTwo extends AppCompatActivity {
         map.put("height", height);
         map.put("age", age);
         return map;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Disable the OrientationEventListener to prevent memory leaks
+        orientationEventListener.disable();
     }
 }

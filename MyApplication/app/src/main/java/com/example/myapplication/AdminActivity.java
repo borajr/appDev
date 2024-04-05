@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,11 +13,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdminActivity extends AppCompatActivity {
     private Spinner spinnerReportedUsers;
+    private OrientationEventListener orientationEventListener;
+
     private TextView tvReportReason;
     private Button btnBanUser, btnRemoveFromList, btnSignOut;
     private List<String> reportedUsers;
@@ -38,20 +47,21 @@ public class AdminActivity extends AppCompatActivity {
         reportReasons = new ArrayList<>();
 
         // Add dummy reported users and reasons
-        reportedUsers.add("Arda Bulbul");
-        reportedUsers.add("Efe Sarigul");
-        reportReasons.add("Swag too good");
-        reportReasons.add("Too Handsome");
+
 
         // Setup the spinner adapter
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, reportedUsers);
         spinnerReportedUsers.setAdapter(adapter);
 
+        fetchReportedUsers();
+
         spinnerReportedUsers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // Display the reason for the report
-                tvReportReason.setText("User was reported for: " + reportReasons.get(position));
+                if (position >= 0 && position < reportReasons.size()) {
+                    tvReportReason.setText("User was reported for: " + reportReasons.get(position));
+                }
             }
 
             @Override
@@ -63,15 +73,10 @@ public class AdminActivity extends AppCompatActivity {
 
         btnBanUser.setOnClickListener(v -> {
             int position = spinnerReportedUsers.getSelectedItemPosition();
-            if (position < 0) {
-                Toast.makeText(AdminActivity.this, "Please select a user", Toast.LENGTH_SHORT).show();
+            if (position >= 0 && position < reportedUsers.size()) {
+                Toast.makeText(AdminActivity.this, "User will be removed in 10 business days", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(AdminActivity.this, reportedUsers.get(position) + " is banned", Toast.LENGTH_SHORT).show();
-            // Remove the user from the list
-            reportedUsers.remove(position);
-            reportReasons.remove(position);
-            adapter.notifyDataSetChanged();
         });
 
         btnRemoveFromList.setOnClickListener(v -> {
@@ -80,11 +85,13 @@ public class AdminActivity extends AppCompatActivity {
                 Toast.makeText(AdminActivity.this, "Please select a user", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(AdminActivity.this, reportedUsers.get(position) + " is removed from the list", Toast.LENGTH_SHORT).show();
-            // Remove the user from the list
+            String userEmail = reportedUsers.get(position);
+            deleteReportForUser(userEmail);
+            // After deleting the report, remove the user from the spinner
             reportedUsers.remove(position);
             reportReasons.remove(position);
             adapter.notifyDataSetChanged();
+            Toast.makeText(AdminActivity.this, userEmail + " is removed from the list", Toast.LENGTH_SHORT).show();
         });
 
         btnSignOut.setOnClickListener(v -> {
@@ -93,5 +100,88 @@ public class AdminActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        orientationEventListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                if (orientation >= 45 && orientation < 135) {
+                    // Landscape mode, set screen orientation to reverse portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (orientation >= 135 && orientation < 225) {
+                    // Upside down mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else if (orientation >= 225 && orientation < 315) {
+                    // Reverse landscape mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                } else {
+                    // Portrait mode, set screen orientation to portrait
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+            }
+        };
+
+        // Start the OrientationEventListener
+        orientationEventListener.enable();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Disable the OrientationEventListener to prevent memory leaks
+        orientationEventListener.disable();
+    }
+
+    private void fetchReportedUsers() {
+        FirebaseFirestore.getInstance().collection("Reports")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        reportedUsers.clear();
+                        reportReasons.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Get user email and reason from each report
+                            String userEmail = document.getString("userEmail");
+                            String reason = document.getString("reason");
+                            if (userEmail != null && reason != null) {
+                                // Add user email to reported users list
+                                reportedUsers.add(userEmail);
+                                // Add reason to report reasons list
+                                reportReasons.add(reason);
+                            }
+                        }
+                        // Notify adapter that data set has changed
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(AdminActivity.this, "Failed to fetch reported users", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+
+    private void deleteReportForUser(String userEmail) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Reports")
+                .whereEqualTo("userEmail", userEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot reportDoc : queryDocumentSnapshots) {
+                        // Delete the report document
+                        db.collection("Reports").document(reportDoc.getId()).delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    // Report successfully deleted
+                                    Toast.makeText(AdminActivity.this, "Report removed successfully", Toast.LENGTH_SHORT).show();
+                                    // Remove the user from the spinner
+                                    reportedUsers.remove(userEmail);
+                                    reportReasons.remove(spinnerReportedUsers.getSelectedItemPosition());
+                                    adapter.notifyDataSetChanged();
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(AdminActivity.this, "Failed to remove report", Toast.LENGTH_SHORT).show());
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(AdminActivity.this, "Failed to find report", Toast.LENGTH_SHORT).show());
+    }
+
+
+
 }
