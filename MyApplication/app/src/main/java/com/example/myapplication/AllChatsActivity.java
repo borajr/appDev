@@ -192,10 +192,8 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String userName = document.getId();
                             ArrayList<String> participantEmails = (ArrayList<String>) document.get("participantEmails");
-                            String lastMessage = "Last message here";
-                            String timestamp = "timestamp here";
                             if (participantEmails.contains(currentUserId)) {
-                                chatList.add(new chat(userName, lastMessage, timestamp, R.drawable.ic_profile_placeholder, "", "", ""));
+                                chatList.add(new chat(userName, R.drawable.ic_profile_placeholder, "", "", ""));
                             }
                         }
                         chatAdapter.notifyDataSetChanged();
