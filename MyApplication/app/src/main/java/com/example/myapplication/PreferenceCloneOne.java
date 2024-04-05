@@ -28,29 +28,9 @@ public class PreferenceCloneOne extends AppCompatActivity {
     boolean[] selectedLanguage;
     ArrayList<Integer> langList = new ArrayList<>();
     String[] langArray = {
-            "Amharic",
-            "Arabic",
-            "Armenian",
-            "Azerbaijani",
-            "Bengali",
-            "Bhojpuri",
-            "Bulgarian",
-            "Burmese",
-            "Chinese (Mandarin)",
-            "Dutch",
-            "English",
-            "Farsi (Persian)",
-            "Finnish",
-            "French",
-            "German",
-            "Gujarati",
-            "Hausa",
-            "Hebrew",
-            "Hindi",
-            "Indonesian",
-            "Italian",
-            "Japanese",
-            "Javanese",
+            "Amharic", "Arabic", "Armenian", "Azerbaijani", "Bengali", "Bhojpuri",
+            "Bulgarian", "Burmese", "Chinese (Mandarin)", "Dutch", "English", "Farsi (Persian)", "Finnish", "French", "German", "Gujarati",
+            "Hausa", "Hebrew", "Hindi", "Indonesian", "Italian", "Japanese", "Javanese",
             "Kannada",
             "Kazakh",
             "Khmer",
@@ -87,18 +67,8 @@ public class PreferenceCloneOne extends AppCompatActivity {
             "Vietnamese"};
 
     String[] langArray1 = {
-            "Aries",
-            "Taurus",
-            "Gemini",
-            "Cancer",
-            "Leo",
-            "Virgo",
-            "Libra",
-            "Scorpio",
-            "Sagittarius",
-            "Capricorn",
-            "Aquarius",
-            "Pisces"};
+            "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+            "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"};
 
     String[] langArray2 = {
             "Male",
@@ -124,19 +94,20 @@ public class PreferenceCloneOne extends AppCompatActivity {
 
         DatabaseHandler db = new DatabaseHandler();
 
-        String gender = textgender.toString();
-        String starSign = textstar.toString();
-        String department = departmentSpinner.getSelectedItem().toString();
-        String minHeight = minHeightSpinner.getSelectedItem().toString();
-        String maxHeight = maxHeightSpinner.getSelectedItem().toString();
-        Integer minAge =  Integer.parseInt(minAgeSpinner.getSelectedItem().toString());
-        Integer maxAge = Integer.parseInt(maxAgeSpinner.getSelectedItem().toString());
+        Integer Minage =  Integer.parseInt(minAgeSpinner.getSelectedItem().toString());
+        Integer Maxage = Integer.parseInt(maxAgeSpinner.getSelectedItem().toString());
+        String Gender = textgender.toString();
+        String Starsign = textstar.toString();
+        String Maxheight = maxHeightSpinner.getSelectedItem().toString();
+        String Department = departmentSpinner.getSelectedItem().toString();
+        String Minheight = minHeightSpinner.getSelectedItem().toString();
+
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validatePreferences()) { //createUserPref only used here, after this use Update
-                    db.updateUserPref(getData(gender, minHeight, maxHeight,starSign, department, minAge, maxAge));
+                    db.updateUserPref(getData(Gender, Minheight, Maxheight,Starsign, Department, Minage, Maxage));
                     Intent nextIntent = new Intent(PreferenceCloneOne.this, ProfileSetup.class);
                     startActivity(nextIntent);
                 }
