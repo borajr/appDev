@@ -36,32 +36,37 @@ public class chat {
         return receiverEmail;
     }
 
+    //setter method for email
     public void setReceiverEmail(String receiverEmail) {
         this.receiverEmail = receiverEmail;
     }
 
+    //getter method for chatid
     public String getChatID() {
         return chatID;
     }
-
 
     // Getters and setters
     public String getUserName() {
         return userName;
     }
 
+    //getter method for last message
     public String getLastMessage() {
         return lastMessage;
     }
 
+    //getter method for timestamp
     public String getTimestamp() {
         return timestamp;
     }
 
+    //setter method for user image profile
     public int getUserProfileImageId() {
         return userProfileImageId;
     }
 
+    //setter method for on click
     public void setOnClickListener(View.OnClickListener onClickListener) {
     }
 

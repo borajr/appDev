@@ -1,44 +1,33 @@
 package com.example.myapplication;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.Firebase;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class ProfileSetup extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseStorage storage;
     FirebaseUser currentUser;
-    StorageReference storageRef;
-    private OrientationEventListener orientationEventListener;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,28 +162,6 @@ public class ProfileSetup extends AppCompatActivity {
             }
         });
 
-        orientationEventListener = new OrientationEventListener(this) {
-            @Override
-            public void onOrientationChanged(int orientation) {
-                if (orientation >= 45 && orientation < 135) {
-                    // Landscape mode, set screen orientation to reverse portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                } else if (orientation >= 135 && orientation < 225) {
-                    // Upside down mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                } else if (orientation >= 225 && orientation < 315) {
-                    // Reverse landscape mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                } else {
-                    // Portrait mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
-            }
-        };
-
-        // Start the OrientationEventListener
-        orientationEventListener.enable();
-
     }
     private void downloadImagesFromFirebaseStorage() {
         ImageView image1 = findViewById(R.id.image1);
@@ -220,7 +187,8 @@ public class ProfileSetup extends AppCompatActivity {
             StorageReference imageRef = storage.getReference().child(currentUser.getEmail() + "/image" + x );
             x++;
             // Create a temporary file to store the downloaded image
-            imageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            long temp = 1024;
+            imageRef.getBytes(temp*temp).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -228,13 +196,6 @@ public class ProfileSetup extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Disable the OrientationEventListener to prevent memory leaks
-        orientationEventListener.disable();
     }
 }
 

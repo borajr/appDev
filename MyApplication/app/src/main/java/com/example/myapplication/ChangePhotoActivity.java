@@ -1,7 +1,6 @@
 package com.example.myapplication;
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,7 +30,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Activity to change or add new photos by the user. It allows capturing new photos with the device's camera,
@@ -51,7 +48,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
     private int imageIndex = 0;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = mAuth.getCurrentUser();
-    private OrientationEventListener orientationEventListener;
 
     /**
      * Initializes the activity, sets up UI components, and downloads existing images from Firebase Storage.
@@ -184,28 +180,6 @@ public class ChangePhotoActivity extends AppCompatActivity {
                     Toast.makeText(ChangePhotoActivity.this, "Please upload at least 1 photo.", Toast.LENGTH_LONG).show();
                 }}
         });
-
-        orientationEventListener = new OrientationEventListener(this) {
-            @Override
-            public void onOrientationChanged(int orientation) {
-                if (orientation >= 45 && orientation < 135) {
-                    // Landscape mode, set screen orientation to reverse portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                } else if (orientation >= 135 && orientation < 225) {
-                    // Upside down mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                } else if (orientation >= 225 && orientation < 315) {
-                    // Reverse landscape mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                } else {
-                    // Portrait mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
-            }
-        };
-
-        // Start the OrientationEventListener
-        orientationEventListener.enable();
     }
 
     /**
@@ -363,15 +337,5 @@ public class ChangePhotoActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    /**
-     * Cleans up resources, particularly the OrientationEventListener, when the activity is destroyed.
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Disable the OrientationEventListener to prevent memory leaks
-        orientationEventListener.disable();
     }
 }

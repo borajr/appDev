@@ -19,9 +19,14 @@ import java.util.Map;
 
 public class PreferenceCloneOne extends AppCompatActivity {
 
-    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner;
-    private Button confirmButton;
-    private OrientationEventListener orientationEventListener;
+    private Spinner genderS;
+    private Spinner minHeightS;
+    private Spinner maxHeightS;
+    private Spinner minAgeS;
+    private Spinner maxAgeS;
+    private Spinner departmentS;
+    private Spinner starSignS;
+    private Button cnfrm;
 
 
     TextView textView;
@@ -50,12 +55,12 @@ public class PreferenceCloneOne extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference_cloneone);
 
-        minHeightSpinner = findViewById(R.id.minHeightSpinner);
-        maxHeightSpinner = findViewById(R.id.maxHeightSpinner);
-        minAgeSpinner = findViewById(R.id.minAgeSpinner);
-        maxAgeSpinner = findViewById(R.id.maxAgeSpinner);
-        confirmButton = findViewById(R.id.confirm_button);
-        departmentSpinner = findViewById(R.id.editText5);
+        minHeightS = findViewById(R.id.minHeightSpinner);
+        maxHeightS = findViewById(R.id.maxHeightSpinner);
+        minAgeS = findViewById(R.id.minAgeSpinner);
+        maxAgeS = findViewById(R.id.maxAgeSpinner);
+        cnfrm = findViewById(R.id.confirm_button);
+        departmentS = findViewById(R.id.editText5);
         textView = findViewById(R.id.textview);
         selectedLanguage = new boolean[langArray.length];
         TextView textstar = findViewById(R.id.textstar);
@@ -63,16 +68,16 @@ public class PreferenceCloneOne extends AppCompatActivity {
 
         DatabaseHandler db = new DatabaseHandler();
 
-        Integer Minage =  Integer.parseInt(minAgeSpinner.getSelectedItem().toString());
-        Integer Maxage = Integer.parseInt(maxAgeSpinner.getSelectedItem().toString());
+        Integer Minage =  Integer.parseInt(minAgeS.getSelectedItem().toString());
+        Integer Maxage = Integer.parseInt(maxAgeS.getSelectedItem().toString());
         String Gender = textgender.toString();
         String Starsign = textstar.toString();
-        String Maxheight = maxHeightSpinner.getSelectedItem().toString();
-        String Department = departmentSpinner.getSelectedItem().toString();
-        String Minheight = minHeightSpinner.getSelectedItem().toString();
+        String Maxheight = maxHeightS.getSelectedItem().toString();
+        String Department = departmentS.getSelectedItem().toString();
+        String Minheight = minHeightS.getSelectedItem().toString();
 
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        cnfrm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validatePreferences()) { //createUserPref only used here, after this use Update
@@ -320,45 +325,27 @@ public class PreferenceCloneOne extends AppCompatActivity {
             }
         });
 
-        orientationEventListener = new OrientationEventListener(this) {
-            @Override
-            public void onOrientationChanged(int orientation) {
-                if (orientation >= 45 && orientation < 135) {
-                    // Landscape mode, set screen orientation to reverse portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                } else if (orientation >= 135 && orientation < 225) {
-                    // Upside down mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                } else if (orientation >= 225 && orientation < 315) {
-                    // Reverse landscape mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                } else {
-                    // Portrait mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
-            }
-        };
-
-        // Start the OrientationEventListener
-        orientationEventListener.enable();
     }
 
     private boolean validatePreferences() {
-        // Ensure a gender is selected
-        // Validate heights
-        int minHeightIndex = minHeightSpinner.getSelectedItemPosition();
-        int maxHeightIndex = maxHeightSpinner.getSelectedItemPosition();
-        if (minHeightIndex > maxHeightIndex) {
-            Toast.makeText(this, "Minimum height cannot be greater than maximum height", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+
         // Validate ages
-        int minAgeIndex = minAgeSpinner.getSelectedItemPosition();
-        int maxAgeIndex = maxAgeSpinner.getSelectedItemPosition();
+        int minAgeIndex = minAgeS.getSelectedItemPosition();
+        int maxAgeIndex = maxAgeS.getSelectedItemPosition();
         if (minAgeIndex > maxAgeIndex) {
             Toast.makeText(this, "Minimum age cannot be greater than maximum age", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        // Ensure a gender is selected
+        // Validate heights
+        int minHeightIndex = minHeightS.getSelectedItemPosition();
+        int maxHeightIndex = maxHeightS.getSelectedItemPosition();
+        if (minHeightIndex > maxHeightIndex) {
+            Toast.makeText(this, "Minimum height cannot be greater than maximum height", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true; // All validations passed
     }
 
@@ -367,33 +354,27 @@ public class PreferenceCloneOne extends AppCompatActivity {
         Map<String, Object> map = new HashMap<>();
         int minHeightInt = 0;
         int maxHeightInt = 0;
-        if (minHeight == "<150") {
+        if (minHeight.equals("<150")) {
             minHeightInt = 149;
-        } else if (minHeight == ">210") {
+        } else if (minHeight.equals("<210")) {
             minHeightInt = 211;
         } else {
             minHeightInt = Integer.parseInt(minHeight);
         }
-        if (maxHeight == "<150") {
+        if (maxHeight.equals("<150")) {
             maxHeightInt = 149;
-        } else if (minHeight == ">210") {
+        } else if (maxHeight.equals("<210")) {
             maxHeightInt = 211;
         } else {
             maxHeightInt = Integer.parseInt(minHeight);
         }
         map.put("gender", gender);
         map.put("minHeight", minHeightInt);
-        map.put("maxHeight", maxHeight);
+        map.put("maxHeight", maxHeightInt);
         map.put("starSign", starSign);
         map.put("department", department);
         map.put("minAge", minAge);
         map.put("maxAge", maxAge);
         return map;
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Disable the OrientationEventListener to prevent memory leaks
-        orientationEventListener.disable();
     }
 }

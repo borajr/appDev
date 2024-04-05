@@ -70,9 +70,9 @@ public class CameraActivity extends AppCompatActivity {
         viewImages[4] = findViewById(R.id.imageView4);
         viewImages[5] = findViewById(R.id.imageView5);
 
-        Button btnChoosePhoto = findViewById(R.id.btn_choose_photo);
-        Button btnTakePhoto = findViewById(R.id.btn_take_photo);
-        Button btnContinue = findViewById(R.id.btn_continue);
+        Button taake = findViewById(R.id.btn_take_photo);
+        Button chuuz = findViewById(R.id.btn_choose_photo);
+        Button cont = findViewById(R.id.btn_continue);
 
         final ImageView imageView = findViewById(R.id.imageView);
         Button imageViewCloseBtn = findViewById(R.id.imageViewCloseBtn);
@@ -85,81 +85,57 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-        final ImageView imageView1 = findViewById(R.id.imageView1);
         Button imageViewCloseBtn1 = findViewById(R.id.imageViewCloseBtn1);
 
         imageViewCloseBtn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView1.setImageDrawable(null); // Clears the ImageView
+                viewImages[0].setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
             }
         });
 
-        final ImageView imageView2 = findViewById(R.id.imageView2);
         Button imageViewCloseBtn2 = findViewById(R.id.imageViewCloseBtn2);
 
         imageViewCloseBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView2.setImageDrawable(null); // Clears the ImageView
+                viewImages[1].setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
             }
         });
 
-        final ImageView imageView3 = findViewById(R.id.imageView3);
         Button imageViewCloseBtn3 = findViewById(R.id.imageViewCloseBtn3);
 
         imageViewCloseBtn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView3.setImageDrawable(null); // Clears the ImageView
+                viewImages[2].setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
             }
         });
 
-        final ImageView imageView4 = findViewById(R.id.imageView4);
         Button imageViewCloseBtn4 = findViewById(R.id.imageViewCloseBtn4);
 
         imageViewCloseBtn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView4.setImageDrawable(null); // Clears the ImageView
+                viewImages[3].setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
             }
         });
 
-        final ImageView imageView5 = findViewById(R.id.imageView5);
         Button imageViewCloseBtn5 = findViewById(R.id.imageViewCloseBtn5);
 
         imageViewCloseBtn5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView5.setImageDrawable(null); // Clears the ImageView
+                viewImages[4].setImageDrawable(null); // Clears the ImageView
                 // Optionally, hide the button itself if desired
             }
         });
 
-        // Set click listener for Choose Photo button
-        btnChoosePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, PICK_IMAGE);
-            }
-        });
-
-        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-                } else {
-                    openCamera();
-                }
-            }
-        });
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+        cont.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -177,6 +153,27 @@ public class CameraActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(CameraActivity.this, "Please upload at least 1 photo.", Toast.LENGTH_LONG).show();
                 }}
+        });
+
+        // Set click listener for Choose Photo button
+        //Yapacağımız işe sıçayım
+        chuuz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE);
+            }
+        });
+
+        taake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                } else {
+                    openCamera();
+                }
+            }
         });
 
         orientationEventListener = new OrientationEventListener(this) {

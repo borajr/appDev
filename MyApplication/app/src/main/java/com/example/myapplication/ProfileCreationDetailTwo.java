@@ -19,8 +19,14 @@ import java.util.Map;
 
 public class ProfileCreationDetailTwo extends AppCompatActivity {
 
-    private Spinner genderSpinner, minHeightSpinner, maxHeightSpinner, minAgeSpinner, maxAgeSpinner, departmentSpinner, starSignSpinner;
-    private Button confirmButton;
+    private Spinner spinnerGender;
+    private Spinner spinnerMinHeight;
+    private Spinner spinnerMaxHeight;
+    private Spinner spinnerMinAge;
+    private Spinner spinnerMaxAge;
+    private Spinner spinnerDepartment;
+    private Spinner spinnerStarSign;
+    private Button buttonConfirm;
 
     private OrientationEventListener orientationEventListener;
 
@@ -29,12 +35,9 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
     TextView textView;
     boolean[] selectedLanguage;
     ArrayList<Integer> langList = new ArrayList<>();
-    String[] langArray = {
-            "Amharic",
-            "Arabic",
+    String[] langArray = {"Amharic", "Arabic",
             "Armenian",
-            "Azerbaijani",
-            "Bengali",
+            "Azerbaijani", "Bengali",
             "Bhojpuri",
             "Bulgarian",
             "Burmese",
@@ -93,24 +96,25 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profiledetailtwo); // Ensure this matches your layout file
 
-        // Initialize your views
-        genderSpinner = findViewById(R.id.editText1); // TODO: this is called edittext1 but is a spinner?
-        minHeightSpinner = findViewById(R.id.minHeightSpinner);
-        confirmButton = findViewById(R.id.confirm_button);
-        textView = findViewById(R.id.textview);
         selectedLanguage = new boolean[langArray.length];
-        departmentSpinner = findViewById(R.id.editText5);
-        starSignSpinner = findViewById(R.id.starSignSpinner);
+        spinnerDepartment = findViewById(R.id.editText5);
+        spinnerStarSign = findViewById(R.id.starSignSpinner);
+        // Initialize your views
+        spinnerGender = findViewById(R.id.editText1); // TODO: this is called edittext1 but is a spinner?
+        spinnerMinHeight = findViewById(R.id.minHeightSpinner);
+        buttonConfirm = findViewById(R.id.confirm_button);
+        textView = findViewById(R.id.textview);
 
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+
+        buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     // Move to the next appropriate page
-                    String gender = genderSpinner.getSelectedItem().toString();
-                    String height = minHeightSpinner.getSelectedItem().toString();
-                    String department = departmentSpinner.getSelectedItem().toString();
-                    String starSign = starSignSpinner.getSelectedItem().toString();
+                    String gender = spinnerGender.getSelectedItem().toString();
+                    String height = spinnerMinHeight.getSelectedItem().toString();
+                    String department = spinnerDepartment.getSelectedItem().toString();
+                    String starSign = spinnerStarSign.getSelectedItem().toString();
                     DatabaseHandler db = new DatabaseHandler();
                     Map<String, Object> data = createMap(gender, height, department, starSign); //TODO: ADD LANGLIST
                     db.updateUser(data);
@@ -198,50 +202,24 @@ public class ProfileCreationDetailTwo extends AppCompatActivity {
                 builder.show();
             }
         });
-        orientationEventListener = new OrientationEventListener(this) {
-            @Override
-            public void onOrientationChanged(int orientation) {
-                if (orientation >= 45 && orientation < 135) {
-                    // Landscape mode, set screen orientation to reverse portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                } else if (orientation >= 135 && orientation < 225) {
-                    // Upside down mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                } else if (orientation >= 225 && orientation < 315) {
-                    // Reverse landscape mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                } else {
-                    // Portrait mode, set screen orientation to portrait
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
-            }
-        };
-
-        // Start the OrientationEventListener
-        orientationEventListener.enable();
     }
-    private Map<String, Object> createMap(String gender, String height, String department, String starSign) {
+    private Map<String, Object> createMap(String Gender, String Height, String Department, String starSign) {
         Map<String, Object> map = new HashMap<>();
-        map.put("gender", gender);
+        map.put("department", Department);
         int heightInt = 0;
 
-        if (height.equals("<150")) {
+        if (Height.equals("<150")) {
             heightInt = 149;
-        } else if (height.equals(">210")) {
+        } else if (Height.equals(">210")) {
             heightInt = 211;
         } else {
-            heightInt = Integer.parseInt(height);
+            heightInt = Integer.parseInt(Height);
         }
         map.put("height", heightInt);
 
-        map.put("department", department);
+
+        map.put("gender", Gender);
         return map;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Disable the OrientationEventListener to prevent memory leaks
-        orientationEventListener.disable();
-    }
 }

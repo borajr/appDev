@@ -7,11 +7,9 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseAuth mAuth;
     private OrientationEventListener orientationEventListener;
 
 

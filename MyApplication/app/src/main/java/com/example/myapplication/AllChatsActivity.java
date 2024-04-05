@@ -28,6 +28,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Displays all chats for the current user, handling creation and retrieval of chat documents
+ * from Firestore based on matches.
+ */
 public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.OnChatClickListener {
     private static final String TAG = "AllChatsActivity";
     private RecyclerView recyclerViewChats;
@@ -38,6 +42,7 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
     private String currentUserId;
     private OrientationEventListener orientationEventListener;
 
+    // Counters for handling chat creation based on matches
     private AtomicInteger matchCount = new AtomicInteger(0);
     private AtomicInteger processedMatches = new AtomicInteger(0);
 
@@ -46,20 +51,25 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_chats);
 
+        // Initialize the current user ID from FirebaseAuth
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getEmail(); // Assuming the user is already logged in
 
+        // Setup RecyclerView and adapter for displaying chats
         placeholderTextView = findViewById(R.id.placeholder_text_view);
 
         recyclerViewChats = findViewById(R.id.recyclerView_chats);
         recyclerViewChats.setLayoutManager(new LinearLayoutManager(this));
 
         chatList = new ArrayList<>();
+        // Assumes existence of a ChatAdapter class
         chatAdapter = new ChatAdapter(chatList, this); // Assuming ChatAdapter is implemented to handle your 'chat' model class
         recyclerViewChats.setAdapter(chatAdapter);
 
+        // Method to create chat documents for all matched users
         createChatsForAllMatches();
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        // Setup BottomNavigationView and its item selection listener
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation); // Sets the chats menu item as selected
         bottomNav.setSelectedItemId(R.id.navigation_chats);
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -83,7 +93,11 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         });
     }
 
+    /**
+     * Creates chat documents for all matches found in the Firestore "Matches" collection.
+     */
     private void createChatsForAllMatches() {
+        // Fetch all matches from Firestore
         db.collection("Matches")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -92,7 +106,7 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                         matchCount.set(matches.size());
                         if (matches.size() == 0) {
                             // No matches to process, fetch chats immediately
-                            fetchDynamicChats();
+                            fetchDynamicChats(); // No matches, fetch chats directly
                         }
                         for (DocumentSnapshot match : matches) {
                             String user1Email = match.getString("user1Mail");
@@ -108,6 +122,7 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                     }
                 });
 
+        // Initialize and enable orientation event listener
         orientationEventListener = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
@@ -131,6 +146,13 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
         orientationEventListener.enable();
     }
 
+    /**
+     * Checks if a chat document already exists for a given match, and creates one if it does not.
+     *
+     * @param db Firestore database instance.
+     * @param user1Email The email address of the first user in the match.
+     * @param user2Email The email address of the second user in the match.
+     */
     private void checkAndCreateChat(FirebaseFirestore db, String user1Email, String user2Email) {
         db.collection("chats")
                 .whereArrayContains("participantEmails", user1Email)
@@ -158,6 +180,13 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                 });
     }
 
+    /**
+     * Creates a new chat document in Firestore for a given match.
+     *
+     * @param db Firestore database instance.
+     * @param user1Email The email address of the first user in the match.
+     * @param user2Email The email address of the second user in the match.
+     */
     private void createChatDocument(FirebaseFirestore db, String user1Email, String user2Email) {
         String uniqueChatID = db.collection("chats").document().getId();
         Map<String, Object> chatData = new HashMap<>();
@@ -175,13 +204,19 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                 });
     }
 
+    /**
+     * Handles completion of a match processing step, either by creating a chat document or after failing to do so.
+     */
     private void processMatchCompletion() {
         if (processedMatches.incrementAndGet() == matchCount.get()) {
             // All matches have been processed, fetch chats
-            fetchDynamicChats();
+            fetchDynamicChats(); // Fetch chats if all matches processed
         }
     }
 
+    /**
+     * Fetches chats dynamically for the current user and updates the UI accordingly.
+     */
     public void fetchDynamicChats() {
         chatList.clear();
         db.collection("chats")
@@ -206,6 +241,9 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
                 });
     }
 
+    /**
+     * Updates the visibility of the placeholder text based on the chat list's size.
+     */
     private void updatePlaceholderVisibility() {
         if (chatList.isEmpty()) {
             placeholderTextView.setVisibility(View.VISIBLE);
@@ -228,7 +266,7 @@ public class AllChatsActivity extends AppCompatActivity implements ChatAdapter.O
     protected void onDestroy() {
         super.onDestroy();
         // Disable the OrientationEventListener to prevent memory leaks
-        orientationEventListener.disable();
+        orientationEventListener.disable(); // Prevent memory leaks by disabling the listener
     }
 
 }
